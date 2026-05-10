@@ -1,8 +1,9 @@
+<!-- login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register - MaxGameStore</title>
+    <title>Login - MaxGameStore</title>
     <style>
         body { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: white; font-family: Arial; text-align: center; padding: 50px; margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
         .container { background: rgba(0,0,0,0.8); padding: 40px; border-radius: 20px; width: 350px; }
@@ -12,59 +13,73 @@
         .error { color: #e74c3c; margin: 10px 0; font-size: 14px; }
         .link { color: #3498db; text-decoration: none; }
         h1 { color: #ffd700; margin-bottom: 20px; }
-        .optional { color: #888; font-size: 12px; margin-top: 10px; }
+        .success { color: #2ecc71; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📝 CREATE ACCOUNT</h1>
-        <input type="text" id="username" placeholder="Username *">
-        <input type="password" id="password" placeholder="Password *">
-        <input type="email" id="email" placeholder="Email (optional)">
-        <button onclick="register()">CREATE ACCOUNT</button>
+        <h1>🔐 LOGIN</h1>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">LOGIN</button>
         <div id="message" class="error"></div>
-        <p>Already have an account? <a href="login.html" class="link">Login</a></p>
-        <div class="optional">* Required fields</div>
+        <p>Don't have an account? <a href="register.html" class="link">Register</a></p>
     </div>
 
     <script>
         const BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
         
-        async function register() {
+        async function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
-            const email = document.getElementById('email').value.trim();
             
             if (!username || !password) {
-                document.getElementById('message').innerText = 'Username and password are required!';
+                document.getElementById('message').innerText = 'Username and password required!';
                 return;
             }
             
-            document.getElementById('message').innerText = 'Creating account...';
+            document.getElementById('message').innerText = 'Logging in...';
+            document.getElementById('message').style.color = '#3498db';
             
             try {
-                const response = await fetch(`${BACKEND_URL}/api/register`, {
+                const response = await fetch(`${BACKEND_URL}/api/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify({ username, password, email })
+                    body: JSON.stringify({ username, password })
                 });
                 
                 const data = await response.json();
-                console.log('Server response:', data);
+                console.log('Login response:', data);
                 
                 if (data.success) {
-                    alert('✅ Account created successfully!');
-                    window.location.href = 'login.html';
+                    // Salvează datele în localStorage
+                    localStorage.setItem('currentUser', username);
+                    localStorage.setItem('userRank', data.rank);
+                    
+                    document.getElementById('message').innerText = '✅ Login successful! Redirecting...';
+                    document.getElementById('message').style.color = '#2ecc71';
+                    
+                    // Redirect către pagina principală după 1 secundă
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
                 } else {
-                    document.getElementById('message').innerText = data.error || 'Registration failed';
+                    document.getElementById('message').innerText = data.error || 'Login failed';
+                    document.getElementById('message').style.color = '#e74c3c';
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
                 document.getElementById('message').innerText = 'Connection error: ' + error.message;
+                document.getElementById('message').style.color = '#e74c3c';
             }
+        }
+        
+        // Dacă e deja logat, trimite la index
+        if (localStorage.getItem('currentUser')) {
+            window.location.href = 'index.html';
         }
     </script>
 </body>
