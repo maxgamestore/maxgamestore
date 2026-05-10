@@ -3,78 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <title>Login - MaxGameStore</title>
-    <link rel="stylesheet" href="css/style.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
         .auth-container {
             max-width: 400px;
-            margin: 100px auto;
-            padding: 30px;
-            background: rgba(0,0,0,0.7);
-            border-radius: 15px;
+            width: 90%;
+            padding: 40px;
+            background: rgba(0,0,0,0.8);
+            border-radius: 20px;
             text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
-        .auth-container input {
+        h1 {
+            color: #ffd700;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+        input {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             background: #333;
             color: white;
+            font-size: 16px;
         }
-        .auth-container button {
+        input:focus {
+            outline: none;
+            border: 1px solid #ffd700;
+        }
+        button {
+            width: 100%;
             background: #2ecc71;
             color: white;
-            padding: 12px 30px;
+            padding: 12px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            margin: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
         }
-        .switch-btn {
-            background: #3498db;
+        button:hover {
+            background: #27ae60;
+            transform: scale(1.02);
         }
         .error {
             color: #e74c3c;
-            margin: 10px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .switch {
+            margin-top: 20px;
+            color: #ccc;
+        }
+        .switch a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .switch a:hover {
+            text-decoration: underline;
+        }
+        .production {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="logo">MaxGameStore</div>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="games.html">Games</a></li>
-            <li><a href="support.html">Support</a></li>
-            <li><a href="login.html" class="login-btn">Login</a></li>
-        </ul>
-    </nav>
-    
     <div class="auth-container" id="loginPanel">
-        <h2>🔐 LOGIN</h2>
+        <h1>🔐 MAXGAMESTORE</h1>
         <input type="text" id="loginUsername" placeholder="Username">
         <input type="password" id="loginPassword" placeholder="Password">
-        <button onclick="login()">Login</button>
+        <button onclick="login()">LOGIN</button>
         <div class="error" id="loginError"></div>
-        <p>Don't have an account? <a href="#" onclick="showRegister()">Register here</a></p>
+        <div class="switch">
+            Nu ai cont? <a href="#" onclick="showRegister()">Creează cont</a>
+        </div>
+        <div class="production">MaxGameStore's production</div>
     </div>
     
     <div class="auth-container" id="registerPanel" style="display:none">
-        <h2>📝 CREATE ACCOUNT</h2>
+        <h1>📝 CREATE ACCOUNT</h1>
         <input type="text" id="regUsername" placeholder="Username">
         <input type="password" id="regPassword" placeholder="Password">
         <input type="password" id="regConfirm" placeholder="Confirm Password">
-        <button onclick="register()">Create Account</button>
+        <button onclick="register()">CREATE ACCOUNT</button>
         <div class="error" id="regError"></div>
-        <p>Already have an account? <a href="#" onclick="showLogin()">Login here</a></p>
+        <div class="switch">
+            Ai deja cont? <a href="#" onclick="showLogin()">Login</a>
+        </div>
+        <div class="production">MaxGameStore's production</div>
     </div>
     
-    <footer>
-        <p>&copy; 2025 MaxGameStore. All rights reserved.</p>
-    </footer>
-    
     <script>
+        // Dacă e deja logat, trimite la index
+        if (localStorage.getItem('currentUser')) {
+            window.location.href = 'index.html';
+        }
+        
         function showRegister() {
             document.getElementById('loginPanel').style.display = 'none';
             document.getElementById('registerPanel').style.display = 'block';
@@ -91,20 +134,19 @@
             const confirm = document.getElementById('regConfirm').value;
             
             if (!username || !password) {
-                document.getElementById('regError').innerText = 'Username and password required!';
+                document.getElementById('regError').innerText = 'Completează toate câmpurile!';
                 return;
             }
             
             if (password !== confirm) {
-                document.getElementById('regError').innerText = 'Passwords do not match!';
+                document.getElementById('regError').innerText = 'Parolele nu coincid!';
                 return;
             }
             
-            // Get existing users
             let users = JSON.parse(localStorage.getItem('users') || '{}');
             
             if (users[username]) {
-                document.getElementById('regError').innerText = 'Username already exists!';
+                document.getElementById('regError').innerText = 'Utilizatorul există deja!';
                 return;
             }
             
@@ -125,13 +167,8 @@
                 localStorage.setItem('currentUser', username);
                 window.location.href = 'index.html';
             } else {
-                document.getElementById('loginError').innerText = 'Invalid username or password!';
+                document.getElementById('loginError').innerText = 'Username sau parolă incorectă!';
             }
-        }
-        
-        // Verifică dacă e deja logat
-        if (localStorage.getItem('currentUser')) {
-            window.location.href = 'index.html';
         }
     </script>
 </body>
