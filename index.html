@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="ro">
-
 <head>
     <meta charset="UTF-8">
     <title>MaxGameStore</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
     <nav>
         <div class="logo">MaxGameStore</div>
@@ -14,21 +12,30 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="games.html">Games</a></li>
             <li><a href="support.html">Support</a></li>
-            <li><a href="login.html" class="login-btn">Login</a></li>
+            <li><a href="login.html" class="login-btn" id="loginBtn">Login</a></li>
         </ul>
     </nav>
-
+    
     <div class="hero">
         <h1>WORLD OF FIGHTS</h1>
         <p>Un joc 2D multiplayer creat de MaxGameStore</p>
-        <a href="games.html" class="play-btn">Play Now</a>
+        <a href="games.html" class="play-btn" id="playBtn">Play Now</a>
     </div>
-
+    
     <footer>
         <p>&copy; 2025 MaxGameStore. All rights reserved.</p>
     </footer>
-
+    
     <script src="js/main.js"></script>
+    <script>
+        // Verifică dacă utilizatorul este logat
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            document.getElementById('playBtn').href = "login.html";
+            document.getElementById('loginBtn').style.background = "#e74c3c";
+        } else {
+            document.getElementById('loginBtn').innerHTML = "Hello, " + currentUser;
+        }
+    </script>
 </body>
-
 </html>
