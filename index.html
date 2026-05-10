@@ -23,7 +23,7 @@
         </ul>
     </nav>
     
-    <span id="userInfo" class="user-info"></span>
+    <div id="userInfo" class="user-info"></div>
     
     <div class="hero">
         <div class="production-badge">MaxGameStore's production</div>
@@ -37,7 +37,19 @@
     </footer>
     
     <script>
-        document.getElementById('userInfo').innerHTML = '👤 ' + localStorage.getItem('currentUser');
+        const user = localStorage.getItem('currentUser');
+        const userRank = localStorage.getItem('userRank') || 'user';
+        
+        let rankDisplay = '';
+        switch(userRank) {
+            case 'owner': rankDisplay = '👑 OWNER'; break;
+            case 'admin': rankDisplay = '⚙️ ADMIN'; break;
+            case 'tester': rankDisplay = '🧪 TESTER'; break;
+            case 'developer': rankDisplay = '💻 DEVELOPER'; break;
+            default: rankDisplay = '🎮 PLAYER';
+        }
+        
+        document.getElementById('userInfo').innerHTML = `👤 ${user} [${rankDisplay}]`;
         
         document.getElementById('logoutBtn').addEventListener('click', function(e) {
             e.preventDefault();
