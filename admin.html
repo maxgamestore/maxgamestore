@@ -1,58 +1,145 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Admin Panel</title>
+    <meta charset="UTF-8">
+    <title>Admin Panel - MaxGameStore</title>
     <style>
         body { background: #1a1a2e; color: white; font-family: Arial; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #333; padding: 10px; text-align: left; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #333; padding: 12px; text-align: left; }
         th { background: #2c3e50; }
         .owner { background: #ff6b35; }
         .admin { background: #2ecc71; }
         .developer { background: #e74c3c; }
         .tester { background: #3498db; }
+        select, button { padding: 5px 10px; margin: 0 5px; border-radius: 5px; border: none; cursor: pointer; }
+        button { background: #e74c3c; color: white; }
+        button:hover { opacity: 0.8; }
+        .logout-btn { background: #e74c3c; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px; }
+        .error { color: #e74c3c; text-align: center; padding: 20px; }
+        h1 { color: #ffd700; }
     </style>
 </head>
 <body>
-    <h1>👑 Admin Panel - User Management</h1>
-    <div id="usersTable"></div>
-    
+    <div class="container">
+        <h1>👑 Admin Panel - User Management</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <div id="usersTable"></div>
+    </div>
+
     <script>
         const BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
         const currentUser = localStorage.getItem('currentUser');
         const userRank = localStorage.getItem('userRank');
         
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+        
         if (userRank !== 'owner') {
-            document.getElementById('usersTable').innerHTML = '<p style="color:red">Only Owner can access this page!</p>';
+            document.getElementById('usersTable').innerHTML = '<div class="error">⚠️ Only Owner can access this page!</div>';
         } else {
             loadUsers();
         }
         
         async function loadUsers() {
-            const res = await fetch(`${BACKEND_URL}/api/users?owner=${currentUser}`);
-            const data = await res.json();
-            
-            if (!data.success) {
-                document.getElementById('usersTable').innerHTML = '<p>' + data.error + '</p>';
-                return;
-            }
-            
-            let html = `<table><tr><th>Username</th><th>Password</th><th>Rank</th></tr>`;
-            for (const user of data.users) {
-                let rankClass = '';
-                if (user.rank === 'owner') rankClass = 'owner';
-                else if (user.rank === 'admin') rankClass = 'admin';
-                else if (user.rank === 'developer') rankClass = 'developer';
-                else if (user.rank === 'tester') rankClass = 'tester';
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/users?owner=${currentUser}`);
+                const data = await response.json();
+                console.log('Users loaded:', data);
                 
-                html += `<tr class="${rankClass}">
-                            <td>${user.username}</td>
-                            <td>${user.password}</td>
-                            <td>${user.rank}</td>
-                         </tr>`;
+                if (!data.success) {
+                    document.getElementById('usersTable').innerHTML = `<div class="error">${data.error}</div>`;
+                    return;
+                }
+                
+                let html = `</table>
+                    <thead>
+                        <tr><th>Username</th><th>Password</th><th>Email</th><th>Rank</th><th>Created</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>`;
+                
+                for (const user of data.users) {
+                    let rankClass = user.rank === 'owner' ? 'owner' : (user.rank === 'admin' ? 'admin' : (user.rank === 'developer' ? 'developer' : (user.rank === 'tester' ? 'tester' : '')));
+                    html += `<tr class="${rankClass}">
+                        <td>${escapeHtml(user.username)}</td>
+                        <td>${escapeHtml(user.password)}</td>
+                        <td>${escapeHtml(user.email || '-')}</td>
+                        <td>
+                            <select id="rank-${user.username}" onchange="changeRank('${user.username}')">
+                                <option value="user" ${user.rank === 'user' ? 'selected' : ''}>user</option>
+                                <option value="tester" ${user.rank === 'tester' ? 'selected' : ''}>tester</option>
+                                <option value="developer" ${user.rank === 'developer' ? 'selected' : ''}>developer</option>
+                                <option value="admin" ${user.rank === 'admin' ? 'selected' : ''}>admin</option>
+                                <option value="owner" ${user.rank === 'owner' ? 'selected' : ''}>owner</option>
+                            </select>
+                        </td>
+                        <td>${user.created ? new Date(user.created).toLocaleDateString() : '-'}</td>
+                        <td><button onclick="deleteUser('${user.username}')">Delete</button></td>
+                    </tr>`;
+                }
+                html += `</tbody></table>`;
+                document.getElementById('usersTable').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading users:', error);
+                document.getElementById('usersTable').innerHTML = '<div class="error">Error loading users. Make sure the backend is running.</div>';
             }
-            html += `</table>`;
-            document.getElementById('usersTable').innerHTML = html;
+        }
+        
+        async function changeRank(username) {
+            const newRank = document.getElementById(`rank-${username}`).value;
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/set-rank`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ owner: currentUser, username, rank: newRank })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert(`✅ Rank changed to ${newRank}`);
+                    loadUsers();
+                } else {
+                    alert(`❌ ${data.error}`);
+                }
+            } catch (error) {
+                alert('Connection error: ' + error.message);
+            }
+        }
+        
+        async function deleteUser(username) {
+            if (!confirm(`Delete user "${username}"? This cannot be undone.`)) return;
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/delete-user`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ owner: currentUser, username })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert('✅ User deleted');
+                    loadUsers();
+                } else {
+                    alert(`❌ ${data.error}`);
+                }
+            } catch (error) {
+                alert('Connection error: ' + error.message);
+            }
+        }
+        
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
         }
     </script>
 </body>
