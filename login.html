@@ -1,19 +1,104 @@
-<!-- login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login - MaxGameStore</title>
     <style>
-        body { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: white; font-family: Arial; text-align: center; padding: 50px; margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .container { background: rgba(0,0,0,0.8); padding: 40px; border-radius: 20px; width: 350px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; background: #333; color: white; box-sizing: border-box; }
-        button { width: 100%; background: #2ecc71; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        button:hover { background: #27ae60; }
-        .error { color: #e74c3c; margin: 10px 0; font-size: 14px; }
-        .link { color: #3498db; text-decoration: none; }
-        h1 { color: #ffd700; margin-bottom: 20px; }
-        .success { color: #2ecc71; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: rgba(0,0,0,0.85);
+            padding: 40px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #ffd700;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            background: #333;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input:focus {
+            outline: none;
+            border: 2px solid #ffd700;
+            background: #444;
+        }
+        
+        button {
+            width: 100%;
+            background: #2ecc71;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #27ae60;
+            transform: scale(1.02);
+        }
+        
+        .error {
+            color: #e74c3c;
+            margin: 15px 0;
+            font-size: 14px;
+            min-height: 40px;
+        }
+        
+        .success {
+            color: #2ecc71;
+        }
+        
+        .link {
+            color: #3498db;
+            text-decoration: none;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        
+        .link:hover {
+            text-decoration: underline;
+        }
+        
+        p {
+            margin-top: 20px;
+            color: #aaa;
+        }
     </style>
 </head>
 <body>
@@ -23,7 +108,7 @@
         <input type="password" id="password" placeholder="Password">
         <button onclick="login()">LOGIN</button>
         <div id="message" class="error"></div>
-        <p>Don't have an account? <a href="register.html" class="link">Register</a></p>
+        <p>Don't have an account? <a href="register.html" class="link">Register here</a></p>
     </div>
 
     <script>
@@ -33,13 +118,16 @@
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             
+            const messageDiv = document.getElementById('message');
+            
             if (!username || !password) {
-                document.getElementById('message').innerText = 'Username and password required!';
+                messageDiv.innerText = '❌ Username and password required!';
+                messageDiv.style.color = '#e74c3c';
                 return;
             }
             
-            document.getElementById('message').innerText = 'Logging in...';
-            document.getElementById('message').style.color = '#3498db';
+            messageDiv.innerText = '⏳ Logging in...';
+            messageDiv.style.color = '#3498db';
             
             try {
                 const response = await fetch(`${BACKEND_URL}/api/login`, {
@@ -55,29 +143,24 @@
                 console.log('Login response:', data);
                 
                 if (data.success) {
-                    // Salvează datele în localStorage
                     localStorage.setItem('currentUser', username);
                     localStorage.setItem('userRank', data.rank);
-                    
-                    document.getElementById('message').innerText = '✅ Login successful! Redirecting...';
-                    document.getElementById('message').style.color = '#2ecc71';
-                    
-                    // Redirect către pagina principală după 1 secundă
+                    messageDiv.innerText = '✅ Login successful! Redirecting...';
+                    messageDiv.style.color = '#2ecc71';
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
                 } else {
-                    document.getElementById('message').innerText = data.error || 'Login failed';
-                    document.getElementById('message').style.color = '#e74c3c';
+                    messageDiv.innerText = '❌ ' + (data.error || 'Login failed');
+                    messageDiv.style.color = '#e74c3c';
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
-                document.getElementById('message').innerText = 'Connection error: ' + error.message;
-                document.getElementById('message').style.color = '#e74c3c';
+                messageDiv.innerText = '❌ Connection error: ' + error.message;
+                messageDiv.style.color = '#e74c3c';
             }
         }
         
-        // Dacă e deja logat, trimite la index
         if (localStorage.getItem('currentUser')) {
             window.location.href = 'index.html';
         }
