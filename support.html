@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Support - MaxGameStore</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .support-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 15px;
+        }
+        .faq-item {
+            margin: 20px 0;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+        .faq-question {
+            font-weight: bold;
+            color: #ffd700;
+            cursor: pointer;
+        }
+        .faq-answer {
+            display: none;
+            margin-top: 10px;
+            color: #ccc;
+        }
+        .contact {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">MaxGameStore</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="games.html">Games</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="login.html" class="login-btn">Login</a></li>
+        </ul>
+    </nav>
+    
+    <div class="support-container">
+        <h1>🎧 Support Center</h1>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleAnswer(this)">❓ How do I download the game?</div>
+            <div class="faq-answer">Create an account, login, then go to Games → World Of Fights → Download.</div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleAnswer(this)">❓ The game won't start!</div>
+            <div class="faq-answer">Make sure you have Java 17+ installed. Download from java.com.</div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleAnswer(this)">❓ Can't connect to server?</div>
+            <div class="faq-answer">Check the server address on the game page. Make sure the host is online.</div>
+        </div>
+        
+        <div class="contact">
+            <p>📧 Email: support@maxgamestore.com</p>
+            <p>💬 Discord: discord.gg/maxgamestore</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 MaxGameStore. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
