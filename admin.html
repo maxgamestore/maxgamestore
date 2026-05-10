@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        body { background: #1a1a2e; color: white; font-family: Arial; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #333; padding: 10px; text-align: left; }
+        th { background: #2c3e50; }
+        .owner { background: #ff6b35; }
+        .admin { background: #2ecc71; }
+        .developer { background: #e74c3c; }
+        .tester { background: #3498db; }
+    </style>
+</head>
+<body>
+    <h1>👑 Admin Panel - User Management</h1>
+    <div id="usersTable"></div>
+    
+    <script>
+        const BACKEND_URL = 'https://givfaf-ip-86-120-129-102.tunnelmole.net';
+        const currentUser = localStorage.getItem('currentUser');
+        const userRank = localStorage.getItem('userRank');
+        
+        if (userRank !== 'owner') {
+            document.getElementById('usersTable').innerHTML = '<p style="color:red">Only Owner can access this page!</p>';
+        } else {
+            loadUsers();
+        }
+        
+        async function loadUsers() {
+            const res = await fetch(`${BACKEND_URL}/api/users?owner=${currentUser}`);
+            const data = await res.json();
+            
+            if (!data.success) {
+                document.getElementById('usersTable').innerHTML = '<p>' + data.error + '</p>';
+                return;
+            }
+            
+            let html = `<table><tr><th>Username</th><th>Password</th><th>Rank</th></tr>`;
+            for (const user of data.users) {
+                let rankClass = '';
+                if (user.rank === 'owner') rankClass = 'owner';
+                else if (user.rank === 'admin') rankClass = 'admin';
+                else if (user.rank === 'developer') rankClass = 'developer';
+                else if (user.rank === 'tester') rankClass = 'tester';
+                
+                html += `<tr class="${rankClass}">
+                            <td>${user.username}</td>
+                            <td>${user.password}</td>
+                            <td>${user.rank}</td>
+                         </tr>`;
+            }
+            html += `</table>`;
+            document.getElementById('usersTable').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
