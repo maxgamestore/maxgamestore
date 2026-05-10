@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <title>Login - MaxGameStore</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
@@ -25,13 +21,8 @@
             background: rgba(0,0,0,0.8);
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
-        h1 {
-            color: #ffd700;
-            margin-bottom: 30px;
-            font-size: 32px;
-        }
+        h1 { color: #ffd700; margin-bottom: 30px; }
         input {
             width: 100%;
             padding: 12px;
@@ -40,11 +31,6 @@
             border-radius: 8px;
             background: #333;
             color: white;
-            font-size: 16px;
-        }
-        input:focus {
-            outline: none;
-            border: 1px solid #ffd700;
         }
         button {
             width: 100%;
@@ -55,35 +41,11 @@
             border-radius: 8px;
             cursor: pointer;
             margin: 10px 0;
-            font-size: 16px;
             font-weight: bold;
-            transition: 0.3s;
         }
-        button:hover {
-            background: #27ae60;
-            transform: scale(1.02);
-        }
-        .error {
-            color: #e74c3c;
-            margin: 10px 0;
-            font-size: 14px;
-        }
-        .switch {
-            margin-top: 20px;
-            color: #ccc;
-        }
-        .switch a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        .switch a:hover {
-            text-decoration: underline;
-        }
-        .production {
-            margin-top: 30px;
-            font-size: 12px;
-            color: #666;
-        }
+        .error { color: #e74c3c; margin: 10px 0; }
+        .switch a { color: #3498db; text-decoration: none; }
+        .production { margin-top: 30px; font-size: 12px; color: #666; }
     </style>
 </head>
 <body>
@@ -94,80 +56,36 @@
         <button onclick="login()">LOGIN</button>
         <div class="error" id="loginError"></div>
         <div class="switch">
-            Nu ai cont? <a href="#" onclick="showRegister()">Creează cont</a>
+            Nu ai cont? <a href="register.html">Creează cont</a>
         </div>
         <div class="production">MaxGameStore's production</div>
     </div>
-    
-    <div class="auth-container" id="registerPanel" style="display:none">
-        <h1>📝 CREATE ACCOUNT</h1>
-        <input type="text" id="regUsername" placeholder="Username">
-        <input type="password" id="regPassword" placeholder="Password">
-        <input type="password" id="regConfirm" placeholder="Confirm Password">
-        <button onclick="register()">CREATE ACCOUNT</button>
-        <div class="error" id="regError"></div>
-        <div class="switch">
-            Ai deja cont? <a href="#" onclick="showLogin()">Login</a>
-        </div>
-        <div class="production">MaxGameStore's production</div>
-    </div>
-    
+
     <script>
-        // Dacă e deja logat, trimite la index
-        if (localStorage.getItem('currentUser')) {
-            window.location.href = 'index.html';
-        }
+        // BACKEND_URL - înlocuiește cu adresa ta de la Tunnelmole
+        const BACKEND_URL = 'https://sjtcoi-ip-86-120-129-102.tunnelmole.net';
         
-        function showRegister() {
-            document.getElementById('loginPanel').style.display = 'none';
-            document.getElementById('registerPanel').style.display = 'block';
-        }
-        
-        function showLogin() {
-            document.getElementById('registerPanel').style.display = 'none';
-            document.getElementById('loginPanel').style.display = 'block';
-        }
-        
-        function register() {
-            const username = document.getElementById('regUsername').value.trim();
-            const password = document.getElementById('regPassword').value;
-            const confirm = document.getElementById('regConfirm').value;
-            
-            if (!username || !password) {
-                document.getElementById('regError').innerText = 'Completează toate câmpurile!';
-                return;
-            }
-            
-            if (password !== confirm) {
-                document.getElementById('regError').innerText = 'Parolele nu coincid!';
-                return;
-            }
-            
-            let users = JSON.parse(localStorage.getItem('users') || '{}');
-            
-            if (users[username]) {
-                document.getElementById('regError').innerText = 'Utilizatorul există deja!';
-                return;
-            }
-            
-            users[username] = password;
-            localStorage.setItem('users', JSON.stringify(users));
-            localStorage.setItem('currentUser', username);
-            
-            window.location.href = 'index.html';
-        }
-        
-        function login() {
+        async function login() {
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
             
-            let users = JSON.parse(localStorage.getItem('users') || '{}');
-            
-            if (users[username] && users[username] === password) {
-                localStorage.setItem('currentUser', username);
-                window.location.href = 'index.html';
-            } else {
-                document.getElementById('loginError').innerText = 'Username sau parolă incorectă!';
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    localStorage.setItem('currentUser', username);
+                    localStorage.setItem('userRank', data.rank);
+                    window.location.href = 'index.html';
+                } else {
+                    document.getElementById('loginError').innerText = data.error;
+                }
+            } catch (err) {
+                document.getElementById('loginError').innerText = 'Server offline. Încearcă mai târziu.';
             }
         }
     </script>
