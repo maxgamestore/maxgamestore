@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <script>
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+    </script>
+    
     <nav>
         <div class="logo">MaxGameStore</div>
         <ul>
@@ -15,6 +22,8 @@
             <li><a href="#" id="logoutBtn" class="logout-btn">Logout</a></li>
         </ul>
     </nav>
+    
+    <span id="userInfo" class="user-info"></span>
     
     <div class="hero">
         <div class="production-badge">MaxGameStore's production</div>
@@ -27,21 +36,9 @@
         <p>&copy; 2025 MaxGameStore. All rights reserved.</p>
     </footer>
     
-    <script src="js/main.js"></script>
     <script>
-        // Verifică dacă utilizatorul este logat
-        const currentUser = localStorage.getItem('currentUser');
-        if (!currentUser) {
-            window.location.href = 'login.html';
-        }
+        document.getElementById('userInfo').innerHTML = '👤 ' + localStorage.getItem('currentUser');
         
-        // Afișează numele utilizatorului în colțul stânga sus
-        const usernameSpan = document.createElement('span');
-        usernameSpan.className = 'user-info';
-        usernameSpan.innerHTML = '👤 ' + currentUser;
-        document.querySelector('.logo').after(usernameSpan);
-        
-        // Logout
         document.getElementById('logoutBtn').addEventListener('click', function(e) {
             e.preventDefault();
             localStorage.removeItem('currentUser');
