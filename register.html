@@ -1,3 +1,4 @@
+<!-- register.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +11,7 @@
         button { width: 100%; background: #2ecc71; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; }
         button:hover { background: #27ae60; }
         .error { color: #e74c3c; margin: 10px 0; font-size: 14px; }
+        .success { color: #2ecc71; }
         .link { color: #3498db; text-decoration: none; }
         h1 { color: #ffd700; margin-bottom: 20px; }
         .optional { color: #888; font-size: 12px; margin-top: 10px; }
@@ -37,10 +39,12 @@
             
             if (!username || !password) {
                 document.getElementById('message').innerText = 'Username and password are required!';
+                document.getElementById('message').style.color = '#e74c3c';
                 return;
             }
             
             document.getElementById('message').innerText = 'Creating account...';
+            document.getElementById('message').style.color = '#3498db';
             
             try {
                 const response = await fetch(`${BACKEND_URL}/api/register`, {
@@ -53,18 +57,30 @@
                 });
                 
                 const data = await response.json();
-                console.log('Server response:', data);
+                console.log('Register response:', data);
                 
                 if (data.success) {
-                    alert('✅ Account created successfully!');
-                    window.location.href = 'login.html';
+                    document.getElementById('message').innerText = '✅ Account created successfully! Redirecting to login...';
+                    document.getElementById('message').style.color = '#2ecc71';
+                    
+                    // Redirect către pagina de login după 1.5 secunde
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
                 } else {
                     document.getElementById('message').innerText = data.error || 'Registration failed';
+                    document.getElementById('message').style.color = '#e74c3c';
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
                 document.getElementById('message').innerText = 'Connection error: ' + error.message;
+                document.getElementById('message').style.color = '#e74c3c';
             }
+        }
+        
+        // Dacă e deja logat, trimite la index
+        if (localStorage.getItem('currentUser')) {
+            window.location.href = 'index.html';
         }
     </script>
 </body>
