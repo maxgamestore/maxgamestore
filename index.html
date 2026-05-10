@@ -43,7 +43,7 @@
             color: #ffd700;
         }
 
-        /* User info în dreapta sus */
+        /* User info în stânga sus */
         .user-info {
             position: fixed;
             top: 20px;
@@ -144,7 +144,7 @@
         <h1>MAXGAMESTORE</h1>
         <div class="description">
             Welcome to the official MaxGameStore platform.<br>
-            Download and play World Of Fights, a 2D multiplayer game with quests, battles, and friends!
+            Discover and play World Of Fights, a 2D multiplayer game.
         </div>
         <a href="games.html" class="play-btn">🎮 PLAY NOW</a>
     </div>
@@ -161,18 +161,18 @@
             window.location.href = 'login.html';
         }
         
-        let rankColor = '';
+        let rankClass = '';
         let rankText = '';
         
         switch(userRank) {
-            case 'owner': rankColor = 'rank-owner'; rankText = '👑 OWNER'; break;
-            case 'admin': rankColor = 'rank-admin'; rankText = '⚙️ ADMIN'; break;
-            case 'developer': rankColor = 'rank-developer'; rankText = '💻 DEVELOPER'; break;
-            case 'tester': rankColor = 'rank-tester'; rankText = '🧪 TESTER'; break;
-            default: rankColor = 'rank-user'; rankText = '🎮 PLAYER';
+            case 'owner': rankClass = 'rank-owner'; rankText = '👑 OWNER'; break;
+            case 'admin': rankClass = 'rank-admin'; rankText = '⚙️ ADMIN'; break;
+            case 'developer': rankClass = 'rank-developer'; rankText = '💻 DEVELOPER'; break;
+            case 'tester': rankClass = 'rank-tester'; rankText = '🧪 TESTER'; break;
+            default: rankClass = 'rank-user'; rankText = '🎮 PLAYER';
         }
         
-        document.getElementById('userInfo').innerHTML = `<span class="${rankColor}">${currentUser} [${rankText}]</span>`;
+        document.getElementById('userInfo').innerHTML = `<span class="${rankClass}">${currentUser} [${rankText}]</span>`;
         
         document.getElementById('logoutBtn').addEventListener('click', function(e) {
             e.preventDefault();
