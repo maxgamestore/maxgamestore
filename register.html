@@ -13,16 +13,22 @@
     <h1>📝 Inregistrare</h1>
     <input type="text" id="username" placeholder="Username"><br>
     <input type="password" id="password" placeholder="Password"><br>
-    <button onclick="register()">Inregistrare</button>
-    <p><a href="login.html">Ai deja cont? Logheaza-te</a></p>
+    <button onclick="register()">CREATE ACCOUNT</button>
+    <p><a href="login.html">Ai deja cont? Login</a></p>
     <div id="message" class="error"></div>
-    
+    <div class="production">MaxGameStore's production</div>
+
     <script>
         const BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
         
         async function register() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                document.getElementById('message').innerText = 'Completeaza toate campurile!';
+                return;
+            }
             
             try {
                 const res = await fetch(`${BACKEND_URL}/api/register`, {
@@ -40,6 +46,7 @@
                 }
             } catch (err) {
                 document.getElementById('message').innerText = 'Server error: ' + err.message;
+                console.error('Error:', err);
             }
         }
     </script>
