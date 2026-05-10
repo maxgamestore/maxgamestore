@@ -3,67 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <title>Games - MaxGameStore</title>
-    <link rel="stylesheet" href="css/style.css">
     <style>
-        .games-list {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            padding: 50px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .game-card {
-            background: rgba(0,0,0,0.7);
-            border-radius: 15px;
-            padding: 20px;
-            width: 250px;
-            text-align: center;
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
             transition: 0.3s;
         }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        .user-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .games-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+            padding: 50px;
+        }
+
+        .game-card {
+            background: rgba(0,0,0,0.7);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            width: 350px;
+            transition: 0.3s;
+        }
+
         .game-card:hover {
             transform: scale(1.05);
         }
-        .game-card img {
-            width: 100%;
-            border-radius: 10px;
+
+        .game-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
         }
-        .play-now {
+
+        .game-card h2 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .game-card p {
+            color: #ccc;
+            margin-bottom: 25px;
+        }
+
+        .play-btn {
+            display: inline-block;
             background: #2ecc71;
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: 0.3s;
         }
+
+        .play-btn:hover {
+            background: #27ae60;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0,0,0,0.3);
+            margin-top: 50px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            border-radius: 20px;
+            padding: 5px 15px;
+        }
+
+        .rank-owner { color: #ffd700; }
+        .rank-admin { color: #2ecc71; }
+        .rank-developer { color: #e74c3c; }
+        .rank-tester { color: #3498db; }
+        .rank-user { color: #bdc3c7; }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="logo">MaxGameStore</div>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="games.html">Games</a></li>
-            <li><a href="support.html">Support</a></li>
-            <li><a href="login.html" class="login-btn">Login</a></li>
-        </ul>
-    </nav>
-    
-    <div class="games-list">
-        <div class="game-card">
-            <h2>⚔️ WORLD OF FIGHTS</h2>
-            <p>Joc 2D multiplayer cu quest-uri și lupte</p>
-            <a href="games/world-of-fights/index.html"><button class="play-now">Play Now</button></a>
-        </div>
-        <div class="game-card">
-            <h2>🎮 Coming Soon</h2>
-            <p>Mai multe jocuri în curând...</p>
-            <button class="play-now" disabled>Coming Soon</button>
+    <div id="userInfo" class="user-info"></div>
+
+    <div class="navbar">
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="games.html">Games</a>
+            <a href="support.html">Support</a>
+            <a href="#" id="logoutBtn" class="logout-btn">Logout</a>
         </div>
     </div>
-    
+
+    <div class="games-container">
+        <div class="game-card">
+            <div class="game-icon">⚔️</div>
+            <h2>WORLD OF FIGHTS</h2>
+            <p>A 2D multiplayer game where you explore, fight and complete quests!</p>
+            <a href="games/world-of-fights/index.html" class="play-btn">PLAY NOW</a>
+        </div>
+    </div>
+
     <footer>
         <p>&copy; 2025 MaxGameStore. All rights reserved.</p>
     </footer>
+
+    <script>
+        const currentUser = localStorage.getItem('currentUser');
+        const userRank = localStorage.getItem('userRank') || 'user';
+        
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+        
+        let rankClass = '';
+        let rankText = '';
+        
+        switch(userRank) {
+            case 'owner': rankClass = 'rank-owner'; rankText = '👑 OWNER'; break;
+            case 'admin': rankClass = 'rank-admin'; rankText = '⚙️ ADMIN'; break;
+            case 'developer': rankClass = 'rank-developer'; rankText = '💻 DEVELOPER'; break;
+            case 'tester': rankClass = 'rank-tester'; rankText = '🧪 TESTER'; break;
+            default: rankClass = 'rank-user'; rankText = '🎮 PLAYER';
+        }
+        
+        document.getElementById('userInfo').innerHTML = `<span class="${rankClass}">${currentUser} [${rankText}]</span>`;
+        
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
+    </script>
 </body>
 </html>
