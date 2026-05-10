@@ -66,8 +66,8 @@
         const BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
         
         async function register() {
-            const username = document.getElementById('regUsername').value.trim();
-            const password = document.getElementById('regPassword').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
             const confirm = document.getElementById('regConfirm').value;
             
             if (!username || !password) {
