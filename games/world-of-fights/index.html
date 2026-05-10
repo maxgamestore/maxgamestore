@@ -1,12 +1,77 @@
 <!DOCTYPE html>
 <html lang="ro">
-
 <head>
     <meta charset="UTF-8">
     <title>World Of Fights - MaxGameStore</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .game-container {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .server-status {
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            margin: 20px;
+            font-size: 18px;
+        }
+        .server-status p {
+            margin: 10px 0;
+        }
+        .online {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        .download-btn {
+            display: inline-block;
+            background: #2ecc71;
+            color: white;
+            padding: 15px 40px;
+            font-size: 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            margin: 20px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .download-btn:hover {
+            background: #27ae60;
+            transform: scale(1.05);
+        }
+        .instructions {
+            background: rgba(0,0,0,0.5);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            margin: 30px auto;
+            text-align: left;
+        }
+        .instructions ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        .instructions li {
+            margin: 10px 0;
+        }
+        .copy-btn {
+            background: #3498db;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .warning {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
-
 <body>
     <nav>
         <div class="logo">MaxGameStore</div>
@@ -14,32 +79,98 @@
             <li><a href="../../index.html">Home</a></li>
             <li><a href="../../games.html">Games</a></li>
             <li><a href="../../support.html">Support</a></li>
-            <li><a href="../../login.html" class="login-btn">Login</a></li>
+            <li><a href="../../login.html" class="login-btn" id="loginBtn">Login</a></li>
         </ul>
     </nav>
-
+    
     <div class="game-container">
         <h1>⚔️ WORLD OF FIGHTS ⚔️</h1>
+        
         <div class="server-status">
-            <p>Server status: <span id="status">🟢 ONLINE</span></p>
-            <p>Server address: <span id="server-address">loading...</span></p>
+            <p>📡 Server Status: <span id="status" class="online">🟢 ONLINE</span></p>
+            <p>🔗 Server Address: <span id="server-address">loading...</span>
+                <button class="copy-btn" onclick="copyAddress()">📋 Copy</button>
+            </p>
+            <p>👥 Players Online: <span id="players">1</span></p>
         </div>
-        <a href="download.html" class="download-btn">DOWNLOAD GAME</a>
+        
+        <button class="download-btn" onclick="downloadGame()">🎮 DOWNLOAD GAME 🎮</button>
+        
         <div class="instructions">
-            <h3>How to play:</h3>
+            <h3>📖 How to play:</h3>
             <ol>
-                <li>Download the game</li>
-                <li>Run with VS Code or Java</li>
-                <li>Click JOIN and enter the server address</li>
+                <li>Click DOWNLOAD GAME above</li>
+                <li>Extract the ZIP file</li>
+                <li>Open the folder and run <strong>WorldOfFights.jar</strong></li>
+                <li>In the game menu, click <strong>JOIN</strong></li>
+                <li>Copy the server address above and paste it in the game</li>
+                <li>Click Connect and start playing!</li>
             </ol>
+            <div class="warning">
+                ⚠️ Note: You need Java installed to run the game.<br>
+                Download Java from: <a href="https://java.com/download" target="_blank">java.com/download</a>
+            </div>
         </div>
     </div>
-
+    
     <footer>
         <p>&copy; 2025 MaxGameStore. All rights reserved.</p>
     </footer>
-
-    <script src="../../js/main.js"></script>
+    
+    <script>
+        // Verifică login-ul
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = '../../login.html';
+        } else {
+            document.getElementById('loginBtn').innerHTML = "👤 " + currentUser;
+        }
+        
+        let currentAddress = '';
+        
+        function updateServerAddress() {
+            fetch('../../server-address.txt?' + new Date().getTime())
+                .then(response => response.text())
+                .then(data => {
+                    currentAddress = data.trim();
+                    document.getElementById('server-address').textContent = currentAddress;
+                })
+                .catch(() => {
+                    document.getElementById('server-address').textContent = 'server.example.com:25565';
+                    currentAddress = 'server.example.com:25565';
+                });
+        }
+        
+        function copyAddress() {
+            navigator.clipboard.writeText(currentAddress);
+            alert('Server address copied to clipboard!');
+        }
+        
+        function downloadGame() {
+            // Înlocuiește cu link-ul real către fișierul .jar
+            alert('Game download will start soon!\nFile will be available shortly.');
+            // window.location.href = 'WorldOfFights.jar';
+        }
+        
+        // Simulează numărul de jucători online (poți actualiza dinamic)
+        function updatePlayers() {
+            const players = Math.floor(Math.random() * 10) + 1;
+            document.getElementById('players').textContent = players;
+        }
+        
+        updateServerAddress();
+        setInterval(updateServerAddress, 30000);
+        updatePlayers();
+        setInterval(updatePlayers, 10000);
+        
+        // Refresh player count every 10 seconds
+        setInterval(() => {
+            fetch('../../server-address.txt?' + new Date().getTime())
+                .then(() => {
+                    document.getElementById('players').textContent = Math.floor(Math.random() * 10) + 1;
+                })
+                .catch(() => {});
+        }, 10000);
+    </script>
 </body>
-
 </html>
