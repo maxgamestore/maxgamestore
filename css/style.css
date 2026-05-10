@@ -16,7 +16,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     padding: 20px 50px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0,0,0,0.5);
 }
 
 .logo {
@@ -46,6 +46,11 @@ nav ul li a:hover {
     border-radius: 20px;
 }
 
+.login-btn:hover {
+    background: #27ae60;
+    transform: scale(1.05);
+}
+
 .hero {
     text-align: center;
     padding: 100px 20px;
@@ -55,10 +60,10 @@ h1 {
     font-size: 72px;
     color: #ffd700;
     margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(255,215,0,0.5);
 }
 
-.play-btn,
-.download-btn {
+.play-btn, .download-btn {
     display: inline-block;
     background: #2ecc71;
     color: white;
@@ -68,21 +73,39 @@ h1 {
     text-decoration: none;
     margin-top: 30px;
     transition: 0.3s;
+    border: none;
+    cursor: pointer;
 }
 
-.play-btn:hover,
-.download-btn:hover {
+.play-btn:hover, .download-btn:hover {
     background: #27ae60;
     transform: scale(1.05);
 }
 
+footer {
+    text-align: center;
+    padding: 30px;
+    background: rgba(0,0,0,0.5);
+    margin-top: 50px;
+}
+
+button, .play-now {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover, .play-now:hover {
+    transform: scale(1.02);
+}
+
+/* Game container styles */
 .game-container {
     text-align: center;
     padding: 50px 20px;
 }
 
 .server-status {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0,0,0,0.7);
     padding: 20px;
     border-radius: 15px;
     display: inline-block;
@@ -90,8 +113,17 @@ h1 {
     font-size: 18px;
 }
 
+.server-status p {
+    margin: 10px 0;
+}
+
+.online {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
 .instructions {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0,0,0,0.5);
     padding: 30px;
     border-radius: 15px;
     max-width: 500px;
@@ -108,9 +140,174 @@ h1 {
     margin: 10px 0;
 }
 
-footer {
-    text-align: center;
+.copy-btn {
+    background: #3498db;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.copy-btn:hover {
+    background: #2980b9;
+}
+
+.warning {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.warning a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+/* Support page */
+.support-container {
+    max-width: 800px;
+    margin: 50px auto;
     padding: 30px;
-    background: rgba(0, 0, 0, 0.5);
-    margin-top: 50px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 15px;
+}
+
+.faq-item {
+    margin: 20px 0;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.faq-question {
+    font-weight: bold;
+    color: #ffd700;
+    cursor: pointer;
+}
+
+.faq-answer {
+    display: none;
+    margin-top: 10px;
+    color: #ccc;
+}
+
+.contact {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* Games page */
+.games-list {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding: 50px;
+}
+
+.game-card {
+    background: rgba(0,0,0,0.7);
+    border-radius: 15px;
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.game-card:hover {
+    transform: scale(1.05);
+}
+
+.game-card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.play-now {
+    background: #2ecc71;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.play-now:disabled {
+    background: #555;
+    cursor: not-allowed;
+}
+
+/* Auth pages */
+.auth-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 30px;
+    background: rgba(0,0,0,0.7);
+    border-radius: 15px;
+    text-align: center;
+}
+
+.auth-container input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background: #333;
+    color: white;
+}
+
+.auth-container button {
+    background: #2ecc71;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.auth-container button:hover {
+    background: #27ae60;
+}
+
+.error {
+    color: #e74c3c;
+    margin: 10px;
+}
+
+.auth-container a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.auth-container a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    h1 {
+        font-size: 36px;
+    }
+    
+    .hero {
+        padding: 50px 20px;
+    }
+    
+    .play-btn, .download-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+    
+    .games-list {
+        padding: 20px;
+    }
 }
