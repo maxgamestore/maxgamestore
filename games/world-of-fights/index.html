@@ -4,6 +4,35 @@
     <meta charset="UTF-8">
     <title>World Of Fights - MaxGameStore</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .main-title {
+            font-size: 64px;
+            color: #ffd700;
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 30px;
+        }
+        .game-description-custom {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 15px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .edit-description {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
     <script>
@@ -22,19 +51,14 @@
         </ul>
     </nav>
     
+    <span id="userInfo" class="user-info"></span>
+    
+    <h1 class="main-title">MaxGameStore</h1>
+    
     <div class="game-container">
-        <h1 class="game-title">⚔️ WORLD OF FIGHTS ⚔️</h1>
-        
-        <div class="game-description">
-            <p>World Of Fights este un joc 2D multiplayer în care explorezi o lume pixelată, lupți cu monștri, completezi quest-uri și te bati cu alți jucători.</p>
-            <p>🎯 Caracteristici:</p>
-            <ul style="text-align: left; max-width: 500px; margin: 20px auto;">
-                <li>🗺️ Hartă 2D generată procedural</li>
-                <li>👥 Multiplayer online (joacă cu prietenii)</li>
-                <li>⚔️ Sistem de luptă și PvP</li>
-                <li>📜 Quest-uri zilnice</li>
-                <li>🎨 Grafică pixel art</li>
-            </ul>
+        <div class="game-description-custom" id="descriptionBox">
+            <span id="descriptionText">⚔️ World Of Fights - Un joc 2D multiplayer unde îți faci prieteni și lupți pentru glorie!</span>
+            <button class="edit-description" onclick="editDescription()">✏️ Edit</button>
         </div>
         
         <div class="server-status">
@@ -42,7 +66,6 @@
             <p>🔗 Server Address: <span id="server-address">loading...</span>
                 <button class="copy-btn" onclick="copyAddress()">📋 Copy</button>
             </p>
-            <p>👥 Players Online: <span id="players">1</span></p>
         </div>
         
         <div class="download-section">
@@ -101,7 +124,7 @@
     
     <script>
         const currentUser = localStorage.getItem('currentUser');
-        document.querySelector('.logo').insertAdjacentHTML('afterend', '<span class="user-info">👤 ' + currentUser + '</span>');
+        document.getElementById('userInfo').innerHTML = '👤 ' + currentUser;
         
         document.getElementById('logoutBtn').addEventListener('click', function(e) {
             e.preventDefault();
@@ -130,17 +153,25 @@
         }
         
         function downloadFile(os) {
-            alert(`📥 Downloading World Of Fights for ${os}...\n\nThe file will be available soon.\nCheck back later for the complete version!`);
+            alert(`📥 Downloading World Of Fights for ${os}...\n\nThe file will be available soon.`);
         }
         
-        function updatePlayers() {
-            document.getElementById('players').textContent = Math.floor(Math.random() * 10) + 1;
+        function editDescription() {
+            const newDesc = prompt('Edit game description:', document.getElementById('descriptionText').innerText);
+            if (newDesc) {
+                document.getElementById('descriptionText').innerText = newDesc;
+                localStorage.setItem('gameDescription', newDesc);
+            }
+        }
+        
+        // Load saved description
+        const savedDesc = localStorage.getItem('gameDescription');
+        if (savedDesc) {
+            document.getElementById('descriptionText').innerText = savedDesc;
         }
         
         updateServerAddress();
         setInterval(updateServerAddress, 30000);
-        updatePlayers();
-        setInterval(updatePlayers, 10000);
     </script>
 </body>
 </html>
