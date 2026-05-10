@@ -12,14 +12,15 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="games.html">Games</a></li>
             <li><a href="support.html">Support</a></li>
-            <li><a href="login.html" class="login-btn" id="loginBtn">Login</a></li>
+            <li><a href="#" id="logoutBtn" class="logout-btn">Logout</a></li>
         </ul>
     </nav>
     
     <div class="hero">
+        <div class="production-badge">MaxGameStore's production</div>
         <h1>WORLD OF FIGHTS</h1>
         <p>Un joc 2D multiplayer creat de MaxGameStore</p>
-        <a href="games.html" class="play-btn" id="playBtn">Play Now</a>
+        <a href="games.html" class="play-btn">Play Now</a>
     </div>
     
     <footer>
@@ -31,11 +32,21 @@
         // Verifică dacă utilizatorul este logat
         const currentUser = localStorage.getItem('currentUser');
         if (!currentUser) {
-            document.getElementById('playBtn').href = "login.html";
-            document.getElementById('loginBtn').style.background = "#e74c3c";
-        } else {
-            document.getElementById('loginBtn').innerHTML = "Hello, " + currentUser;
+            window.location.href = 'login.html';
         }
+        
+        // Afișează numele utilizatorului în colțul stânga sus
+        const usernameSpan = document.createElement('span');
+        usernameSpan.className = 'user-info';
+        usernameSpan.innerHTML = '👤 ' + currentUser;
+        document.querySelector('.logo').after(usernameSpan);
+        
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        });
     </script>
 </body>
 </html>
