@@ -20,8 +20,6 @@
             border-radius: 10px;
             text-decoration: none;
             font-size: 18px;
-            cursor: pointer;
-            border: none;
         }
         .btn:hover {
             background: #27ae60;
@@ -35,17 +33,9 @@
         h1 {
             color: #ffd700;
         }
-        .warning {
-            background: rgba(231, 76, 60, 0.3);
-            border: 1px solid #e74c3c;
-            padding: 15px;
-            border-radius: 10px;
-            max-width: 500px;
-            margin: 20px auto;
-        }
-        .success {
-            background: rgba(46, 204, 113, 0.3);
-            border: 1px solid #2ecc71;
+        .info {
+            background: rgba(52, 152, 219, 0.3);
+            border: 1px solid #3498db;
             padding: 15px;
             border-radius: 10px;
             max-width: 500px;
@@ -57,80 +47,24 @@
             border-radius: 5px;
             font-family: monospace;
         }
-        .hidden {
-            display: none;
-        }
     </style>
 </head>
 <body>
     <h1>⚔️ WORLD OF FIGHTS ⚔️</h1>
     
-    <div id="javaCheck">
-        <p>🔍 Checking Java version...</p>
+    <div class="info">
+        ✅ <strong>Java 25 is installed on your system!</strong><br><br>
+        Click the button below to download the game.
     </div>
     
-    <div id="downloadSection" class="hidden">
-        <a href="WorldOfFights.jar" class="btn">⬇️ DOWNLOAD GAME (JAR)</a>
-        <p><br>After download, run with:</p>
-        <code>java -jar WorldOfFights.jar</code>
-        <p>or double-click if Java is installed</p>
-    </div>
-
-    <script>
-        function checkJavaVersion() {
-            const div = document.getElementById('javaCheck');
-            const downloadDiv = document.getElementById('downloadSection');
-            
-            // Folosește un applet Java pentru a verifica versiunea
-            // Metoda alternativă: folosim navigator.javaEnabled() + user agent
-            const javaEnabled = navigator.javaEnabled();
-            const userAgent = navigator.userAgent;
-            
-            // Verifică dacă e Windows și versiunea
-            const isWindows = userAgent.indexOf('Windows') !== -1;
-            
-            if (!javaEnabled) {
-                div.innerHTML = `
-                    <div class="warning">
-                        ⚠️ <strong>Java is not detected!</strong><br><br>
-                        World Of Fights needs <strong>Java 17 or higher</strong> to run.<br><br>
-                        <a href="https://adoptium.net/temurin/releases/" target="_blank" class="btn btn-java">⬇️ Download Java 17+</a>
-                        <p style="margin-top: 15px; font-size: 12px;">Choose Windows → JRE or JDK → Install</p>
-                    </div>
-                `;
-                downloadDiv.classList.add('hidden');
-                return;
-            }
-            
-            // Java este activat, dar nu știm versiunea exactă
-            // Folosim un fetch la un serviciu extern sau presupunem că e ok
-            div.innerHTML = `
-                <div class="success">
-                    ✅ Java is enabled!<br>
-                    <span style="font-size: 12px;">Make sure you have Java 17+ installed</span>
-                </div>
-            `;
-            downloadDiv.classList.remove('hidden');
-        }
-        
-        // Încearcă să detecteze Java
-        setTimeout(checkJavaVersion, 500);
-        
-        // Metodă alternativă - link direct către Java dacă utilizatorul are probleme
-        function showJavaHelp() {
-            alert("World Of Fights needs Java 17+\n\nDownload from: https://adoptium.net/temurin/releases/");
-        }
-    </script>
+    <a href="WorldOfFights.jar" class="btn">⬇️ DOWNLOAD GAME (JAR)</a>
     
-    <noscript>
-        <div class="warning">
-            ⚠️ JavaScript is disabled. Please enable it to check Java version.<br>
-            <a href="https://adoptium.net/temurin/releases/" target="_blank" class="btn btn-java">⬇️ Download Java 17+</a>
-        </div>
-    </noscript>
+    <p><br>After download, run with:</p>
+    <code>java -jar WorldOfFights.jar</code>
+    <p>or double-click if Java is associated with JAR files</p>
     
     <div style="margin-top: 30px; font-size: 12px; color: #888;">
-        <a href="#" onclick="showJavaHelp(); return false;" style="color: #888;">Need help?</a>
+        <p>⚡ Make sure Java 17+ is installed | <a href="https://adoptium.net/temurin/releases/" target="_blank" style="color:#2ecc71;">Download Java</a></p>
     </div>
 </body>
 </html>
