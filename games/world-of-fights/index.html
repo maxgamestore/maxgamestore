@@ -26,6 +26,18 @@
         .btn:hover {
             background: #27ae60;
         }
+        .btn-exe {
+            background: #3498db;
+        }
+        .btn-exe:hover {
+            background: #2980b9;
+        }
+        .btn-jar {
+            background: #e67e22;
+        }
+        .btn-jar:hover {
+            background: #d35400;
+        }
         h1 {
             color: #ffd700;
         }
@@ -39,11 +51,12 @@
 <body>
     <h1>⚔️ WORLD OF FIGHTS ⚔️</h1>
     
-    <button class="btn" onclick="downloadEXE()">⬇️ Download for Windows (EXE)</button>
-    <button class="btn" onclick="downloadJAR()">⬇️ Download for All Platforms (JAR)</button>
+    <button class="btn btn-exe" onclick="downloadEXE()">⬇️ Download for Windows (EXE)</button>
+    <button class="btn btn-jar" onclick="downloadJAR()">⬇️ Download for All Platforms (JAR)</button>
     
     <div class="note">
-        <p>Download will start automatically. If not, check your browser settings.</p>
+        <p>Click the button - download starts immediately.</p>
+        <p>If Windows blocks the EXE, click "More info" → "Run anyway"</p>
     </div>
 
     <script>
