@@ -9,10 +9,9 @@ public class BootLoader {
             System.out.println("  WORLD OF FIGHTS - BOOTLOADER");
             System.out.println("========================================\n");
             
-            System.out.println("📥 Se descarca jocul de pe server...");
+            System.out.println("📥 Downloading game from server...");
             
-            // AICI TREBUIE SA PUI IP-UL SERVERULUI TAU REAL
-            // Exemplu: "http://81.181.x.x:3001/download-client"
+            // ÎNLOCOUIEȘTE CU IP-UL SERVERULUI TĂU REAL
             String serverUrl = "http://localhost:3001/download-client";
             
             URL url = new URL(serverUrl);
@@ -25,11 +24,10 @@ public class BootLoader {
                     fos.write(buffer, 0, len);
                     total += len;
                 }
-                System.out.println("   Downloadat: " + total + " bytes");
+                System.out.println("   Downloaded: " + total + " bytes");
             }
             
-            System.out.println("📦 Se extrag fisierele...");
-            // Extrage arhiva ZIP
+            System.out.println("📦 Extracting files...");
             try (ZipInputStream zis = new ZipInputStream(new FileInputStream("game.zip"))) {
                 ZipEntry entry;
                 while ((entry = zis.getNextEntry()) != null) {
@@ -50,8 +48,7 @@ public class BootLoader {
                 }
             }
             
-            System.out.println("⚙️ Se compileaza jocul...");
-            // Compilează toate fișierele Java
+            System.out.println("⚙️ Compiling game...");
             ProcessBuilder pb = new ProcessBuilder("javac", "clientfiles/com/worldoffights/client/*.java");
             pb.redirectErrorStream(true);
             Process compile = pb.start();
@@ -65,22 +62,21 @@ public class BootLoader {
             
             int exitCode = compile.waitFor();
             if (exitCode != 0) {
-                System.err.println("❌ Compilare esuata!");
+                System.err.println("❌ Compilation failed!");
                 System.out.println("\nPress Enter to exit...");
                 System.in.read();
                 return;
             }
             
-            System.out.println("✅ Compilare reusita!\n");
-            System.out.println("🎮 Se porneste WORLD OF FIGHTS...\n");
+            System.out.println("✅ Compilation successful!\n");
+            System.out.println("🎮 Starting World Of Fights...\n");
             
-            // Rulează jocul
             ProcessBuilder pbRun = new ProcessBuilder("java", "-cp", "clientfiles", "com.worldoffights.client.Main");
             pbRun.inheritIO();
             pbRun.start();
             
         } catch (Exception e) {
-            System.err.println("❌ Eroare: " + e.getMessage());
+            System.err.println("❌ Error: " + e.getMessage());
             e.printStackTrace();
             System.out.println("\nPress Enter to exit...");
             try { System.in.read(); } catch(Exception ex) {}
