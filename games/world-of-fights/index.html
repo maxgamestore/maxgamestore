@@ -1,398 +1,59 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>World Of Fights - MaxGameStore</title>
-    <link rel="stylesheet" href="../../css/style.css">
+    <title>World Of Fights - Download</title>
     <style>
-        .main-title {
-            font-size: 64px;
-            color: #ffd700;
-            text-align: center;
-            margin-top: 50px;
-            margin-bottom: 30px;
-        }
-        .game-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .game-description-custom {
-            background: rgba(0,0,0,0.5);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 20px 0;
-            position: relative;
-        }
-        .edit-description {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #3498db;
-            border: none;
+        body {
+            background: #1a1a2e;
             color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .edit-description:hover {
-            background: #2980b9;
-        }
-        .server-status {
-            background: rgba(0,0,0,0.7);
-            padding: 20px;
-            border-radius: 15px;
             text-align: center;
-            margin: 20px 0;
+            padding: 50px;
+            font-family: Arial;
         }
-        .server-status p {
-            margin: 10px 0;
-        }
-        .online {
-            color: #2ecc71;
-            font-weight: bold;
-        }
-        .offline {
-            color: #e74c3c;
-            font-weight: bold;
-        }
-        .copy-btn {
-            background: #3498db;
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-        .copy-btn:hover {
-            background: #2980b9;
-        }
-        .download-section {
-            margin: 40px 0;
-        }
-        .download-section h3 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 28px;
-        }
-        .download-grid {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-        .download-card {
-            background: rgba(0,0,0,0.6);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            width: 280px;
-            transition: 0.3s;
-        }
-        .download-card:hover {
-            transform: translateY(-5px);
-            background: rgba(0,0,0,0.8);
-        }
-        .download-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-        .download-card h4 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #ffd700;
-        }
-        .download-card p {
-            color: #aaa;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-        .download-link {
+        .btn {
             display: inline-block;
             background: #2ecc71;
             color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            transition: 0.3s;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .download-link:hover {
-            background: #27ae60;
-            transform: scale(1.05);
-        }
-        .requirements {
-            background: rgba(0,0,0,0.5);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 30px auto;
-            max-width: 500px;
-        }
-        .requirements ul {
-            margin-left: 20px;
-            margin-top: 10px;
-        }
-        .requirements li {
-            margin: 8px 0;
-        }
-        .instructions {
-            background: rgba(0,0,0,0.5);
-            padding: 30px;
-            border-radius: 15px;
-            margin: 30px 0;
-        }
-        .instructions ol {
-            margin-left: 20px;
-            margin-top: 10px;
-        }
-        .instructions li {
-            margin: 10px 0;
-        }
-        code {
-            background: #2a2a4e;
-            padding: 2px 6px;
-            border-radius: 5px;
-            font-family: monospace;
-        }
-        .warning {
-            background: rgba(231, 76, 60, 0.2);
-            padding: 10px;
+            padding: 15px 30px;
+            margin: 10px;
             border-radius: 10px;
-            margin-top: 20px;
-        }
-        .warning a {
-            color: #2ecc71;
-        }
-        footer {
-            text-align: center;
-            padding: 30px;
-            background: rgba(0,0,0,0.3);
-            margin-top: 50px;
-            font-size: 12px;
-            color: #666;
-        }
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 50px;
-            background: rgba(0,0,0,0.3);
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffd700;
-        }
-        nav ul {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-        }
-        nav ul li a {
-            color: white;
             text-decoration: none;
-            transition: 0.3s;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
         }
-        nav ul li a:hover {
+        .btn:hover {
+            background: #27ae60;
+        }
+        h1 {
             color: #ffd700;
         }
-        .logout-btn {
-            background: #e74c3c;
-            padding: 5px 15px;
-            border-radius: 20px;
-        }
-        .user-info {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.7);
-            padding: 8px 16px;
-            border-radius: 20px;
+        .note {
+            margin-top: 30px;
+            color: #888;
             font-size: 14px;
-            z-index: 100;
         }
     </style>
 </head>
 <body>
-    <script>
-        if (!localStorage.getItem('currentUser')) {
-            window.location.href = '../../login.html';
-        }
-        
-        const userRank = localStorage.getItem('userRank') || 'user';
-    </script>
+    <h1>⚔️ WORLD OF FIGHTS ⚔️</h1>
     
-    <nav>
-        <div class="logo">MaxGameStore</div>
-        <ul>
-            <li><a href="../../index.html">Home</a></li>
-            <li><a href="../../games.html">Games</a></li>
-            <li><a href="../../support.html">Support</a></li>
-            <li><a href="#" id="logoutBtn" class="logout-btn">Logout</a></li>
-        </ul>
-    </nav>
+    <button class="btn" onclick="downloadEXE()">⬇️ Download for Windows (EXE)</button>
+    <button class="btn" onclick="downloadJAR()">⬇️ Download for All Platforms (JAR)</button>
     
-    <div id="userInfo" class="user-info" style="color: white;"></div>
-    
-    <h1 class="main-title">WORLD OF FIGHTS</h1>
-    
-    <div class="game-container">
-        <div class="game-description-custom" id="descriptionBox">
-            <span id="descriptionText">⚔️ World Of Fights - Un joc 2D multiplayer unde îți faci prieteni și lupți pentru glorie!</span>
-            <button class="edit-description" onclick="editDescription()">✏️ Edit</button>
-        </div>
-        
-        <div class="server-status">
-            <p>📡 Server Status: <span id="status" class="online">🟢 Checking...</span></p>
-            <p>🔗 Server Address: <span id="server-address">loading...</span>
-                <button class="copy-btn" onclick="copyAddress()">📋 Copy</button>
-            </p>
-            <p>👥 Players Online: <span id="players">0</span></p>
-        </div>
-        
-        <div class="download-section">
-            <h3>📦 DOWNLOAD GAME</h3>
-            <div class="download-grid">
-                <!-- Buton 1: EXE pentru Windows -->
-                <div class="download-card">
-                    <div class="download-icon">🪟</div>
-                    <h4>World Of Fights</h4>
-                    <p>Windows EXE (recommended)</p>
-                    <a href="WorldOfFights.exe" class="download-link" onclick="downloadEXE()">⬇️ Download .exe</a>
-                </div>
-                
-                <!-- Buton 2: JAR pentru toate sistemele -->
-                <div class="download-card">
-                    <div class="download-icon">☕</div>
-                    <h4>World Of Fights</h4>
-                    <p>JAR file (Windows/Linux/macOS)</p>
-                    <a href="WorldOfFights.jar" class="download-link" onclick="downloadJAR()">⬇️ Download .jar</a>
-                </div>
-            </div>
-            
-            <div class="requirements">
-                <h4>📋 System Requirements:</h4>
-                <ul>
-                    <li>💾 OS: Windows 10/11, macOS 11+, or Linux</li>
-                    <li>⚙️ CPU: 2.0 GHz dual-core</li>
-                    <li>🎮 RAM: 4 GB</li>
-                    <li>🖥️ GPU: Integrated graphics</li>
-                    <li>💿 Storage: 500 MB</li>
-                    <li>☕ Java: Version 17 or higher (for JAR version)</li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="instructions">
-            <h3>📖 How to install & play:</h3>
-            <ol>
-                <li><strong>For Windows EXE:</strong> Download the .exe file and double-click to run</li>
-                <li><strong>For JAR file:</strong> Download and run with <code>java -jar WorldOffFights.jar</code> or double-click if Java is installed</li>
-                <li>Make sure you have Java 17+ installed for the JAR version</li>
-                <li>In the game menu, enter the server address above and click <strong>JOIN</strong></li>
-                <li>Start fighting!</li>
-            </ol>
-            <div class="warning">
-                ⚠️ <strong>Important:</strong><br>
-                • If Windows blocks the EXE, click "More info" → "Run anyway"<br>
-                • If the JAR doesn't open, right-click → Open with → Java<br>
-                <br>
-                📥 <a href="https://adoptium.net/temurin/releases/" target="_blank">Download Java here if you don't have it</a>
-            </div>
-        </div>
+    <div class="note">
+        <p>Download will start automatically. If not, check your browser settings.</p>
     </div>
-    
-    <footer>
-        <p>&copy; 2025 MaxGameStore. All rights reserved.</p>
-    </footer>
-    
+
     <script>
-        const currentUser = localStorage.getItem('currentUser');
-        const userRank = localStorage.getItem('userRank') || 'user';
-        
-        let rankText = '';
-        let rankColor = '#fff';
-        
-        switch(userRank) {
-            case 'owner': rankText = '👑 OWNER'; rankColor = '#ff6b35'; break;
-            case 'admin': rankText = '⚙️ ADMIN'; rankColor = '#2ecc71'; break;
-            case 'tester': rankText = '🧪 TESTER'; rankColor = '#3498db'; break;
-            case 'developer': rankText = '💻 DEVELOPER'; rankColor = '#e74c3c'; break;
-            default: rankText = '🎮 PLAYER'; rankColor = '#fff';
-        }
-        
-        document.getElementById('userInfo').innerHTML = `👤 ${currentUser} <span style="color: ${rankColor}">[${rankText}]</span>`;
-        
-        document.getElementById('logoutBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            localStorage.removeItem('currentUser');
-            window.location.href = '../../login.html';
-        });
-        
-        let currentAddress = '';
-        
-        function updateServerAddress() {
-            fetch('../../server-address.txt?' + new Date().getTime())
-                .then(response => response.text())
-                .then(data => {
-                    currentAddress = data.trim();
-                    document.getElementById('server-address').textContent = currentAddress;
-                })
-                .catch(() => {
-                    document.getElementById('server-address').textContent = 'server.maxgamestore.com:3001';
-                    currentAddress = 'server.maxgamestore.com:3001';
-                });
-        }
-        
-        function copyAddress() {
-            navigator.clipboard.writeText(currentAddress);
-            alert('✅ Server address copied to clipboard!');
-        }
-        
         function downloadEXE() {
-            alert('📥 Downloading World Of Fights for Windows...\n\nAfter download, double-click the .exe file to play.');
+            window.location.href = 'WorldOfFights.exe';
         }
         
         function downloadJAR() {
-            alert('📥 Downloading World Of Fights JAR file...\n\nAfter download, double-click or run: java -jar WorldOffFights.jar');
+            window.location.href = 'WorldOfFights.jar';
         }
-        
-        function editDescription() {
-            const newDesc = prompt('Edit game description:', document.getElementById('descriptionText').innerText);
-            if (newDesc) {
-                document.getElementById('descriptionText').innerText = newDesc;
-                localStorage.setItem('gameDescription', newDesc);
-            }
-        }
-        
-        function checkRealServer() {
-            const serverUrl = currentAddress || 'localhost';
-            fetch(`http://${serverUrl}/players`)
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById('players').textContent = data.count || 0;
-                    document.getElementById('status').innerHTML = '🟢 ONLINE';
-                    document.getElementById('status').className = 'online';
-                })
-                .catch(() => {
-                    document.getElementById('players').textContent = '0';
-                    document.getElementById('status').innerHTML = '🟢 ONLINE';
-                    document.getElementById('status').className = 'online';
-                });
-        }
-        
-        const savedDesc = localStorage.getItem('gameDescription');
-        if (savedDesc) {
-            document.getElementById('descriptionText').innerText = savedDesc;
-        }
-        
-        updateServerAddress();
-        setInterval(updateServerAddress, 30000);
-        setInterval(checkRealServer, 10000);
-        setTimeout(checkRealServer, 1000);
     </script>
 </body>
 </html>
