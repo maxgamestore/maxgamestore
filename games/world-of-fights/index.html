@@ -16,55 +16,37 @@
             background: #2ecc71;
             color: white;
             padding: 15px 30px;
-            margin: 20px;
+            margin: 10px;
             border-radius: 10px;
             text-decoration: none;
             font-size: 18px;
         }
-        .btn:hover {
-            background: #27ae60;
-        }
         .btn-java {
             background: #3498db;
-        }
-        .btn-java:hover {
-            background: #2980b9;
         }
         h1 {
             color: #ffd700;
         }
-        .info {
-            background: rgba(52, 152, 219, 0.3);
-            border: 1px solid #3498db;
-            padding: 15px;
-            border-radius: 10px;
+        .box {
+            background: rgba(0,0,0,0.5);
+            padding: 30px;
+            border-radius: 15px;
             max-width: 500px;
             margin: 20px auto;
-        }
-        code {
-            background: #2a2a4e;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-family: monospace;
         }
     </style>
 </head>
 <body>
     <h1>⚔️ WORLD OF FIGHTS ⚔️</h1>
     
-    <div class="info">
-        ✅ <strong>Java 25 is installed on your system!</strong><br><br>
-        Click the button below to download the game.
-    </div>
-    
-    <a href="WorldOfFights.jar" class="btn">⬇️ DOWNLOAD GAME (JAR)</a>
-    
-    <p><br>After download, run with:</p>
-    <code>java -jar WorldOfFights.jar</code>
-    <p>or double-click if Java is associated with JAR files</p>
-    
-    <div style="margin-top: 30px; font-size: 12px; color: #888;">
-        <p>⚡ Make sure Java 17+ is installed | <a href="https://adoptium.net/temurin/releases/" target="_blank" style="color:#2ecc71;">Download Java</a></p>
+    <div class="box">
+        <p><strong>⬇️ DOWNLOAD GAME</strong></p>
+        <a href="WorldOfFights.jar" class="btn">🎮 Click to Download</a>
+        
+        <p style="margin-top: 30px;"><strong>☕ Need Java?</strong></p>
+        <a href="https://adoptium.net/temurin/releases/" target="_blank" class="btn btn-java">⬇️ Download Java 17+</a>
+        
+        <p style="margin-top: 20px; font-size: 12px;">After download: <code>java -jar WorldOfFights.jar</code></p>
     </div>
 </body>
 </html>
