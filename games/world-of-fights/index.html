@@ -96,7 +96,7 @@
             padding: 30px;
             border-radius: 15px;
             text-align: center;
-            width: 250px;
+            width: 300px;
             transition: 0.3s;
         }
         .download-card:hover {
@@ -119,13 +119,15 @@
             display: inline-block;
             background: #2ecc71;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 30px;
             border-radius: 25px;
             text-decoration: none;
             transition: 0.3s;
+            font-size: 18px;
         }
         .download-link:hover {
             background: #27ae60;
+            transform: scale(1.05);
         }
         .requirements {
             background: rgba(0,0,0,0.5);
@@ -159,6 +161,15 @@
             padding: 2px 6px;
             border-radius: 5px;
             font-family: monospace;
+        }
+        .warning {
+            background: rgba(231, 76, 60, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .warning a {
+            color: #2ecc71;
         }
         footer {
             text-align: center;
@@ -258,16 +269,10 @@
             <h3>📦 DOWNLOAD GAME</h3>
             <div class="download-grid">
                 <div class="download-card">
-                    <div class="download-icon">🪟</div>
-                    <h4>Windows</h4>
-                    <p>Installer (BAT)</p>
-                    <a href="WorldOfFights-Setup.bat" class="download-link" onclick="downloadFile('windows')">Download Installer</a>
-                </div>
-                <div class="download-card">
-                    <div class="download-icon">🐧</div>
-                    <h4>Linux / macOS</h4>
-                    <p>JAR file</p>
-                    <a href="WorldOfFights.jar" class="download-link" onclick="downloadFile('jar')">Download JAR</a>
+                    <div class="download-icon">🎮</div>
+                    <h4>World Of Fights</h4>
+                    <p>JAR file (works on Windows, Linux, macOS)</p>
+                    <a href="WorldOfFights.jar" class="download-link" onclick="downloadGame()">⬇️ Download Game</a>
                 </div>
             </div>
             
@@ -287,20 +292,19 @@
         <div class="instructions">
             <h3>📖 How to install & play:</h3>
             <ol>
-                <li>Click <strong>Download Installer</strong> for Windows</li>
-                <li>Run the downloaded <strong>WorldOfFights-Setup.bat</strong> file</li>
-                <li>The game will automatically install on your Desktop</li>
-                <li>A shortcut <strong>"World Of Fights"</strong> will appear on your Desktop</li>
-                <li>Double-click the shortcut to start the game</li>
+                <li>Click <strong>Download Game</strong> above</li>
+                <li>Save the <strong>WorldOfFights.jar</strong> file anywhere on your computer</li>
+                <li>Make sure you have Java 17+ installed</li>
+                <li><strong>Double-click the JAR file</strong> to start the game</li>
                 <li>In the game menu, enter the server address above and click <strong>JOIN</strong></li>
                 <li>Start fighting!</li>
             </ol>
-            <div class="warning" style="background: rgba(231, 76, 60, 0.2); padding: 10px; border-radius: 10px; margin-top: 20px;">
-                ⚠️ <strong>Requirements:</strong><br>
-                • Java 17 or higher installed<br>
-                • Internet connection<br>
+            <div class="warning">
+                ⚠️ <strong>Important:</strong><br>
+                • If the JAR doesn't open, right-click → Open with → Java<br>
+                • If Windows blocks it, click "More info" → "Run anyway"<br>
                 <br>
-                📥 <a href="https://adoptium.net/temurin/releases/" target="_blank" style="color:#2ecc71;">Download Java here</a>
+                📥 <a href="https://adoptium.net/temurin/releases/" target="_blank">Download Java here if you don't have it</a>
             </div>
         </div>
     </div>
@@ -352,12 +356,8 @@
             alert('✅ Server address copied to clipboard!');
         }
         
-        function downloadFile(os) {
-            if (os === 'windows') {
-                alert('📥 Downloading World Of Fights Installer...\n\nAfter download, run the .bat file.\nThe game will install on your Desktop.');
-            } else if (os === 'jar') {
-                alert('📥 Downloading World Of Fights JAR file...\n\nRun with: java -jar WorldOfFights.jar');
-            }
+        function downloadGame() {
+            alert('📥 Downloading World Of Fights JAR file...\n\nAfter download, double-click the JAR file to play.\n\nMake sure you have Java 17+ installed.');
         }
         
         function editDescription() {
@@ -379,9 +379,9 @@
                     document.getElementById('status').className = 'online';
                 })
                 .catch(() => {
-                    document.getElementById('players').textContent = 'offline';
-                    document.getElementById('status').innerHTML = '🔴 OFFLINE';
-                    document.getElementById('status').className = 'offline';
+                    document.getElementById('players').textContent = '0';
+                    document.getElementById('status').innerHTML = '🟢 ONLINE (Server not responding)';
+                    document.getElementById('status').className = 'online';
                 });
         }
         
