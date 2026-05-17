@@ -96,7 +96,7 @@
             padding: 30px;
             border-radius: 15px;
             text-align: center;
-            width: 300px;
+            width: 280px;
             transition: 0.3s;
         }
         .download-card:hover {
@@ -110,10 +110,12 @@
         .download-card h4 {
             font-size: 24px;
             margin-bottom: 10px;
+            color: #ffd700;
         }
         .download-card p {
             color: #aaa;
             margin-bottom: 15px;
+            font-size: 14px;
         }
         .download-link {
             display: inline-block;
@@ -123,7 +125,8 @@
             border-radius: 25px;
             text-decoration: none;
             transition: 0.3s;
-            font-size: 18px;
+            font-size: 16px;
+            font-weight: bold;
         }
         .download-link:hover {
             background: #27ae60;
@@ -228,13 +231,6 @@
         }
         
         const userRank = localStorage.getItem('userRank') || 'user';
-        const rankColors = {
-            'owner': '#ff6b35',
-            'admin': '#2ecc71',
-            'tester': '#3498db',
-            'developer': '#e74c3c',
-            'user': '#ffffff'
-        };
     </script>
     
     <nav>
@@ -268,11 +264,20 @@
         <div class="download-section">
             <h3>📦 DOWNLOAD GAME</h3>
             <div class="download-grid">
+                <!-- Varianta 1: EXE pentru Windows -->
                 <div class="download-card">
-                    <div class="download-icon">🎮</div>
+                    <div class="download-icon">🪟</div>
                     <h4>World Of Fights</h4>
-                    <p>JAR file (works on Windows, Linux, macOS)</p>
-                    <a href="WorldOfFights.jar" class="download-link" onclick="downloadGame()">⬇️ Download Game</a>
+                    <p>Windows EXE (recommended)</p>
+                    <a href="WorldOffFights.exe" class="download-link" onclick="downloadEXE()">⬇️ Download .exe</a>
+                </div>
+                
+                <!-- Varianta 2: JAR pentru toate sistemele -->
+                <div class="download-card">
+                    <div class="download-icon">☕</div>
+                    <h4>World Of Fights</h4>
+                    <p>JAR file (Windows/Linux/macOS)</p>
+                    <a href="WorldOffFights.jar" class="download-link" onclick="downloadJAR()">⬇️ Download .jar</a>
                 </div>
             </div>
             
@@ -284,7 +289,7 @@
                     <li>🎮 RAM: 4 GB</li>
                     <li>🖥️ GPU: Integrated graphics</li>
                     <li>💿 Storage: 500 MB</li>
-                    <li>☕ Java: Version 17 or higher</li>
+                    <li>☕ Java: Version 17 or higher (for JAR version)</li>
                 </ul>
             </div>
         </div>
@@ -292,17 +297,16 @@
         <div class="instructions">
             <h3>📖 How to install & play:</h3>
             <ol>
-                <li>Click <strong>Download Game</strong> above</li>
-                <li>Save the <strong>WorldOfFights.jar</strong> file anywhere on your computer</li>
-                <li>Make sure you have Java 17+ installed</li>
-                <li><strong>Double-click the JAR file</strong> to start the game</li>
+                <li><strong>For Windows EXE:</strong> Download the .exe file and double-click to run</li>
+                <li><strong>For JAR file:</strong> Download and run with <code>java -jar WorldOffFights.jar</code> or double-click if Java is installed</li>
+                <li>Make sure you have Java 17+ installed for the JAR version</li>
                 <li>In the game menu, enter the server address above and click <strong>JOIN</strong></li>
                 <li>Start fighting!</li>
             </ol>
             <div class="warning">
                 ⚠️ <strong>Important:</strong><br>
+                • If Windows blocks the EXE, click "More info" → "Run anyway"<br>
                 • If the JAR doesn't open, right-click → Open with → Java<br>
-                • If Windows blocks it, click "More info" → "Run anyway"<br>
                 <br>
                 📥 <a href="https://adoptium.net/temurin/releases/" target="_blank">Download Java here if you don't have it</a>
             </div>
@@ -356,8 +360,12 @@
             alert('✅ Server address copied to clipboard!');
         }
         
-        function downloadGame() {
-            alert('📥 Downloading World Of Fights JAR file...\n\nAfter download, double-click the JAR file to play.\n\nMake sure you have Java 17+ installed.');
+        function downloadEXE() {
+            alert('📥 Downloading World Of Fights for Windows...\n\nAfter download, double-click the .exe file to play.');
+        }
+        
+        function downloadJAR() {
+            alert('📥 Downloading World Of Fights JAR file...\n\nAfter download, double-click or run: java -jar WorldOffFights.jar');
         }
         
         function editDescription() {
@@ -368,7 +376,6 @@
             }
         }
         
-        // Verifică serverul real
         function checkRealServer() {
             const serverUrl = currentAddress || 'localhost';
             fetch(`http://${serverUrl}/players`)
@@ -392,8 +399,6 @@
         
         updateServerAddress();
         setInterval(updateServerAddress, 30000);
-        
-        // Verifică serverul la fiecare 10 secunde
         setInterval(checkRealServer, 10000);
         setTimeout(checkRealServer, 1000);
     </script>
