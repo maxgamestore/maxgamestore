@@ -1,52 +1,317 @@
 <!DOCTYPE html>
-<html>
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <title>World Of Fights</title>
+    <title>World Of Fights - MaxGameStore</title>
     <style>
-        body {
-            background: #1a1a2e;
-            color: white;
-            text-align: center;
-            padding: 50px;
-            font-family: Arial;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .btn {
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        .user-info {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 100;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .production-badge {
+            font-size: 14px;
+            color: #888;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 64px;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 18px;
+            color: #ccc;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .download-section {
+            margin: 50px auto;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .download-card {
+            background: rgba(0,0,0,0.6);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: 280px;
+            transition: 0.3s;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            background: rgba(0,0,0,0.8);
+        }
+
+        .download-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .download-card h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .download-card p {
+            color: #aaa;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .download-btn {
             display: inline-block;
             background: #2ecc71;
             color: white;
-            padding: 15px 30px;
-            margin: 10px;
-            border-radius: 10px;
+            padding: 12px 30px;
+            border-radius: 25px;
             text-decoration: none;
-            font-size: 18px;
+            transition: 0.3s;
+            font-size: 16px;
+            font-weight: bold;
         }
-        .btn-java {
+
+        .download-btn:hover {
+            background: #27ae60;
+            transform: scale(1.05);
+        }
+
+        .btn-installer {
             background: #3498db;
         }
-        h1 {
-            color: #ffd700;
+
+        .btn-installer:hover {
+            background: #2980b9;
         }
-        .box {
+
+        .requirements {
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 500px;
+            margin: 30px auto;
+        }
+
+        .requirements ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .requirements li {
+            margin: 8px 0;
+        }
+
+        .instructions {
             background: rgba(0,0,0,0.5);
             padding: 30px;
             border-radius: 15px;
-            max-width: 500px;
-            margin: 20px auto;
+            max-width: 600px;
+            margin: 30px auto;
+            text-align: left;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .instructions li {
+            margin: 10px 0;
+        }
+
+        code {
+            background: #2a2a4e;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+
+        .warning {
+            background: rgba(231, 76, 60, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .warning a {
+            color: #2ecc71;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0,0,0,0.3);
+            margin-top: 50px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 40px; }
+            .download-card { width: 260px; }
         }
     </style>
 </head>
 <body>
-    <h1>⚔️ WORLD OF FIGHTS ⚔️</h1>
-    
-    <div class="box">
-        <p><strong>⬇️ DOWNLOAD GAME</strong></p>
-        <a href="WorldOfFights.jar" class="btn">🎮 Click to Download</a>
-        
-        <p style="margin-top: 30px;"><strong>☕ Need Java?</strong></p>
-        <a href="https://adoptium.net/temurin/releases/" target="_blank" class="btn btn-java">⬇️ Download Java 17+</a>
-        
-        <p style="margin-top: 20px; font-size: 12px;">After download: <code>java -jar WorldOfFights.jar</code></p>
+    <div id="userInfo" class="user-info"></div>
+
+    <div class="navbar">
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="games.html">Games</a>
+            <a href="support.html">Support</a>
+            <a href="#" id="logoutBtn" class="logout-btn" style="background:#e74c3c; padding:5px 15px; border-radius:20px;">Logout</a>
+        </div>
     </div>
+
+    <div class="hero">
+        <div class="production-badge">MaxGameStore productions</div>
+        <h1>WORLD OF FIGHTS</h1>
+        <div class="description">
+            Un joc 2D multiplayer unde îți faci prieteni și lupți pentru glorie!
+        </div>
+
+        <div class="download-section">
+            <div class="download-card">
+                <div class="download-icon">📦</div>
+                <h3>INSTALLER</h3>
+                <p>One-time setup (creates shortcut)</p>
+                <a href="games/world-of-fights/Installer.jar" class="download-btn btn-installer" onclick="downloadInstaller()">⬇️ Download Installer.jar</a>
+            </div>
+
+            <div class="download-card">
+                <div class="download-icon">🎮</div>
+                <h3>GAME ONLY</h3>
+                <p>Already have Java? Download directly</p>
+                <a href="games/world-of-fights/WorldOfFights.jar" class="download-btn" onclick="downloadGame()">⬇️ Download Game.jar</a>
+            </div>
+        </div>
+
+        <div class="requirements">
+            <h3>📋 System Requirements:</h3>
+            <ul>
+                <li>💾 OS: Windows 10/11, macOS 11+, Linux</li>
+                <li>⚙️ CPU: 2.0 GHz dual-core</li>
+                <li>🎮 RAM: 4 GB</li>
+                <li>💿 Storage: 500 MB</li>
+                <li>☕ Java: Version 17 or higher</li>
+            </ul>
+        </div>
+
+        <div class="instructions">
+            <h3>📖 How to install:</h3>
+            <ol>
+                <li>Download <strong>Installer.jar</strong> (one time setup)</li>
+                <li>Double-click <strong>Installer.jar</strong></li>
+                <li>Game will be saved on Desktop with shortcut</li>
+                <li>Double-click the shortcut to play!</li>
+            </ol>
+            <div class="warning">
+                ⚠️ <strong>Need Java?</strong><br>
+                Download Java 17+ from:<br>
+                <a href="https://adoptium.net/temurin/releases/" target="_blank">https://adoptium.net/temurin/releases/</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 MaxGameStore. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Verifică login-ul
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+        
+        const userRank = localStorage.getItem('userRank') || 'user';
+        let rankText = '';
+        let rankColor = '#fff';
+        
+        switch(userRank) {
+            case 'owner': rankText = '👑 OWNER'; rankColor = '#ff6b35'; break;
+            case 'admin': rankText = '⚙️ ADMIN'; rankColor = '#2ecc71'; break;
+            case 'tester': rankText = '🧪 TESTER'; rankColor = '#3498db'; break;
+            case 'developer': rankText = '💻 DEVELOPER'; rankColor = '#e74c3c'; break;
+            default: rankText = '🎮 PLAYER'; rankColor = '#fff';
+        }
+        
+        document.getElementById('userInfo').innerHTML = `👤 ${currentUser} <span style="color: ${rankColor}">[${rankText}]</span>`;
+        
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
+        
+        function downloadInstaller() {
+            alert('📥 Downloading Installer.jar\n\nAfter download, double-click the file to install the game.\n\nA shortcut will be created on your Desktop.');
+        }
+        
+        function downloadGame() {
+            alert('📥 Downloading WorldOfFights.jar\n\nMake sure you have Java 17+ installed.\n\nDouble-click the JAR file to play.');
+        }
+    </script>
 </body>
 </html>
