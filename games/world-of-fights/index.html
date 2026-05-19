@@ -2,6 +2,7 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>World Of Fights - MaxGameStore</title>
     <style>
         * {
@@ -23,7 +24,7 @@
         .container {
             text-align: center;
             padding: 40px;
-            max-width: 600px;
+            max-width: 700px;
         }
 
         h1 {
@@ -39,12 +40,12 @@
             margin-bottom: 40px;
         }
 
-        .download-btn {
+        .btn {
             display: inline-block;
             background: linear-gradient(45deg, #2ecc71, #27ae60);
             color: white;
-            padding: 20px 50px;
-            font-size: 24px;
+            padding: 18px 45px;
+            font-size: 22px;
             font-weight: bold;
             border-radius: 50px;
             text-decoration: none;
@@ -55,14 +56,14 @@
             cursor: pointer;
         }
 
-        .download-btn:hover {
+        .btn:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 30px rgba(46,204,113,0.5);
         }
 
         .info {
             background: rgba(0,0,0,0.5);
-            padding: 20px;
+            padding: 25px;
             border-radius: 15px;
             margin-top: 30px;
             font-size: 14px;
@@ -80,7 +81,7 @@
         }
 
         .steps {
-            margin-top: 20px;
+            margin-top: 15px;
             padding-left: 20px;
         }
 
@@ -123,16 +124,35 @@
             color: #666;
             text-align: center;
         }
+
+        .status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #2ecc71;
+            margin-right: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>⚔️ WORLD OF FIGHTS ⚔️</h1>
-        <div class="subtitle">Joc 2D Multiplayer - Luptă pentru glorie!</div>
+        <div class="subtitle">
+            <span class="status"></span>
+            Joc 2D Multiplayer - Luptă pentru glorie!
+        </div>
 
-        <a href="https://raw.githubusercontent.com/maxgamestore/maxgamestore/main/games/world-of-fights/WorldOfFights_Online.jar" 
-           class="download-btn" 
-           download="WorldOfFights_Online.jar">
+        <a href="https://raw.githubusercontent.com/maxgamestore/maxgamestore/main/games/world-of-fights/WorldOfFights_Final.jar" 
+           class="btn" 
+           download="WorldOfFights_Final.jar">
            🎮 DOWNLOAD GAME 🎮
         </a>
 
@@ -140,9 +160,10 @@
             <h3>📖 Cum instalezi:</h3>
             <ol class="steps">
                 <li>Apasă butonul <strong>DOWNLOAD GAME</strong> de mai sus</li>
-                <li>Dă dublu-click pe <strong>WorldOfFights_Online.jar</strong> descărcat</li>
-                <li>Jocul pornește automat</li>
-                <li>Pentru performanță optimă, rulează cu: <code>java -Xmx512m -jar WorldOfFights_Online.jar</code></li>
+                <li>Dă dublu-click pe <strong>WorldOfFights_Final.jar</strong> descărcat</li>
+                <li>Dacă nu pornește, rulează din CMD: <code>java -Xmx512m -jar WorldOfFights_Final.jar</code></li>
+                <li>Login cu orice nume și parolă (cont se creează automat)</li>
+                <li>Apasă "JOIN" și începe lupta!</li>
             </ol>
 
             <div class="warning">
@@ -150,7 +171,8 @@
                 Dacă nu ai Java instalat, descarcă de aici:<br>
                 <a href="https://adoptium.net/temurin/releases/" target="_blank">https://adoptium.net/temurin/releases/</a>
                 <br><br>
-                📌 Alege: Windows → JRE sau JDK → Instalează
+                📌 Alege: Windows → JRE sau JDK → Instalează<br>
+                📌 După instalare, repornește calculatorul
             </div>
 
             <div class="requirements">
@@ -163,10 +185,20 @@
                     <li>☕ Java 17 sau mai nou</li>
                 </ul>
             </div>
+
+            <div class="requirements">
+                <p><strong>🎮 Comenzi în joc:</strong></p>
+                <ul>
+                    <li>WASD - Mișcare</li>
+                    <li>SPAȚIU - Atac</li>
+                    <li>ESC - Deconectare</li>
+                </ul>
+            </div>
         </div>
 
         <footer>
             <p>&copy; 2025 MaxGameStore. Toate drepturile rezervate.</p>
+            <p style="margin-top: 5px;">🔧 Server status: <span style="color:#2ecc71;">Online</span></p>
         </footer>
     </div>
 </body>
