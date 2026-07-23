@@ -2,7 +2,8 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <title>MaxGameStore</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Of Fights - Download</title>
     <style>
         * {
             margin: 0;
@@ -11,176 +12,223 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             color: white;
             min-height: 100vh;
-        }
-
-        /* Navbar - fără logo în stânga */
-        .navbar {
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 20px 50px;
-            background: rgba(0,0,0,0.3);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
+            justify-content: center;
             align-items: center;
         }
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #ffd700;
-        }
-
-        /* User info în stânga sus */
-        .user-info {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.7);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            z-index: 100;
-        }
-
-        /* Hero section - centrat */
-        .hero {
+        .container {
+            max-width: 800px;
+            padding: 40px;
             text-align: center;
-            padding: 100px 20px;
         }
 
-        .production-badge {
-            font-size: 14px;
-            color: #888;
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+        .logo {
+            font-size: 64px;
+            color: #ffd700;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         }
 
         h1 {
-            font-size: 64px;
+            font-size: 48px;
             color: #ffd700;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        .description {
+        .subtitle {
             font-size: 18px;
-            color: #ccc;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
+            color: #aaa;
+            margin-bottom: 40px;
         }
 
-        .play-btn {
-            display: inline-block;
-            background: #2ecc71;
-            color: white;
-            padding: 15px 40px;
-            font-size: 18px;
-            border-radius: 50px;
-            text-decoration: none;
-            margin-top: 40px;
+        .download-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
             transition: 0.3s;
         }
 
-        .play-btn:hover {
-            background: #27ae60;
+        .download-card:hover {
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 18px 50px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.3);
+            margin: 10px 0;
+        }
+
+        .download-btn:hover {
             transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(46, 204, 113, 0.5);
         }
 
-        footer {
+        .download-btn-github {
+            background: linear-gradient(45deg, #333, #555);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn-github:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-small {
+            padding: 12px 30px;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .info-box {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .info-box h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
             text-align: center;
-            padding: 30px;
-            background: rgba(0,0,0,0.3);
-            margin-top: 100px;
-            font-size: 12px;
+        }
+
+        .info-box ol {
+            padding-left: 20px;
+        }
+
+        .info-box li {
+            margin: 8px 0;
+            color: #ccc;
+        }
+
+        .info-box .warning {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .info-box .warning a {
+            color: #2ecc71;
+        }
+
+        .version {
             color: #666;
+            font-size: 14px;
+            margin-top: 30px;
         }
 
-        /* Rank culori */
-        .rank-owner { color: #ffd700; text-shadow: 0 0 5px #ffd700; }
-        .rank-admin { color: #2ecc71; text-shadow: 0 0 5px #2ecc71; }
-        .rank-developer { color: #e74c3c; text-shadow: 0 0 5px #e74c3c; }
-        .rank-tester { color: #3498db; text-shadow: 0 0 5px #3498db; }
-        .rank-user { color: #bdc3c7; }
-
-        .logout-btn {
-            background: #e74c3c;
-            border-radius: 20px;
-            padding: 5px 15px;
+        .version span {
+            color: #ffd700;
         }
 
-        .logout-btn:hover {
-            background: #c0392b;
+        .status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #2ecc71;
+            margin-right: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 32px; }
+            .logo { font-size: 40px; }
+            .download-btn { font-size: 18px; padding: 14px 30px; }
         }
     </style>
 </head>
 <body>
-    <div id="userInfo" class="user-info"></div>
+    <div class="container">
+        <div class="logo">⚔️</div>
+        <h1>WORLD OF FIGHTS</h1>
+        <div class="subtitle">
+            <span class="status"></span>
+            Joc 2D Multiplayer - Luptă pentru glorie!
+        </div>
 
-    <div class="navbar">
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="games.html">Games</a>
-            <a href="support.html">Support</a>
-            <a href="#" id="logoutBtn" class="logout-btn">Logout</a>
+        <div class="download-card">
+            <h2 style="color: #ffd700; margin-bottom: 10px;">📥 DOWNLOAD GAME</h2>
+            <p style="color: #aaa; margin-bottom: 20px;">
+                Descarcă installer-ul și joacă în câteva secunde!
+            </p>
+
+            <!-- BUTONUL PRINCIPAL DE DOWNLOAD -->
+            <a href="launcher/install-launcher.bat" 
+               class="download-btn" 
+               download="install-launcher.bat">
+               🎮 DOWNLOAD INSTALLER
+            </a>
+
+            <div style="margin-top: 15px;">
+                <a href="https://raw.githubusercontent.com/maxgamestore/maxgamestore/main/launcher/install-launcher.bat" 
+                   class="download-btn download-btn-github btn-small">
+                   📦 Download from GitHub
+                </a>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>📖 Cum instalezi:</h3>
+            <ol>
+                <li>Apasă butonul <strong>DOWNLOAD INSTALLER</strong></li>
+                <li>Dă dublu-click pe <strong>install-launcher.bat</strong></li>
+                <li>Jocul se instalează automat pe Desktop</li>
+                <li>Pe Desktop apare shortcut-ul <strong>"World Of Fights"</strong></li>
+                <li>Dă dublu-click pe shortcut și joacă!</li>
+            </ol>
+
+            <div class="warning">
+                ⚠️ <strong>Ai nevoie de Java 17+</strong><br>
+                Dacă nu ai Java instalat, descarcă de aici:<br>
+                <a href="https://adoptium.net/temurin/releases/" target="_blank">
+                    https://adoptium.net/temurin/releases/
+                </a>
+                <br><br>
+                📌 Alege: Windows → JRE sau JDK → Instalează
+            </div>
+        </div>
+
+        <div class="info-box" style="margin-top: 20px;">
+            <h3>⚙️ Cerințe sistem:</h3>
+            <ul style="color: #ccc; padding-left: 20px;">
+                <li>💾 Windows 10/11, macOS 11+, sau Linux</li>
+                <li>⚙️ Procesor 2.0 GHz dual-core</li>
+                <li>🎮 RAM 4 GB (recomandat)</li>
+                <li>💿 Spațiu 500 MB</li>
+                <li>☕ Java 17 sau mai nou</li>
+            </ul>
+        </div>
+
+        <div class="version">
+            📌 Versiune: <span>1.0.0</span>
         </div>
     </div>
-
-    <div class="hero">
-        <div class="production-badge">MaxGameStore productions</div>
-        <h1>MAXGAMESTORE</h1>
-        <div class="description">
-            Welcome to the official MaxGameStore platform.<br>
-            We are a new company trying to evolve the gaming era,by introducing a new game named<br>
-            World of Fights that is still being worked thill today but in a less that a year it will be launched <br>
-            only for the comunity for the first time.<br>
-        </div>
-        <a href="games.html" class="play-btn">🎮 PLAY NOW</a>
-    </div>
-
-    <footer>
-        <p>&copy; 2025 MaxGameStore. All rights reserved.</p>
-    </footer>
-
-    <script>
-        const currentUser = localStorage.getItem('currentUser');
-        const userRank = localStorage.getItem('userRank') || 'user';
-        
-        if (!currentUser) {
-            window.location.href = 'login.html';
-        }
-        
-        let rankClass = '';
-        let rankText = '';
-        
-        switch(userRank) {
-            case 'owner': rankClass = 'rank-owner'; rankText = '👑 OWNER'; break;
-            case 'admin': rankClass = 'rank-admin'; rankText = '⚙️ ADMIN'; break;
-            case 'developer': rankClass = 'rank-developer'; rankText = '💻 DEVELOPER'; break;
-            case 'tester': rankClass = 'rank-tester'; rankText = '🧪 TESTER'; break;
-            default: rankClass = 'rank-user'; rankText = '🎮 PLAYER';
-        }
-        
-        document.getElementById('userInfo').innerHTML = `<span class="${rankClass}">${currentUser} [${rankText}]</span>`;
-        
-        document.getElementById('logoutBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            localStorage.clear();
-            window.location.href = 'login.html';
-        });
-    </script>
 </body>
 </html>
