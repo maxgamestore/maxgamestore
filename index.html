@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Of Fights - Download</title>
+    <title>World Of Fights</title>
     <style>
         * {
             margin: 0;
@@ -46,59 +46,223 @@
             margin-bottom: 40px;
         }
 
-        .download-card {
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            padding: 12px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        .form-container {
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 20px;
             padding: 40px;
-            margin: 30px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            color: #aaa;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
             transition: 0.3s;
         }
 
-        .download-card:hover {
+        .form-group input:focus {
+            outline: none;
             border-color: #ffd700;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
         }
 
-        .download-btn {
+        .form-group input::placeholder {
+            color: #666;
+        }
+
+        .btn {
             display: inline-block;
+            padding: 14px 40px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .btn-primary {
             background: linear-gradient(45deg, #2ecc71, #27ae60);
             color: white;
-            padding: 18px 50px;
-            font-size: 22px;
-            font-weight: bold;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: 0.3s;
             box-shadow: 0 5px 20px rgba(46, 204, 113, 0.3);
-            margin: 10px 0;
         }
 
-        .download-btn:hover {
-            transform: scale(1.05);
+        .btn-primary:hover {
+            transform: scale(1.02);
             box-shadow: 0 8px 30px rgba(46, 204, 113, 0.5);
         }
 
-        .download-btn-github {
-            background: linear-gradient(45deg, #333, #555);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        .btn-download {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
+            box-shadow: 0 5px 20px rgba(243, 156, 18, 0.3);
+            font-size: 20px;
+            padding: 18px 50px;
+            width: auto;
+            margin: 10px 0;
         }
 
-        .download-btn-github:hover {
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        .btn-download:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(243, 156, 18, 0.5);
         }
 
-        .btn-small {
-            padding: 12px 30px;
-            font-size: 16px;
-            margin: 5px;
+        .btn-guest {
+            background: rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
+        }
+
+        .btn-guest:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .switch-link {
+            color: #3498db;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+
+        .switch-link:hover {
+            color: #2980b9;
+        }
+
+        .error-msg {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+            padding: 10px;
+            border-radius: 10px;
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        .success-msg {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid #2ecc71;
+            padding: 10px;
+            border-radius: 10px;
+            color: #2ecc71;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success-msg.show {
+            display: block;
+        }
+
+        .download-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .user-rank {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .user-rank.owner { background: rgba(255, 215, 0, 0.3); color: #ffd700; }
+        .user-rank.admin { background: rgba(46, 204, 113, 0.3); color: #2ecc71; }
+        .user-rank.developer { background: rgba(231, 76, 60, 0.3); color: #e74c3c; }
+        .user-rank.tester { background: rgba(52, 152, 219, 0.3); color: #3498db; }
+        .user-rank.user { background: rgba(255, 255, 255, 0.1); color: #aaa; }
+
+        .server-status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #2ecc71;
+            margin-right: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
         }
 
         .info-box {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
-            padding: 25px;
+            padding: 20px;
             margin: 20px 0;
             text-align: left;
         }
@@ -141,26 +305,31 @@
             color: #ffd700;
         }
 
-        .status {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #2ecc71;
-            margin-right: 5px;
-            animation: pulse 2s infinite;
+        .btn-logout {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.3s;
         }
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
+        .btn-logout:hover {
+            background: rgba(231, 76, 60, 0.4);
+        }
+
+        .hidden {
+            display: none !important;
         }
 
         @media (max-width: 600px) {
             h1 { font-size: 32px; }
             .logo { font-size: 40px; }
-            .download-btn { font-size: 18px; padding: 14px 30px; }
+            .form-container { padding: 20px; }
+            .btn { font-size: 14px; }
+            .btn-download { font-size: 16px; padding: 14px 30px; }
         }
     </style>
 </head>
@@ -169,66 +338,277 @@
         <div class="logo">⚔️</div>
         <h1>WORLD OF FIGHTS</h1>
         <div class="subtitle">
-            <span class="status"></span>
+            <span class="server-status"></span>
             Joc 2D Multiplayer - Luptă pentru glorie!
         </div>
 
-        <div class="download-card">
-            <h2 style="color: #ffd700; margin-bottom: 10px;">📥 DOWNLOAD GAME</h2>
-            <p style="color: #aaa; margin-bottom: 20px;">
-                Descarcă installer-ul și joacă în câteva secunde!
-            </p>
+        <!-- ====== LOGIN / REGISTER ====== -->
+        <div id="authSection">
+            <div class="tabs">
+                <button class="tab-btn active" id="loginTab" onclick="showTab('login')">LOGIN</button>
+                <button class="tab-btn" id="registerTab" onclick="showTab('register')">REGISTER</button>
+            </div>
 
-            <!-- BUTONUL PRINCIPAL DE DOWNLOAD -->
-            <a href="launcher/install-launcher.bat" 
-               class="download-btn" 
-               download="install-launcher.bat">
-               🎮 DOWNLOAD INSTALLER
-            </a>
+            <!-- FORM LOGIN -->
+            <div class="form-container active" id="loginForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password">
+                </div>
+                <button class="btn btn-primary" onclick="login()">🔑 LOGIN</button>
+                <button class="btn btn-guest" onclick="loginAsGuest()">🎮 PLAY AS GUEST</button>
+                <div class="error-msg" id="loginError"></div>
+            </div>
 
-            <div style="margin-top: 15px;">
-                <a href="https://raw.githubusercontent.com/maxgamestore/maxgamestore/main/launcher/install-launcher.bat" 
-                   class="download-btn download-btn-github btn-small">
-                   📦 Download from GitHub
-                </a>
+            <!-- FORM REGISTER -->
+            <div class="form-container" id="registerForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="registerUsername" placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" placeholder="Choose a password">
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="registerConfirm" placeholder="Confirm your password">
+                </div>
+                <button class="btn btn-primary" onclick="register()">📝 CREATE ACCOUNT</button>
+                <div class="error-msg" id="registerError"></div>
+                <div class="success-msg" id="registerSuccess"></div>
             </div>
         </div>
 
-        <div class="info-box">
-            <h3>📖 Cum instalezi:</h3>
-            <ol>
-                <li>Apasă butonul <strong>DOWNLOAD INSTALLER</strong></li>
-                <li>Dă dublu-click pe <strong>install-launcher.bat</strong></li>
-                <li>Jocul se instalează automat pe Desktop</li>
-                <li>Pe Desktop apare shortcut-ul <strong>"World Of Fights"</strong></li>
-                <li>Dă dublu-click pe shortcut și joacă!</li>
-            </ol>
-
-            <div class="warning">
-                ⚠️ <strong>Ai nevoie de Java 17+</strong><br>
-                Dacă nu ai Java instalat, descarcă de aici:<br>
-                <a href="https://adoptium.net/temurin/releases/" target="_blank">
-                    https://adoptium.net/temurin/releases/
-                </a>
-                <br><br>
-                📌 Alege: Windows → JRE sau JDK → Instalează
+        <!-- ====== USER INFO + DOWNLOAD ====== -->
+        <div id="userSection" class="hidden">
+            <div class="user-info">
+                <span id="displayName" style="color: #ffd700; font-weight: bold;">Player</span>
+                <span class="user-rank" id="displayRank">🎮 PLAYER</span>
+                <span style="color: #666; font-size: 14px;" id="displayId">ID: -</span>
+                <button class="btn-logout" onclick="logout()">🚪 Logout</button>
             </div>
-        </div>
 
-        <div class="info-box" style="margin-top: 20px;">
-            <h3>⚙️ Cerințe sistem:</h3>
-            <ul style="color: #ccc; padding-left: 20px;">
-                <li>💾 Windows 10/11, macOS 11+, sau Linux</li>
-                <li>⚙️ Procesor 2.0 GHz dual-core</li>
-                <li>🎮 RAM 4 GB (recomandat)</li>
-                <li>💿 Spațiu 500 MB</li>
-                <li>☕ Java 17 sau mai nou</li>
-            </ul>
+            <div class="download-section">
+                <a href="installer/WorldOfFights_Installer.jar" class="btn btn-download" onclick="downloadGame()">
+                    🎮 DOWNLOAD GAME
+                </a>
+                <p style="color: #666; font-size: 14px; margin-top: 10px;">
+                    One-time download. After that, use the shortcut on your Desktop.
+                </p>
+            </div>
+
+            <div class="info-box">
+                <h3>📖 Cum instalezi:</h3>
+                <ol>
+                    <li>Apasă butonul <strong>DOWNLOAD GAME</strong> de mai sus</li>
+                    <li>Dă dublu-click pe <strong>WorldOfFights_Installer.jar</strong></li>
+                    <li>Jocul se instalează automat pe Desktop</li>
+                    <li>Pe Desktop apare shortcut-ul <strong>"World Of Fights"</strong></li>
+                    <li>Dă dublu-click pe shortcut și joacă!</li>
+                </ol>
+                <div class="warning">
+                    ⚠️ <strong>Ai nevoie de Java 17+</strong><br>
+                    <a href="https://adoptium.net/temurin/releases/" target="_blank">https://adoptium.net/temurin/releases/</a>
+                </div>
+            </div>
         </div>
 
         <div class="version">
-            📌 Versiune: <span>1.0.0</span>
+            📌 Versiune: <span id="gameVersion">1.0.0</span>
         </div>
     </div>
+
+    <script>
+        // ============ DATE UTILIZATOR ============
+        let currentUser = null;
+        let currentRank = 'user';
+
+        // ============ RANK-URI ============
+        const RANK_NAMES = {
+            'owner': '👑 OWNER',
+            'admin': '⚙️ ADMIN',
+            'developer': '💻 DEVELOPER',
+            'tester': '🧪 TESTER',
+            'user': '🎮 PLAYER'
+        };
+
+        const RANK_CLASSES = {
+            'owner': 'owner',
+            'admin': 'admin',
+            'developer': 'developer',
+            'tester': 'tester',
+            'user': 'user'
+        };
+
+        // ============ TAB-URI ============
+        function showTab(tab) {
+            document.getElementById('loginForm').classList.remove('active');
+            document.getElementById('registerForm').classList.remove('active');
+            document.getElementById('loginTab').classList.remove('active');
+            document.getElementById('registerTab').classList.remove('active');
+
+            if (tab === 'login') {
+                document.getElementById('loginForm').classList.add('active');
+                document.getElementById('loginTab').classList.add('active');
+            } else {
+                document.getElementById('registerForm').classList.add('active');
+                document.getElementById('registerTab').classList.add('active');
+            }
+        }
+
+        // ============ LOGIN ============
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (!username || !password) {
+                errorEl.textContent = 'Please enter username and password!';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // Conectare la serverul tău (Node.js)
+            fetch('https://trimmer-chrome-landfall.ngrok-free.dev/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Salvează userul
+                    localStorage.setItem('currentUser', username);
+                    localStorage.setItem('userRank', data.rank || 'user');
+                    showUserSection(username, data.rank || 'user');
+                    errorEl.classList.remove('show');
+                } else {
+                    errorEl.textContent = data.error || 'Login failed!';
+                    errorEl.classList.add('show');
+                }
+            })
+            .catch(() => {
+                // Dacă serverul e offline, folosește cont local
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                if (users[username] && users[username].password === password) {
+                    localStorage.setItem('currentUser', username);
+                    localStorage.setItem('userRank', users[username].rank || 'user');
+                    showUserSection(username, users[username].rank || 'user');
+                    errorEl.classList.remove('show');
+                } else {
+                    errorEl.textContent = 'Server offline! Please try again later.';
+                    errorEl.classList.add('show');
+                }
+            });
+        }
+
+        // ============ REGISTER ============
+        function register() {
+            const username = document.getElementById('registerUsername').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirm').value;
+            const errorEl = document.getElementById('registerError');
+            const successEl = document.getElementById('registerSuccess');
+
+            errorEl.classList.remove('show');
+            successEl.classList.remove('show');
+
+            if (!username || !password || !confirm) {
+                errorEl.textContent = 'All fields are required!';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (password.length < 4) {
+                errorEl.textContent = 'Password must be at least 4 characters!';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (password !== confirm) {
+                errorEl.textContent = 'Passwords do not match!';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // Salvează local (pentru test)
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            if (users[username]) {
+                errorEl.textContent = 'Username already exists!';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            users[username] = { password: password, rank: 'user' };
+            localStorage.setItem('users', JSON.stringify(users));
+
+            successEl.textContent = '✅ Account created successfully! You can now login.';
+            successEl.classList.add('show');
+
+            document.getElementById('registerUsername').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerConfirm').value = '';
+
+            setTimeout(() => showTab('login'), 1500);
+        }
+
+        // ============ GUEST ============
+        function loginAsGuest() {
+            const guests = ['Warrior', 'Mage', 'Archer', 'Knight', 'Rogue', 'Paladin', 'Druid'];
+            const name = guests[Math.floor(Math.random() * guests.length)] + (Math.floor(Math.random() * 1000) + 1);
+            localStorage.setItem('currentUser', name);
+            localStorage.setItem('userRank', 'user');
+            showUserSection(name, 'user');
+        }
+
+        // ============ LOGOUT ============
+        function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('userRank');
+            location.reload();
+        }
+
+        // ============ AFIȘARE SECȚIUNE USER ============
+        function showUserSection(username, rank) {
+            currentUser = username;
+            currentRank = rank;
+
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('userSection').classList.remove('hidden');
+
+            document.getElementById('displayName').textContent = username;
+            document.getElementById('displayRank').textContent = RANK_NAMES[rank] || '🎮 PLAYER';
+            document.getElementById('displayRank').className = 'user-rank ' + (RANK_CLASSES[rank] || 'user');
+            document.getElementById('displayId').textContent = 'ID: ' + Math.floor(Math.random() * 10000);
+        }
+
+        // ============ DOWNLOAD ============
+        function downloadGame() {
+            alert('📥 Downloading World Of Fights...\n\nAfter download, double-click WorldOfFights_Installer.jar\nA shortcut will be created on your Desktop.');
+        }
+
+        // ============ VERIFICARE AUTENTIFICARE LA ÎNCĂRCARE ============
+        window.onload = function() {
+            const user = localStorage.getItem('currentUser');
+            const rank = localStorage.getItem('userRank') || 'user';
+
+            if (user) {
+                showUserSection(user, rank);
+            }
+
+            // Obține versiunea jocului
+            fetch('https://trimmer-chrome-landfall.ngrok-free.dev/version')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('gameVersion').textContent = data.version || '1.0.0';
+                })
+                .catch(() => {});
+        };
+    </script>
 </body>
 </html>
