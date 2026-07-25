@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>World Of Fights</title>
+    <title>MaxGameStore Corporation</title>
     <style>
         * {
             margin: 0;
@@ -80,6 +80,15 @@
             border-bottom-color: #ffd700;
         }
 
+        .navbar-right a.admin-link {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .navbar-right a.admin-link:hover {
+            color: #ff6b6b;
+        }
+
         .btn-logout {
             background: rgba(231, 76, 60, 0.2);
             border: 1px solid #e74c3c;
@@ -109,6 +118,7 @@
             display: block;
         }
 
+        /* ===== HOME ===== */
         .hero {
             text-align: center;
             padding: 60px 20px 40px;
@@ -124,6 +134,13 @@
             font-size: 48px;
             color: #ffd700;
             margin: 10px 0;
+        }
+
+        .hero h1 .corporation {
+            font-size: 20px;
+            color: #888;
+            display: block;
+            margin-top: 5px;
         }
 
         .hero p {
@@ -150,24 +167,6 @@
             100% { opacity: 1; }
         }
 
-        .btn-download {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 14px 40px;
-            background: linear-gradient(45deg, #2ecc71, #27ae60);
-            color: white;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 18px;
-            transition: 0.3s;
-        }
-
-        .btn-download:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(46, 204, 113, 0.4);
-        }
-
         .company-section {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 20px;
@@ -190,6 +189,63 @@
             line-height: 1.8;
         }
 
+        /* ===== UPDATE-URI ===== */
+        .updates-section {
+            margin: 40px 0;
+        }
+
+        .updates-section h2 {
+            color: #ffd700;
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .update-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px 25px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .update-card:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .update-card .date {
+            color: #666;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .update-card .title {
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .update-card .desc {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .update-card .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .tag-new { background: rgba(46, 204, 113, 0.3); color: #2ecc71; }
+        .tag-fix { background: rgba(52, 152, 219, 0.3); color: #3498db; }
+        .tag-update { background: rgba(243, 156, 18, 0.3); color: #f39c12; }
+
+        /* ===== LIVE STATS ===== */
         .live-stats {
             display: flex;
             justify-content: center;
@@ -227,6 +283,7 @@
             animation: pulse 2s infinite;
         }
 
+        /* ===== GAMES ===== */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -296,6 +353,13 @@
             color: #f39c12;
         }
 
+        .game-card .player-count {
+            color: #888;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        /* ===== SUPPORT ===== */
         .support-section {
             max-width: 700px;
             margin: 0 auto;
@@ -367,6 +431,8 @@
             <a href="#" class="active" data-page="home" onclick="showPage('home')">🏠 Home</a>
             <a href="#" data-page="games" onclick="showPage('games')">🎮 Games</a>
             <a href="#" data-page="support" onclick="showPage('support')">📞 Support</a>
+            <!-- BUTON ADMIN - apare doar pentru owner/admin -->
+            <a href="#" id="adminBtn" onclick="goToAdmin()" style="display:none; color: #e74c3c; font-weight: bold;">🛡️ Admin</a>
             <button class="btn-logout" onclick="logout()">🚪 Logout</button>
         </div>
     </nav>
@@ -378,20 +444,69 @@
         <div class="page active" id="page-home">
 
             <div class="hero">
-                <div class="hero-logo">⚔️</div>
-                <h1>WORLD OF FIGHTS</h1>
+                <div class="hero-logo">🏢</div>
+                <h1>
+                    MAXGAMESTORE CORPORATION
+                    <span class="corporation">Building the future of gaming</span>
+                </h1>
                 <p>
                     <span class="server-status"></span>
                     <strong style="color:#2ecc71;">Online</strong>
                 </p>
                 <p>
-                    A 2D multiplayer game where you make friends, fight for glory, and build your legacy.
-                    <br>
-                    Free to play. No pay-to-win. Built by gamers, for gamers.
+                    Welcome to MaxGameStore Corporation – an indie game studio dedicated to creating 
+                    immersive multiplayer experiences. We believe in games that bring people together, 
+                    free from pay-to-win mechanics.
                 </p>
-                <a href="installer/WorldOfFights_Installer.jar" class="btn-download">
-                    📥 Download Game
-                </a>
+            </div>
+
+            <!-- ===== COMPANY INFO ===== -->
+            <div class="company-section">
+                <h2>🏢 About MaxGameStore</h2>
+                <p>
+                    <strong>MaxGameStore Corporation</strong> is an indie game studio founded in 2025 
+                    with a mission to create games that connect players worldwide.
+                    <br><br>
+                    Our flagship title, <strong>World Of Fights</strong>, is a 2D multiplayer RPG where 
+                    players fight, explore, level up, and build their legacy. We're committed to 
+                    delivering a completely free experience with no pay-to-win mechanics.
+                    <br><br>
+                    We believe in transparency, community-driven development, and games that stand 
+                    the test of time. Join us on this journey!
+                </p>
+            </div>
+
+            <!-- ===== UPDATE-URI ===== -->
+            <div class="updates-section">
+                <h2>📢 Game Updates</h2>
+
+                <div class="update-card">
+                    <div class="date">July 23, 2025</div>
+                    <div class="title">🎉 Official Launcher Released!</div>
+                    <div class="desc">We've launched the new launcher with support for multiple game versions. You can now choose between Beta 0.0.1 and future releases directly from the interface.</div>
+                    <span class="tag tag-new">NEW</span>
+                </div>
+
+                <div class="update-card">
+                    <div class="date">July 20, 2025</div>
+                    <div class="title">⚔️ Combat System Overhaul</div>
+                    <div class="desc">We've improved the sword combat system with new animations and hit detection. Every strike feels more responsive!</div>
+                    <span class="tag tag-update">UPDATE</span>
+                </div>
+
+                <div class="update-card">
+                    <div class="date">July 15, 2025</div>
+                    <div class="title">🐛 Bug Fixes & Optimization</div>
+                    <div class="desc">Fixed WebSocket connection issues and improved player synchronization in private rooms. The game runs smoother than ever.</div>
+                    <span class="tag tag-fix">FIX</span>
+                </div>
+
+                <div class="update-card">
+                    <div class="date">July 10, 2025</div>
+                    <div class="title">🏠 Private Rooms Now Available</div>
+                    <div class="desc">You can now create private rooms with custom codes and invite friends to play together. The system is fully functional!</div>
+                    <span class="tag tag-new">NEW</span>
+                </div>
             </div>
 
             <!-- ===== LIVE STATS ===== -->
@@ -404,26 +519,17 @@
                     <div class="number" id="totalVersions">0</div>
                     <div class="label">📦 Versions Available</div>
                 </div>
-            </div>
-
-            <!-- ===== COMPANY INFO ===== -->
-            <div class="company-section">
-                <h2>🏢 About MaxGameStore</h2>
-                <p>
-                    <strong>MaxGameStore</strong> is an indie game studio dedicated to creating experiences that bring people together.
-                    <br><br>
-                    <strong>World Of Fights</strong> is our first major project – a 2D multiplayer game with combat, exploration,
-                    and a growing community. We're proud to offer a completely free experience, with no pay-to-win mechanics.
-                    <br><br>
-                    Join our community and help us build something unforgettable!
-                </p>
+                <div class="stat-item">
+                    <div class="number" id="gamePlayers">0</div>
+                    <div class="label">🎮 World Of Fights Players</div>
+                </div>
             </div>
 
         </div>
 
         <!-- ===== PAGE: GAMES ===== -->
         <div class="page" id="page-games">
-            <h2 style="color: #ffd700; font-size: 32px; text-align: center; margin-bottom: 30px;">🎮 Games</h2>
+            <h2 style="color: #ffd700; font-size: 32px; text-align: center; margin-bottom: 30px;">🎮 Our Games</h2>
 
             <div class="games-grid">
                 <div class="game-card">
@@ -435,15 +541,17 @@
                     </p>
                     <a href="installer/WorldOfFights_Installer.jar" class="btn-play">🎮 Play Now</a>
                     <div class="badge">🟢 Online</div>
+                    <div class="player-count" id="wofPlayers">👥 0 players online</div>
                 </div>
 
                 <div class="game-card">
                     <div class="icon">🚀</div>
                     <h3>Project Nexus</h3>
                     <p>
-                        Our next project – a sci-fi themed 2D adventure. Stay tuned for updates!
+                        Our next project – a sci-fi themed 2D adventure with unique mechanics and an immersive storyline.
                     </p>
                     <span class="badge badge-dev">🚧 In Development</span>
+                    <div class="player-count">🔜 Coming Soon</div>
                 </div>
             </div>
         </div>
@@ -456,7 +564,7 @@
                 <div class="support-card">
                     <h3>📖 How do I get started?</h3>
                     <p>
-                        1. Download the installer from the <strong>Home</strong> page.<br>
+                        1. Download the installer from the <strong>Games</strong> page.<br>
                         2. Run the file – a shortcut will appear on your Desktop.<br>
                         3. Double-click the shortcut and start playing!
                     </p>
@@ -490,7 +598,7 @@
     </div>
 
     <footer>
-        &copy; 2025 MaxGameStore. All rights reserved. | World Of Fights
+        &copy; 2025 MaxGameStore Corporation. All rights reserved. | World Of Fights
     </footer>
 
     <script>
@@ -518,6 +626,21 @@
             window.location.href = 'login.html';
         }
 
+        // ===== GO TO ADMIN =====
+        function goToAdmin() {
+            window.location.href = 'admin.html';
+        }
+
+        // ===== VERIFICĂ DACĂ UTILIZATORUL ARE ACCES ADMIN =====
+        function checkAdminAccess(rank) {
+            const adminBtn = document.getElementById('adminBtn');
+            if (rank === 'owner' || rank === 'admin') {
+                adminBtn.style.display = 'inline-block';
+            } else {
+                adminBtn.style.display = 'none';
+            }
+        }
+
         // ===== DISPLAY USER =====
         function displayUser(username, rank) {
             document.getElementById('displayName').textContent = username;
@@ -532,6 +655,8 @@
 
             document.getElementById('displayRank').textContent = rankNames[rank] || '🎮 PLAYER';
             document.getElementById('displayRank').className = 'user-rank ' + (rank || 'user');
+            
+            checkAdminAccess(rank);
         }
 
         // ===== LOAD USER FROM SERVER (LIVE) =====
@@ -539,7 +664,6 @@
             const user = localStorage.getItem('currentUser');
 
             if (user) {
-                // Întreabă serverul pentru rank-ul live
                 fetch(`${BACKEND_URL}/api/get-rank/${user}`)
                     .then(res => res.json())
                     .then(data => {
@@ -548,7 +672,6 @@
                         displayUser(user, rank);
                     })
                     .catch(() => {
-                        // Dacă serverul e offline, folosește localStorage
                         const rank = localStorage.getItem('userRank') || 'user';
                         displayUser(user, rank);
                     });
@@ -561,9 +684,13 @@
                 .then(res => res.json())
                 .then(data => {
                     document.getElementById('totalPlayers').textContent = data.count || 0;
+                    document.getElementById('gamePlayers').textContent = data.count || 0;
+                    document.getElementById('wofPlayers').textContent = '👥 ' + (data.count || 0) + ' players online';
                 })
                 .catch(() => {
                     document.getElementById('totalPlayers').textContent = '0';
+                    document.getElementById('gamePlayers').textContent = '0';
+                    document.getElementById('wofPlayers').textContent = '👥 0 players online';
                 });
 
             fetch(`${BACKEND_URL}/versions`)
@@ -580,7 +707,10 @@
                 fetch(`${BACKEND_URL}/players`)
                     .then(res => res.json())
                     .then(data => {
-                        document.getElementById('totalPlayers').textContent = data.count || 0;
+                        const count = data.count || 0;
+                        document.getElementById('totalPlayers').textContent = count;
+                        document.getElementById('gamePlayers').textContent = count;
+                        document.getElementById('wofPlayers').textContent = '👥 ' + count + ' players online';
                     })
                     .catch(() => {});
             }, 10000);
