@@ -2,143 +2,664 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - MaxGameStore</title>
     <style>
-        body { background: #1a1a2e; color: white; font-family: Arial; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #333; padding: 12px; text-align: left; }
-        th { background: #2c3e50; }
-        .owner { background: #ff6b35; }
-        .admin { background: #2ecc71; }
-        .developer { background: #e74c3c; }
-        .tester { background: #3498db; }
-        select, button { padding: 5px 10px; margin: 0 5px; border-radius: 5px; border: none; cursor: pointer; }
-        button { background: #e74c3c; color: white; }
-        button:hover { opacity: 0.8; }
-        .logout-btn { background: #e74c3c; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px; }
-        .error { color: #e74c3c; text-align: center; padding: 20px; }
-        h1 { color: #ffd700; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .navbar .user-info .rank {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .btn-logout {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(231, 76, 60, 0.4);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .admin-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            transition: 0.3s;
+        }
+
+        .admin-card:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .admin-card h2 {
+            color: #ffd700;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-card label {
+            display: block;
+            color: #aaa;
+            font-size: 13px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .admin-card input, .admin-card select, .admin-card textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .admin-card input:focus, .admin-card select:focus, .admin-card textarea:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+
+        .admin-card textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .admin-card select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.3s;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .status-msg {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .status-msg.success {
+            display: block;
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
+        }
+
+        .status-msg.error {
+            display: block;
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+        }
+
+        .status-msg.info {
+            display: block;
+            background: rgba(52, 152, 219, 0.2);
+            border: 1px solid #3498db;
+            color: #3498db;
+        }
+
+        .status-msg.loading {
+            display: block;
+            background: rgba(243, 156, 18, 0.2);
+            border: 1px solid #f39c12;
+            color: #f39c12;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #444;
+            font-size: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 10px;
+            }
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="title">🛡️ Admin Panel</div>
+        <div class="user-info">
+            <span id="adminName">Loading...</span>
+            <span class="rank" id="adminRank">[OWNER]</span>
+            <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+        </div>
+    </nav>
+
     <div class="container">
-        <h1>👑 Admin Panel - User Management</h1>
-        <button class="logout-btn" onclick="logout()">Logout</button>
-        <div id="usersTable"></div>
+        <h1 style="color: #ffd700; font-size: 28px; margin-bottom: 5px;">⚙️ Administration</h1>
+        <p style="color: #888; margin-bottom: 20px;">Manage users, bans, messages and more</p>
+
+        <div class="admin-grid">
+
+            <!-- ===== CARD: MESAGEM ===== -->
+            <div class="admin-card">
+                <h2>💬 Send Message</h2>
+                <label>To (username)</label>
+                <input type="text" id="msgTo" placeholder="Enter username">
+                <label>Message</label>
+                <textarea id="msgContent" placeholder="Type your message here..."></textarea>
+                <button class="btn btn-primary" onclick="sendMessage()">📤 Send Message</button>
+                <div id="msgStatus" class="status-msg"></div>
+            </div>
+
+            <!-- ===== CARD: BAN ===== -->
+            <div class="admin-card">
+                <h2>🔨 Ban User</h2>
+                <label>Username</label>
+                <input type="text" id="banUser" placeholder="Enter username">
+                <label>Reason</label>
+                <input type="text" id="banReason" placeholder="Reason for ban">
+                <label>Duration (seconds)</label>
+                <input type="number" id="banDuration" placeholder="Leave empty for permanent">
+                <button class="btn btn-danger" onclick="banUser()">🔨 Ban User</button>
+                <div id="banStatus" class="status-msg"></div>
+            </div>
+
+            <!-- ===== CARD: UNBAN ===== -->
+            <div class="admin-card">
+                <h2>🔓 Unban User</h2>
+                <label>Username</label>
+                <input type="text" id="unbanUser" placeholder="Enter username">
+                <button class="btn btn-warning" onclick="unbanUser()">🔓 Unban User</button>
+                <div id="unbanStatus" class="status-msg"></div>
+            </div>
+
+            <!-- ===== CARD: IP BAN ===== -->
+            <div class="admin-card">
+                <h2>🚫 IP Ban</h2>
+                <label>IP Address</label>
+                <input type="text" id="ipBanAddress" placeholder="e.g. 192.168.1.1">
+                <label>Reason</label>
+                <input type="text" id="ipBanReason" placeholder="Reason for IP ban">
+                <label>Duration (seconds)</label>
+                <input type="number" id="ipBanDuration" placeholder="Leave empty for permanent">
+                <button class="btn btn-danger" onclick="banIp()">🚫 Ban IP</button>
+                <div id="ipBanStatus" class="status-msg"></div>
+            </div>
+
+            <!-- ===== CARD: UNBAN IP ===== -->
+            <div class="admin-card">
+                <h2>🔓 Unban IP</h2>
+                <label>IP Address</label>
+                <input type="text" id="unbanIpAddress" placeholder="e.g. 192.168.1.1">
+                <button class="btn btn-warning" onclick="unbanIp()">🔓 Unban IP</button>
+                <div id="unbanIpStatus" class="status-msg"></div>
+            </div>
+
+            <!-- ===== CARD: EMAIL ===== -->
+            <div class="admin-card">
+                <h2>📧 Send Email</h2>
+                <label>To (username)</label>
+                <input type="text" id="emailTo" placeholder="Enter username">
+                <label>Subject</label>
+                <input type="text" id="emailSubject" placeholder="Email subject">
+                <label>Message</label>
+                <textarea id="emailContent" placeholder="Type your email content here..."></textarea>
+                <button class="btn btn-info" onclick="sendEmail()">📧 Send Email</button>
+                <div id="emailStatus" class="status-msg"></div>
+            </div>
+
+            <!-- ===== CARD: LISTA CONTURI ===== -->
+            <div class="admin-card" style="grid-column: 1 / -1;">
+                <h2>👥 All Users</h2>
+                <div style="max-height: 300px; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px;">
+                    <div id="userList" style="color: #aaa; font-size: 14px;">Loading users...</div>
+                </div>
+                <button class="btn btn-info" onclick="loadUsers()" style="margin-top: 10px;">🔄 Refresh Users</button>
+            </div>
+
+        </div>
     </div>
+
+    <footer>
+        &copy; 2025 MaxGameStore Corporation. All rights reserved. | Admin Panel
+    </footer>
 
     <script>
         const BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
-        const currentUser = localStorage.getItem('currentUser');
-        const userRank = localStorage.getItem('userRank');
-        
-        if (!currentUser) {
-            window.location.href = 'login.html';
+
+        // ===== GET CURRENT ADMIN =====
+        function getAdmin() {
+            return localStorage.getItem('currentUser') || '';
         }
-        
-        if (userRank !== 'owner') {
-            document.getElementById('usersTable').innerHTML = '<div class="error">⚠️ Only Owner can access this page!</div>';
-        } else {
+
+        function getRank() {
+            return localStorage.getItem('userRank') || 'user';
+        }
+
+        // ===== CHECK PERMISSIONS =====
+        function checkAdmin() {
+            const rank = getRank();
+            if (rank !== 'owner' && rank !== 'admin') {
+                alert('You do not have permission to access this page!');
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // ===== DISPLAY ADMIN INFO =====
+        window.onload = function() {
+            if (!checkAdmin()) return;
+
+            const adminName = getAdmin();
+            const adminRank = getRank();
+            document.getElementById('adminName').textContent = adminName;
+            document.getElementById('adminRank').textContent = '[' + adminRank.toUpperCase() + ']';
             loadUsers();
-        }
-        
-        async function loadUsers() {
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/users?owner=${currentUser}`);
-                const data = await response.json();
-                console.log('Users loaded:', data);
-                
-                if (!data.success) {
-                    document.getElementById('usersTable').innerHTML = `<div class="error">${data.error}</div>`;
-                    return;
-                }
-                
-                let html = `</table>
-                    <thead>
-                        <tr><th>Username</th><th>Password</th><th>Email</th><th>Rank</th><th>Created</th><th>Actions</th></tr>
-                    </thead>
-                    <tbody>`;
-                
-                for (const user of data.users) {
-                    let rankClass = user.rank === 'owner' ? 'owner' : (user.rank === 'admin' ? 'admin' : (user.rank === 'developer' ? 'developer' : (user.rank === 'tester' ? 'tester' : '')));
-                    html += `<tr class="${rankClass}">
-                        <td>${escapeHtml(user.username)}</td>
-                        <td>${escapeHtml(user.password)}</td>
-                        <td>${escapeHtml(user.email || '-')}</td>
-                        <td>
-                            <select id="rank-${user.username}" onchange="changeRank('${user.username}')">
-                                <option value="user" ${user.rank === 'user' ? 'selected' : ''}>user</option>
-                                <option value="tester" ${user.rank === 'tester' ? 'selected' : ''}>tester</option>
-                                <option value="developer" ${user.rank === 'developer' ? 'selected' : ''}>developer</option>
-                                <option value="admin" ${user.rank === 'admin' ? 'selected' : ''}>admin</option>
-                                <option value="owner" ${user.rank === 'owner' ? 'selected' : ''}>owner</option>
-                            </select>
-                        </td>
-                        <td>${user.created ? new Date(user.created).toLocaleDateString() : '-'}</td>
-                        <td><button onclick="deleteUser('${user.username}')">Delete</button></td>
-                    </tr>`;
-                }
-                html += `</tbody></table>`;
-                document.getElementById('usersTable').innerHTML = html;
-            } catch (error) {
-                console.error('Error loading users:', error);
-                document.getElementById('usersTable').innerHTML = '<div class="error">Error loading users. Make sure the backend is running.</div>';
-            }
-        }
-        
-        async function changeRank(username) {
-            const newRank = document.getElementById(`rank-${username}`).value;
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/set-rank`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ owner: currentUser, username, rank: newRank })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    alert(`✅ Rank changed to ${newRank}`);
-                    loadUsers();
-                } else {
-                    alert(`❌ ${data.error}`);
-                }
-            } catch (error) {
-                alert('Connection error: ' + error.message);
-            }
-        }
-        
-        async function deleteUser(username) {
-            if (!confirm(`Delete user "${username}"? This cannot be undone.`)) return;
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/delete-user`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ owner: currentUser, username })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    alert('✅ User deleted');
-                    loadUsers();
-                } else {
-                    alert(`❌ ${data.error}`);
-                }
-            } catch (error) {
-                alert('Connection error: ' + error.message);
-            }
-        }
-        
+        };
+
+        // ===== LOGOUT =====
         function logout() {
-            localStorage.clear();
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('userRank');
             window.location.href = 'login.html';
         }
-        
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
+
+        // ===== LOAD USERS =====
+        function loadUsers() {
+            const userList = document.getElementById('userList');
+            userList.textContent = 'Loading...';
+            
+            fetch(`${BACKEND_URL}/api/accounts`)
+                .then(res => res.json())
+                .then(data => {
+                    if (Array.isArray(data)) {
+                        let html = '<table style="width:100%; border-collapse: collapse; font-size:13px;">';
+                        html += '<tr style="color:#ffd700; border-bottom:1px solid #333;">';
+                        html += '<th style="text-align:left; padding:5px;">Username</th>';
+                        html += '<th style="text-align:left; padding:5px;">Rank</th>';
+                        html += '<th style="text-align:left; padding:5px;">Email</th>';
+                        html += '<th style="text-align:left; padding:5px;">Banned</th>';
+                        html += '<th style="text-align:left; padding:5px;">Level</th>';
+                        html += '</tr>';
+                        
+                        data.forEach(user => {
+                            html += '<tr style="border-bottom:1px solid #222;">';
+                            html += `<td style="padding:5px;">${user.username}</td>`;
+                            html += `<td style="padding:5px; color: ${user.rank === 'owner' ? '#ffd700' : user.rank === 'admin' ? '#2ecc71' : '#aaa'};">${user.rank}</td>`;
+                            html += `<td style="padding:5px;">${user.email || '-'}</td>`;
+                            html += `<td style="padding:5px; color: ${user.banned ? '#e74c3c' : '#2ecc71'};">${user.banned ? '🔨 Yes' : '✅ No'}</td>`;
+                            html += `<td style="padding:5px;">${user.stats?.level || 1}</td>`;
+                            html += '</tr>';
+                        });
+                        
+                        html += '</table>';
+                        userList.innerHTML = html;
+                    } else {
+                        userList.textContent = 'No users found';
+                    }
+                })
+                .catch(err => {
+                    userList.textContent = 'Error loading users: ' + err.message;
+                });
+        }
+
+        // ===== SEND MESSAGE =====
+        function sendMessage() {
+            const to = document.getElementById('msgTo').value.trim();
+            const message = document.getElementById('msgContent').value.trim();
+            const admin = getAdmin();
+            const status = document.getElementById('msgStatus');
+
+            if (!to || !message) {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Please fill in all fields!';
+                return;
+            }
+
+            status.className = 'status-msg loading';
+            status.textContent = '⏳ Sending message...';
+
+            fetch(`${BACKEND_URL}/api/message`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ from: admin, to, message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    status.className = 'status-msg success';
+                    status.textContent = '✅ Message sent successfully!';
+                    document.getElementById('msgTo').value = '';
+                    document.getElementById('msgContent').value = '';
+                } else {
+                    status.className = 'status-msg error';
+                    status.textContent = '❌ ' + (data.error || 'Failed to send message');
+                }
+            })
+            .catch(err => {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Error: ' + err.message;
+            });
+        }
+
+        // ===== BAN USER =====
+        function banUser() {
+            const username = document.getElementById('banUser').value.trim();
+            const reason = document.getElementById('banReason').value.trim() || 'No reason provided';
+            const duration = document.getElementById('banDuration').value.trim();
+            const admin = getAdmin();
+            const status = document.getElementById('banStatus');
+
+            if (!username) {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Please enter a username!';
+                return;
+            }
+
+            status.className = 'status-msg loading';
+            status.textContent = '⏳ Banning user...';
+
+            const body = { username, reason, admin };
+            if (duration) body.duration = parseInt(duration) * 1000;
+
+            fetch(`${BACKEND_URL}/api/ban`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    status.className = 'status-msg success';
+                    status.textContent = '✅ ' + data.message;
+                    document.getElementById('banUser').value = '';
+                    document.getElementById('banReason').value = '';
+                    document.getElementById('banDuration').value = '';
+                    loadUsers();
+                } else {
+                    status.className = 'status-msg error';
+                    status.textContent = '❌ ' + (data.error || 'Failed to ban user');
+                }
+            })
+            .catch(err => {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Error: ' + err.message;
+            });
+        }
+
+        // ===== UNBAN USER =====
+        function unbanUser() {
+            const username = document.getElementById('unbanUser').value.trim();
+            const admin = getAdmin();
+            const status = document.getElementById('unbanStatus');
+
+            if (!username) {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Please enter a username!';
+                return;
+            }
+
+            status.className = 'status-msg loading';
+            status.textContent = '⏳ Unbanning user...';
+
+            fetch(`${BACKEND_URL}/api/unban`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, admin })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    status.className = 'status-msg success';
+                    status.textContent = '✅ ' + data.message;
+                    document.getElementById('unbanUser').value = '';
+                    loadUsers();
+                } else {
+                    status.className = 'status-msg error';
+                    status.textContent = '❌ ' + (data.error || 'Failed to unban user');
+                }
+            })
+            .catch(err => {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Error: ' + err.message;
+            });
+        }
+
+        // ===== BAN IP =====
+        function banIp() {
+            const ip = document.getElementById('ipBanAddress').value.trim();
+            const reason = document.getElementById('ipBanReason').value.trim() || 'No reason provided';
+            const duration = document.getElementById('ipBanDuration').value.trim();
+            const admin = getAdmin();
+            const status = document.getElementById('ipBanStatus');
+
+            if (!ip) {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Please enter an IP address!';
+                return;
+            }
+
+            status.className = 'status-msg loading';
+            status.textContent = '⏳ Banning IP...';
+
+            const body = { ip, reason, admin };
+            if (duration) body.duration = parseInt(duration) * 1000;
+
+            fetch(`${BACKEND_URL}/api/ban-ip`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    status.className = 'status-msg success';
+                    status.textContent = '✅ ' + data.message;
+                    document.getElementById('ipBanAddress').value = '';
+                    document.getElementById('ipBanReason').value = '';
+                    document.getElementById('ipBanDuration').value = '';
+                } else {
+                    status.className = 'status-msg error';
+                    status.textContent = '❌ ' + (data.error || 'Failed to ban IP');
+                }
+            })
+            .catch(err => {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Error: ' + err.message;
+            });
+        }
+
+        // ===== UNBAN IP =====
+        function unbanIp() {
+            const ip = document.getElementById('unbanIpAddress').value.trim();
+            const admin = getAdmin();
+            const status = document.getElementById('unbanIpStatus');
+
+            if (!ip) {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Please enter an IP address!';
+                return;
+            }
+
+            status.className = 'status-msg loading';
+            status.textContent = '⏳ Unbanning IP...';
+
+            fetch(`${BACKEND_URL}/api/unban-ip`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ip, admin })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    status.className = 'status-msg success';
+                    status.textContent = '✅ ' + data.message;
+                    document.getElementById('unbanIpAddress').value = '';
+                } else {
+                    status.className = 'status-msg error';
+                    status.textContent = '❌ ' + (data.error || 'Failed to unban IP');
+                }
+            })
+            .catch(err => {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Error: ' + err.message;
+            });
+        }
+
+        // ===== SEND EMAIL =====
+        function sendEmail() {
+            const to = document.getElementById('emailTo').value.trim();
+            const subject = document.getElementById('emailSubject').value.trim();
+            const message = document.getElementById('emailContent').value.trim();
+            const admin = getAdmin();
+            const status = document.getElementById('emailStatus');
+
+            if (!to || !subject || !message) {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Please fill in all fields!';
+                return;
+            }
+
+            status.className = 'status-msg loading';
+            status.textContent = '⏳ Sending email...';
+
+            fetch(`${BACKEND_URL}/api/send-email`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ to, subject, message, admin })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    status.className = 'status-msg success';
+                    status.textContent = '✅ ' + data.message;
+                    document.getElementById('emailTo').value = '';
+                    document.getElementById('emailSubject').value = '';
+                    document.getElementById('emailContent').value = '';
+                } else {
+                    status.className = 'status-msg error';
+                    status.textContent = '❌ ' + (data.error || 'Failed to send email');
+                }
+            })
+            .catch(err => {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Error: ' + err.message;
             });
         }
     </script>
