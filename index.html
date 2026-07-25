@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MaxGameStore Corporation</title>
     <style>
+        /* ... același CSS ca înainte ... */
         * {
             margin: 0;
             padding: 0;
@@ -118,7 +119,6 @@
             display: block;
         }
 
-        /* ===== HOME ===== */
         .hero {
             text-align: center;
             padding: 60px 20px 40px;
@@ -189,7 +189,6 @@
             line-height: 1.8;
         }
 
-        /* ===== UPDATE-URI ===== */
         .updates-section {
             margin: 40px 0;
         }
@@ -245,7 +244,6 @@
         .tag-fix { background: rgba(52, 152, 219, 0.3); color: #3498db; }
         .tag-update { background: rgba(243, 156, 18, 0.3); color: #f39c12; }
 
-        /* ===== LIVE STATS ===== */
         .live-stats {
             display: flex;
             justify-content: center;
@@ -283,7 +281,6 @@
             animation: pulse 2s infinite;
         }
 
-        /* ===== GAMES ===== */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -359,7 +356,6 @@
             margin-top: 8px;
         }
 
-        /* ===== SUPPORT ===== */
         .support-section {
             max-width: 700px;
             margin: 0 auto;
@@ -421,7 +417,6 @@
 </head>
 <body>
 
-    <!-- ===== NAVBAR ===== -->
     <nav class="navbar">
         <div class="navbar-left">
             <span class="user-name" id="displayName">Guest</span>
@@ -431,18 +426,14 @@
             <a href="#" class="active" data-page="home" onclick="showPage('home')">🏠 Home</a>
             <a href="#" data-page="games" onclick="showPage('games')">🎮 Games</a>
             <a href="#" data-page="support" onclick="showPage('support')">📞 Support</a>
-            <!-- BUTON ADMIN - apare doar pentru owner/admin -->
             <a href="#" id="adminBtn" onclick="goToAdmin()" style="display:none; color: #e74c3c; font-weight: bold;">🛡️ Admin</a>
             <button class="btn-logout" onclick="logout()">🚪 Logout</button>
         </div>
     </nav>
 
-    <!-- ===== CONȚINUT ===== -->
     <div class="container">
 
-        <!-- ===== PAGE: HOME ===== -->
         <div class="page active" id="page-home">
-
             <div class="hero">
                 <div class="hero-logo">🏢</div>
                 <h1>
@@ -460,7 +451,6 @@
                 </p>
             </div>
 
-            <!-- ===== COMPANY INFO ===== -->
             <div class="company-section">
                 <h2>🏢 About MaxGameStore</h2>
                 <p>
@@ -476,40 +466,34 @@
                 </p>
             </div>
 
-            <!-- ===== UPDATE-URI ===== -->
             <div class="updates-section">
                 <h2>📢 Game Updates</h2>
-
                 <div class="update-card">
                     <div class="date">July 23, 2025</div>
                     <div class="title">🎉 Official Launcher Released!</div>
-                    <div class="desc">We've launched the new launcher with support for multiple game versions. You can now choose between Beta 0.0.1 and future releases directly from the interface.</div>
+                    <div class="desc">We've launched the new launcher with support for multiple game versions.</div>
                     <span class="tag tag-new">NEW</span>
                 </div>
-
                 <div class="update-card">
                     <div class="date">July 20, 2025</div>
                     <div class="title">⚔️ Combat System Overhaul</div>
-                    <div class="desc">We've improved the sword combat system with new animations and hit detection. Every strike feels more responsive!</div>
+                    <div class="desc">Improved sword combat system with new animations.</div>
                     <span class="tag tag-update">UPDATE</span>
                 </div>
-
                 <div class="update-card">
                     <div class="date">July 15, 2025</div>
                     <div class="title">🐛 Bug Fixes & Optimization</div>
-                    <div class="desc">Fixed WebSocket connection issues and improved player synchronization in private rooms. The game runs smoother than ever.</div>
+                    <div class="desc">Fixed WebSocket connection issues and improved synchronization.</div>
                     <span class="tag tag-fix">FIX</span>
                 </div>
-
                 <div class="update-card">
                     <div class="date">July 10, 2025</div>
                     <div class="title">🏠 Private Rooms Now Available</div>
-                    <div class="desc">You can now create private rooms with custom codes and invite friends to play together. The system is fully functional!</div>
+                    <div class="desc">You can now create private rooms with custom codes.</div>
                     <span class="tag tag-new">NEW</span>
                 </div>
             </div>
 
-            <!-- ===== LIVE STATS ===== -->
             <div class="live-stats" id="liveStats">
                 <div class="stat-item">
                     <div class="number" id="totalPlayers">0</div>
@@ -524,73 +508,47 @@
                     <div class="label">🎮 World Of Fights Players</div>
                 </div>
             </div>
-
         </div>
 
-        <!-- ===== PAGE: GAMES ===== -->
         <div class="page" id="page-games">
             <h2 style="color: #ffd700; font-size: 32px; text-align: center; margin-bottom: 30px;">🎮 Our Games</h2>
-
             <div class="games-grid">
                 <div class="game-card">
                     <div class="icon">⚔️</div>
                     <h3>World Of Fights</h3>
-                    <p>
-                        A 2D multiplayer RPG where you fight, explore, level up, and build your character.
-                        Includes both <strong>Online Multiplayer</strong> and <strong>Survival Singleplayer</strong> modes.
-                    </p>
+                    <p>A 2D multiplayer RPG where you fight, explore, level up, and build your character.</p>
                     <a href="installer/WorldOfFights_Installer.jar" class="btn-play">🎮 Play Now</a>
                     <div class="badge">🟢 Online</div>
                     <div class="player-count" id="wofPlayers">👥 0 players online</div>
                 </div>
-
                 <div class="game-card">
                     <div class="icon">🚀</div>
                     <h3>Project Nexus</h3>
-                    <p>
-                        Our next project – a sci-fi themed 2D adventure with unique mechanics and an immersive storyline.
-                    </p>
+                    <p>Our next project – a sci-fi themed 2D adventure.</p>
                     <span class="badge badge-dev">🚧 In Development</span>
                     <div class="player-count">🔜 Coming Soon</div>
                 </div>
             </div>
         </div>
 
-        <!-- ===== PAGE: SUPPORT ===== -->
         <div class="page" id="page-support">
             <h2 style="color: #ffd700; font-size: 32px; text-align: center; margin-bottom: 30px;">📞 Support</h2>
-
             <div class="support-section">
                 <div class="support-card">
                     <h3>📖 How do I get started?</h3>
-                    <p>
-                        1. Download the installer from the <strong>Games</strong> page.<br>
-                        2. Run the file – a shortcut will appear on your Desktop.<br>
-                        3. Double-click the shortcut and start playing!
-                    </p>
+                    <p>Download the installer from the Games page and run it.</p>
                 </div>
-
                 <div class="support-card">
                     <h3>🐛 I found a bug!</h3>
-                    <p>
-                        Please report it on our Discord or via email. Every report helps us improve the game!
-                    </p>
+                    <p>Report it on Discord or via email.</p>
                 </div>
-
                 <div class="support-card">
                     <h3>💬 Community</h3>
-                    <p>
-                        Join our Discord to stay updated, report bugs, and chat with other players:<br>
-                        <a href="#">https://discord.gg/worldoffights</a>
-                    </p>
+                    <p>Join our Discord: <a href="#">https://discord.gg/worldoffights</a></p>
                 </div>
-
                 <div class="support-card">
                     <h3>📧 Contact</h3>
-                    <p>
-                        Email: <a href="mailto:support@maxgamestore.com">support@maxgamestore.com</a><br>
-                        We usually respond within 24 hours.
-                    </p>
+                    <p>Email: <a href="mailto:support@maxgamestore.com">support@maxgamestore.com</a></p>
                 </div>
             </div>
         </div>
@@ -604,21 +562,15 @@
     <script>
         const BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
 
-        // ===== NAVIGATION =====
         function showPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.navbar-right a').forEach(a => a.classList.remove('active'));
-
             document.getElementById('page-' + page).classList.add('active');
-
             document.querySelectorAll('.navbar-right a').forEach(a => {
-                if (a.dataset.page === page) {
-                    a.classList.add('active');
-                }
+                if (a.dataset.page === page) a.classList.add('active');
             });
         }
 
-        // ===== LOGOUT =====
         function logout() {
             localStorage.removeItem('currentUser');
             localStorage.removeItem('userRank');
@@ -626,12 +578,10 @@
             window.location.href = 'login.html';
         }
 
-        // ===== GO TO ADMIN =====
         function goToAdmin() {
             window.location.href = 'admin.html';
         }
 
-        // ===== VERIFICĂ DACĂ UTILIZATORUL ARE ACCES ADMIN =====
         function checkAdminAccess(rank) {
             const adminBtn = document.getElementById('adminBtn');
             if (rank === 'owner' || rank === 'admin') {
@@ -641,10 +591,8 @@
             }
         }
 
-        // ===== DISPLAY USER =====
         function displayUser(username, rank) {
             document.getElementById('displayName').textContent = username;
-
             const rankNames = {
                 'owner': '👑 OWNER',
                 'admin': '⚙️ ADMIN',
@@ -652,14 +600,58 @@
                 'tester': '🧪 TESTER',
                 'user': '🎮 PLAYER'
             };
-
             document.getElementById('displayRank').textContent = rankNames[rank] || '🎮 PLAYER';
             document.getElementById('displayRank').className = 'user-rank ' + (rank || 'user');
-            
             checkAdminAccess(rank);
         }
 
-        // ===== LOAD USER FROM SERVER (LIVE) =====
+        function formatBanTime(ms) {
+            if (ms <= 0) return 'Expired';
+            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+            let parts = [];
+            if (days > 0) parts.push(`${days}d`);
+            if (hours > 0) parts.push(`${hours}h`);
+            if (minutes > 0) parts.push(`${minutes}m`);
+            if (seconds > 0 || parts.length === 0) parts.push(`${seconds}s`);
+            return parts.join(' ');
+        }
+
+        function checkBanStatus() {
+            const user = localStorage.getItem('currentUser');
+            if (!user) return;
+            
+            fetch(`${BACKEND_URL}/api/check-ban/${user}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.banned) {
+                        let timeMessage = '';
+                        if (data.remaining && data.remaining > 0) {
+                            timeMessage = `⏳ Remaining: ${formatBanTime(data.remaining)}`;
+                        } else {
+                            timeMessage = '⏳ Permanent ban';
+                        }
+                        const banType = data.type === 'IP' ? '🚫 IP BAN' : '🔨 ACCOUNT BAN';
+                        
+                        alert(
+                            `⚠️ YOU HAVE BEEN BANNED!\n\n` +
+                            `${banType}\n` +
+                            `📝 Reason: ${data.reason}\n` +
+                            `${timeMessage}\n` +
+                            `\nYou will be logged out now.`
+                        );
+                        
+                        localStorage.removeItem('currentUser');
+                        localStorage.removeItem('userRank');
+                        localStorage.removeItem('userEmail');
+                        window.location.href = 'login.html';
+                    }
+                })
+                .catch(() => {});
+        }
+
         window.onload = function() {
             const user = localStorage.getItem('currentUser');
 
@@ -679,13 +671,14 @@
                 window.location.href = 'login.html';
             }
 
-            // ===== LIVE STATS =====
+            // Live stats
             fetch(`${BACKEND_URL}/players`)
                 .then(res => res.json())
                 .then(data => {
-                    document.getElementById('totalPlayers').textContent = data.count || 0;
-                    document.getElementById('gamePlayers').textContent = data.count || 0;
-                    document.getElementById('wofPlayers').textContent = '👥 ' + (data.count || 0) + ' players online';
+                    const count = data.count || 0;
+                    document.getElementById('totalPlayers').textContent = count;
+                    document.getElementById('gamePlayers').textContent = count;
+                    document.getElementById('wofPlayers').textContent = '👥 ' + count + ' players online';
                 })
                 .catch(() => {
                     document.getElementById('totalPlayers').textContent = '0';
@@ -702,7 +695,11 @@
                     document.getElementById('totalVersions').textContent = '0';
                 });
 
-            // Reîmprospătare jucători la fiecare 10 secunde
+            // Verifică ban la fiecare 30 de secunde
+            setInterval(checkBanStatus, 30000);
+            setTimeout(checkBanStatus, 3000);
+
+            // Refresh players
             setInterval(() => {
                 fetch(`${BACKEND_URL}/players`)
                     .then(res => res.json())
