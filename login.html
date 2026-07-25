@@ -25,7 +25,7 @@
             padding: 40px;
             border-radius: 20px;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
             text-align: center;
         }
@@ -73,15 +73,26 @@
             transform: scale(1.02);
         }
         
-        .error {
-            color: #e74c3c;
+        .message {
             margin: 15px 0;
             font-size: 14px;
             min-height: 40px;
         }
         
-        .success {
+        .message.error {
+            color: #e74c3c;
+        }
+        
+        .message.success {
             color: #2ecc71;
+        }
+        
+        .message.info {
+            color: #3498db;
+        }
+        
+        .message.loading {
+            color: #f39c12;
         }
         
         .link {
@@ -99,6 +110,36 @@
             margin-top: 20px;
             color: #aaa;
         }
+
+        .ban-box {
+            background: rgba(231,76,60,0.2);
+            border: 2px solid #e74c3c;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .ban-box .ban-title {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .ban-box .ban-reason {
+            color: #ff6b6b;
+            margin-bottom: 5px;
+        }
+
+        .ban-box .ban-time {
+            color: #ffd93d;
+            margin-bottom: 5px;
+        }
+
+        .ban-box .ban-expires {
+            color: #888;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -107,27 +148,82 @@
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
         <button onclick="login()">LOGIN</button>
-        <div id="message" class="error"></div>
+        <div id="message" class="message"></div>
         <p>Don't have an account? <a href="register.html" class="link">Register here</a></p>
     </div>
 
     <script>
         const BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
         
+        async function checkBan(username) {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/check-ban/${username}`);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Ban check error:', error);
+                return null;
+            }
+        }
+
+        function formatTime(ms) {
+            if (ms <= 0) return 'Expired';
+            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+            
+            let parts = [];
+            if (days > 0) parts.push(`${days} day${days > 1 ? 's' : ''}`);
+            if (hours > 0) parts.push(`${hours} hour${hours > 1 ? 's' : ''}`);
+            if (minutes > 0) parts.push(`${minutes} minute${minutes > 1 ? 's' : ''}`);
+            if (seconds > 0 || parts.length === 0) parts.push(`${seconds} second${seconds > 1 ? 's' : ''}`);
+            
+            return parts.join(', ');
+        }
+        
         async function login() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
-            
             const messageDiv = document.getElementById('message');
             
             if (!username || !password) {
+                messageDiv.className = 'message error';
                 messageDiv.innerText = '❌ Username and password required!';
-                messageDiv.style.color = '#e74c3c';
                 return;
             }
             
+            // Verifică ban
+            messageDiv.className = 'message loading';
+            messageDiv.innerText = '⏳ Checking ban status...';
+            
+            const banCheck = await checkBan(username);
+            
+            if (banCheck && banCheck.banned) {
+                let timeMessage = '';
+                if (banCheck.remaining && banCheck.remaining > 0) {
+                    timeMessage = `⏳ Remaining: ${formatTime(banCheck.remaining)}`;
+                } else {
+                    timeMessage = '⏳ Permanent ban';
+                }
+                
+                const banType = banCheck.type === 'IP' ? '🚫 IP BAN' : '🔨 ACCOUNT BAN';
+                
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = `
+                    <div class="ban-box">
+                        <div class="ban-title">${banType}</div>
+                        <div class="ban-reason">📝 Reason: ${banCheck.reason}</div>
+                        <div class="ban-time">${timeMessage}</div>
+                        ${banCheck.until ? `<div class="ban-expires">📅 Expires: ${new Date(banCheck.until).toLocaleString()}</div>` : ''}
+                    </div>
+                `;
+                return;
+            }
+            
+            // Continuă login
+            messageDiv.className = 'message loading';
             messageDiv.innerText = '⏳ Logging in...';
-            messageDiv.style.color = '#3498db';
             
             try {
                 const response = await fetch(`${BACKEND_URL}/api/login`, {
@@ -144,20 +240,43 @@
                 
                 if (data.success) {
                     localStorage.setItem('currentUser', username);
-                    localStorage.setItem('userRank', data.rank);
+                    localStorage.setItem('userRank', data.rank || 'user');
+                    localStorage.setItem('userEmail', data.email || '');
+                    
+                    messageDiv.className = 'message success';
                     messageDiv.innerText = '✅ Login successful! Redirecting...';
-                    messageDiv.style.color = '#2ecc71';
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
                 } else {
-                    messageDiv.innerText = '❌ ' + (data.error || 'Login failed');
-                    messageDiv.style.color = '#e74c3c';
+                    messageDiv.className = 'message error';
+                    
+                    if (data.kickReason) {
+                        messageDiv.innerText = `👢 You have been kicked!\nReason: ${data.kickReason}`;
+                    } else if (data.banType) {
+                        const banType = data.banType === 'IP' ? '🚫 IP BAN' : '🔨 ACCOUNT BAN';
+                        let timeMsg = 'Permanent';
+                        if (data.until && data.until !== 'Permanent') {
+                            const until = new Date(data.until);
+                            const diff = until - Date.now();
+                            timeMsg = formatTime(diff);
+                        }
+                        messageDiv.innerHTML = `
+                            <div class="ban-box">
+                                <div class="ban-title">${banType}</div>
+                                <div class="ban-reason">📝 Reason: ${data.reason || 'No reason'}</div>
+                                <div class="ban-time">⏳ ${timeMsg}</div>
+                                ${data.until && data.until !== 'Permanent' ? `<div class="ban-expires">📅 Expires: ${new Date(data.until).toLocaleString()}</div>` : ''}
+                            </div>
+                        `;
+                    } else {
+                        messageDiv.innerText = '❌ ' + (data.error || 'Login failed');
+                    }
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
+                messageDiv.className = 'message error';
                 messageDiv.innerText = '❌ Connection error: ' + error.message;
-                messageDiv.style.color = '#e74c3c';
             }
         }
         
