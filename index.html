@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MaxGameStore - World Of Fights</title>
+    <title>World Of Fights</title>
     <style>
         * {
             margin: 0;
@@ -48,8 +48,6 @@
             padding: 3px 12px;
             border-radius: 20px;
             font-weight: bold;
-            background: rgba(255, 215, 0, 0.2);
-            color: #ffd700;
         }
 
         .user-rank.owner { background: rgba(255, 215, 0, 0.3); color: #ffd700; }
@@ -111,7 +109,6 @@
             display: block;
         }
 
-        /* ===== HOME ===== */
         .hero {
             text-align: center;
             padding: 60px 20px 40px;
@@ -193,7 +190,6 @@
             line-height: 1.8;
         }
 
-        /* ===== LIVE STATS ===== */
         .live-stats {
             display: flex;
             justify-content: center;
@@ -231,33 +227,6 @@
             animation: pulse 2s infinite;
         }
 
-        /* ===== UPDATE TIMER ===== */
-        .update-timer {
-            text-align: center;
-            padding: 15px;
-            margin: 10px 0 30px;
-            background: rgba(243, 156, 18, 0.1);
-            border: 1px solid rgba(243, 156, 18, 0.3);
-            border-radius: 12px;
-        }
-
-        .update-timer .label {
-            color: #f39c12;
-            font-weight: bold;
-        }
-
-        .update-timer .time {
-            color: #ffd700;
-            font-size: 24px;
-            font-weight: bold;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .update-timer .hidden {
-            display: none;
-        }
-
-        /* ===== GAMES ===== */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -327,7 +296,6 @@
             color: #f39c12;
         }
 
-        /* ===== SUPPORT ===== */
         .support-section {
             max-width: 700px;
             margin: 0 auto;
@@ -438,12 +406,6 @@
                 </div>
             </div>
 
-            <!-- ===== UPDATE TIMER ===== -->
-            <div class="update-timer" id="updateTimer">
-                <span class="label">⏳ Next Update:</span>
-                <span class="time" id="timerDisplay">--:--:--</span>
-            </div>
-
             <!-- ===== COMPANY INFO ===== -->
             <div class="company-section">
                 <h2>🏢 About MaxGameStore</h2>
@@ -532,6 +494,8 @@
     </footer>
 
     <script>
+        const BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
+
         // ===== NAVIGATION =====
         function showPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -550,69 +514,70 @@
         function logout() {
             localStorage.removeItem('currentUser');
             localStorage.removeItem('userRank');
+            localStorage.removeItem('userEmail');
             window.location.href = 'login.html';
         }
 
-        // ===== LOAD USER =====
+        // ===== DISPLAY USER =====
+        function displayUser(username, rank) {
+            document.getElementById('displayName').textContent = username;
+
+            const rankNames = {
+                'owner': '👑 OWNER',
+                'admin': '⚙️ ADMIN',
+                'developer': '💻 DEVELOPER',
+                'tester': '🧪 TESTER',
+                'user': '🎮 PLAYER'
+            };
+
+            document.getElementById('displayRank').textContent = rankNames[rank] || '🎮 PLAYER';
+            document.getElementById('displayRank').className = 'user-rank ' + (rank || 'user');
+        }
+
+        // ===== LOAD USER FROM SERVER (LIVE) =====
         window.onload = function() {
             const user = localStorage.getItem('currentUser');
-            const rank = localStorage.getItem('userRank') || 'user';
 
             if (user) {
-                document.getElementById('displayName').textContent = user;
-
-                const rankNames = {
-                    'owner': '👑 OWNER',
-                    'admin': '⚙️ ADMIN',
-                    'developer': '💻 DEVELOPER',
-                    'tester': '🧪 TESTER',
-                    'user': '🎮 PLAYER'
-                };
-
-                document.getElementById('displayRank').textContent = rankNames[rank] || '🎮 PLAYER';
-                document.getElementById('displayRank').className = 'user-rank ' + rank;
+                // Întreabă serverul pentru rank-ul live
+                fetch(`${BACKEND_URL}/api/get-rank/${user}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const rank = data.rank || 'user';
+                        localStorage.setItem('userRank', rank);
+                        displayUser(user, rank);
+                    })
+                    .catch(() => {
+                        // Dacă serverul e offline, folosește localStorage
+                        const rank = localStorage.getItem('userRank') || 'user';
+                        displayUser(user, rank);
+                    });
             } else {
                 window.location.href = 'login.html';
             }
 
-            // Simulare jucători online (conectat la server real)
-            fetch('https://trimmer-chrome-landfall.ngrok-free.dev/players')
+            // ===== LIVE STATS =====
+            fetch(`${BACKEND_URL}/players`)
                 .then(res => res.json())
                 .then(data => {
                     document.getElementById('totalPlayers').textContent = data.count || 0;
                 })
                 .catch(() => {
-                    document.getElementById('totalPlayers').textContent = Math.floor(Math.random() * 50) + 10;
+                    document.getElementById('totalPlayers').textContent = '0';
                 });
 
-            // Simulare număr versiuni
-            fetch('https://trimmer-chrome-landfall.ngrok-free.dev/versions')
+            fetch(`${BACKEND_URL}/versions`)
                 .then(res => res.json())
                 .then(data => {
                     document.getElementById('totalVersions').textContent = data.versions ? data.versions.length : 0;
                 })
                 .catch(() => {
-                    document.getElementById('totalVersions').textContent = 0;
+                    document.getElementById('totalVersions').textContent = '0';
                 });
-
-            // ===== UPDATE TIMER (doar dacă ownerul setează) =====
-            // Dacă există un timer setat de owner în localStorage sau pe server
-            const timerEnd = localStorage.getItem('updateTimerEnd');
-            if (timerEnd) {
-                const end = parseInt(timerEnd);
-                const now = Date.now();
-                if (end > now) {
-                    startTimer(end);
-                } else {
-                    document.getElementById('updateTimer').classList.add('hidden');
-                }
-            } else {
-                document.getElementById('updateTimer').classList.add('hidden');
-            }
 
             // Reîmprospătare jucători la fiecare 10 secunde
             setInterval(() => {
-                fetch('https://trimmer-chrome-landfall.ngrok-free.dev/players')
+                fetch(`${BACKEND_URL}/players`)
                     .then(res => res.json())
                     .then(data => {
                         document.getElementById('totalPlayers').textContent = data.count || 0;
@@ -620,49 +585,6 @@
                     .catch(() => {});
             }, 10000);
         };
-
-        // ===== TIMER =====
-        function startTimer(endTime) {
-            const timerDisplay = document.getElementById('timerDisplay');
-            const timerContainer = document.getElementById('updateTimer');
-            timerContainer.classList.remove('hidden');
-
-            function updateTimer() {
-                const now = Date.now();
-                const remaining = endTime - now;
-
-                if (remaining <= 0) {
-                    timerDisplay.textContent = 'Updating now!';
-                    return;
-                }
-
-                const hours = Math.floor(remaining / (1000 * 60 * 60));
-                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
-
-                timerDisplay.textContent =
-                    String(hours).padStart(2, '0') + ':' +
-                    String(minutes).padStart(2, '0') + ':' +
-                    String(seconds).padStart(2, '0');
-            }
-
-            updateTimer();
-            setInterval(updateTimer, 1000);
-        }
-
-        // ===== PENTRU OWNER: SETEAZĂ TIMER (doar owner) =====
-        function setUpdateTimer(hours) {
-            const rank = localStorage.getItem('userRank') || 'user';
-            if (rank !== 'owner' && rank !== 'admin') {
-                alert('Only owners can set update timers!');
-                return;
-            }
-
-            const endTime = Date.now() + hours * 60 * 60 * 1000;
-            localStorage.setItem('updateTimerEnd', endTime);
-            startTimer(endTime);
-            alert('✅ Timer set for ' + hours + ' hours from now!');
-        }
     </script>
 </body>
 </html>
