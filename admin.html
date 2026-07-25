@@ -61,7 +61,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 30px 20px;
         }
@@ -180,6 +180,16 @@
             box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
         }
 
+        .btn-purple {
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            color: white;
+        }
+
+        .btn-purple:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
+        }
+
         .status-msg {
             margin-top: 10px;
             padding: 10px;
@@ -216,6 +226,32 @@
             color: #f39c12;
         }
 
+        .table-container {
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .table-container th {
+            color: #ffd700;
+            text-align: left;
+            padding: 5px;
+            border-bottom: 1px solid #333;
+        }
+
+        .table-container td {
+            padding: 5px;
+            border-bottom: 1px solid #222;
+        }
+
         footer {
             text-align: center;
             padding: 30px;
@@ -239,7 +275,6 @@
 </head>
 <body>
 
-    <!-- ===== NAVBAR ===== -->
     <nav class="navbar">
         <div class="title">🛡️ Admin Panel</div>
         <div class="user-info">
@@ -255,7 +290,7 @@
 
         <div class="admin-grid">
 
-            <!-- ===== CARD: MESAGEM ===== -->
+            <!-- CARD: MESAGE -->
             <div class="admin-card">
                 <h2>💬 Send Message</h2>
                 <label>To (username)</label>
@@ -266,7 +301,18 @@
                 <div id="msgStatus" class="status-msg"></div>
             </div>
 
-            <!-- ===== CARD: BAN ===== -->
+            <!-- CARD: KICK -->
+            <div class="admin-card">
+                <h2>👢 Kick User</h2>
+                <label>Username</label>
+                <input type="text" id="kickUser" placeholder="Enter username">
+                <label>Reason</label>
+                <input type="text" id="kickReason" placeholder="Reason for kick">
+                <button class="btn btn-warning" onclick="kickUser()">👢 Kick User</button>
+                <div id="kickStatus" class="status-msg"></div>
+            </div>
+
+            <!-- CARD: BAN -->
             <div class="admin-card">
                 <h2>🔨 Ban User</h2>
                 <label>Username</label>
@@ -279,16 +325,16 @@
                 <div id="banStatus" class="status-msg"></div>
             </div>
 
-            <!-- ===== CARD: UNBAN ===== -->
+            <!-- CARD: UNBAN -->
             <div class="admin-card">
                 <h2>🔓 Unban User</h2>
                 <label>Username</label>
                 <input type="text" id="unbanUser" placeholder="Enter username">
-                <button class="btn btn-warning" onclick="unbanUser()">🔓 Unban User</button>
+                <button class="btn btn-success" onclick="unbanUser()" style="background: linear-gradient(45deg, #2ecc71, #27ae60); color: white;">🔓 Unban User</button>
                 <div id="unbanStatus" class="status-msg"></div>
             </div>
 
-            <!-- ===== CARD: IP BAN ===== -->
+            <!-- CARD: IP BAN -->
             <div class="admin-card">
                 <h2>🚫 IP Ban</h2>
                 <label>IP Address</label>
@@ -301,16 +347,16 @@
                 <div id="ipBanStatus" class="status-msg"></div>
             </div>
 
-            <!-- ===== CARD: UNBAN IP ===== -->
+            <!-- CARD: UNBAN IP -->
             <div class="admin-card">
                 <h2>🔓 Unban IP</h2>
                 <label>IP Address</label>
                 <input type="text" id="unbanIpAddress" placeholder="e.g. 192.168.1.1">
-                <button class="btn btn-warning" onclick="unbanIp()">🔓 Unban IP</button>
+                <button class="btn btn-success" onclick="unbanIp()" style="background: linear-gradient(45deg, #2ecc71, #27ae60); color: white;">🔓 Unban IP</button>
                 <div id="unbanIpStatus" class="status-msg"></div>
             </div>
 
-            <!-- ===== CARD: EMAIL ===== -->
+            <!-- CARD: EMAIL -->
             <div class="admin-card">
                 <h2>📧 Send Email</h2>
                 <label>To (username)</label>
@@ -323,10 +369,19 @@
                 <div id="emailStatus" class="status-msg"></div>
             </div>
 
-            <!-- ===== CARD: LISTA CONTURI ===== -->
+            <!-- CARD: BANURI ACTIVE -->
+            <div class="admin-card" style="grid-column: 1 / -1;">
+                <h2>🔨 Active Bans</h2>
+                <div class="table-container">
+                    <div id="activeBans" style="color: #aaa; font-size: 14px;">Loading bans...</div>
+                </div>
+                <button class="btn btn-info" onclick="loadActiveBans()" style="margin-top: 10px;">🔄 Refresh Bans</button>
+            </div>
+
+            <!-- CARD: LISTA CONTURI -->
             <div class="admin-card" style="grid-column: 1 / -1;">
                 <h2>👥 All Users</h2>
-                <div style="max-height: 300px; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px;">
+                <div class="table-container">
                     <div id="userList" style="color: #aaa; font-size: 14px;">Loading users...</div>
                 </div>
                 <button class="btn btn-info" onclick="loadUsers()" style="margin-top: 10px;">🔄 Refresh Users</button>
@@ -342,7 +397,6 @@
     <script>
         const BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
 
-        // ===== GET CURRENT ADMIN =====
         function getAdmin() {
             return localStorage.getItem('currentUser') || '';
         }
@@ -351,7 +405,6 @@
             return localStorage.getItem('userRank') || 'user';
         }
 
-        // ===== CHECK PERMISSIONS =====
         function checkAdmin() {
             const rank = getRank();
             if (rank !== 'owner' && rank !== 'admin') {
@@ -362,7 +415,6 @@
             return true;
         }
 
-        // ===== DISPLAY ADMIN INFO =====
         window.onload = function() {
             if (!checkAdmin()) return;
 
@@ -371,9 +423,9 @@
             document.getElementById('adminName').textContent = adminName;
             document.getElementById('adminRank').textContent = '[' + adminRank.toUpperCase() + ']';
             loadUsers();
+            loadActiveBans();
         };
 
-        // ===== LOGOUT =====
         function logout() {
             localStorage.removeItem('currentUser');
             localStorage.removeItem('userRank');
@@ -389,25 +441,17 @@
                 .then(res => res.json())
                 .then(data => {
                     if (Array.isArray(data)) {
-                        let html = '<table style="width:100%; border-collapse: collapse; font-size:13px;">';
-                        html += '<tr style="color:#ffd700; border-bottom:1px solid #333;">';
-                        html += '<th style="text-align:left; padding:5px;">Username</th>';
-                        html += '<th style="text-align:left; padding:5px;">Rank</th>';
-                        html += '<th style="text-align:left; padding:5px;">Email</th>';
-                        html += '<th style="text-align:left; padding:5px;">Banned</th>';
-                        html += '<th style="text-align:left; padding:5px;">Level</th>';
-                        html += '</tr>';
-                        
+                        let html = '<table>';
+                        html += '<tr><th>Username</th><th>Rank</th><th>Email</th><th>Banned</th><th>Level</th></tr>';
                         data.forEach(user => {
-                            html += '<tr style="border-bottom:1px solid #222;">';
-                            html += `<td style="padding:5px;">${user.username}</td>`;
-                            html += `<td style="padding:5px; color: ${user.rank === 'owner' ? '#ffd700' : user.rank === 'admin' ? '#2ecc71' : '#aaa'};">${user.rank}</td>`;
-                            html += `<td style="padding:5px;">${user.email || '-'}</td>`;
-                            html += `<td style="padding:5px; color: ${user.banned ? '#e74c3c' : '#2ecc71'};">${user.banned ? '🔨 Yes' : '✅ No'}</td>`;
-                            html += `<td style="padding:5px;">${user.stats?.level || 1}</td>`;
-                            html += '</tr>';
+                            html += `<tr>
+                                <td>${user.username}</td>
+                                <td style="color: ${user.rank === 'owner' ? '#ffd700' : user.rank === 'admin' ? '#2ecc71' : '#aaa'};">${user.rank}</td>
+                                <td>${user.email || '-'}</td>
+                                <td style="color: ${user.banned ? '#e74c3c' : '#2ecc71'};">${user.banned ? '🔨 Yes' : '✅ No'}</td>
+                                <td>${user.stats?.level || 1}</td>
+                            </tr>`;
                         });
-                        
                         html += '</table>';
                         userList.innerHTML = html;
                     } else {
@@ -416,6 +460,66 @@
                 })
                 .catch(err => {
                     userList.textContent = 'Error loading users: ' + err.message;
+                });
+        }
+
+        // ===== LOAD ACTIVE BANS =====
+        function loadActiveBans() {
+            const bansDiv = document.getElementById('activeBans');
+            
+            fetch(`${BACKEND_URL}/api/accounts`)
+                .then(res => res.json())
+                .then(users => {
+                    const bannedUsers = users.filter(u => u.banned === true);
+                    
+                    if (bannedUsers.length === 0) {
+                        bansDiv.innerHTML = '<div style="color: #2ecc71;">✅ No active bans</div>';
+                        return;
+                    }
+                    
+                    let html = '<table>';
+                    html += '<tr><th>Username</th><th>Reason</th><th>Remaining</th><th>Expires</th></tr>';
+                    
+                    bannedUsers.forEach(user => {
+                        let remainingText = 'Permanent';
+                        let expiresText = 'Never';
+                        
+                        if (user.bannedUntil) {
+                            const until = new Date(user.bannedUntil);
+                            const now = new Date();
+                            const diff = until - now;
+                            
+                            if (diff > 0) {
+                                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                                
+                                let parts = [];
+                                if (days > 0) parts.push(`${days}d`);
+                                if (hours > 0) parts.push(`${hours}h`);
+                                if (minutes > 0) parts.push(`${minutes}m`);
+                                if (parts.length === 0) parts.push('0m');
+                                
+                                remainingText = parts.join(' ');
+                            } else {
+                                remainingText = 'Expired';
+                            }
+                            expiresText = until.toLocaleString();
+                        }
+                        
+                        html += `<tr>
+                            <td style="color: #e74c3c;">${user.username}</td>
+                            <td>${user.banReason || 'No reason'}</td>
+                            <td style="color: ${remainingText === 'Expired' ? '#2ecc71' : '#ffd93d'};">${remainingText}</td>
+                            <td style="font-size: 12px; color: #888;">${expiresText}</td>
+                        </tr>`;
+                    });
+                    
+                    html += '</table>';
+                    bansDiv.innerHTML = html;
+                })
+                .catch(err => {
+                    bansDiv.textContent = 'Error loading bans: ' + err.message;
                 });
         }
 
@@ -458,6 +562,46 @@
             });
         }
 
+        // ===== KICK USER =====
+        function kickUser() {
+            const username = document.getElementById('kickUser').value.trim();
+            const reason = document.getElementById('kickReason').value.trim() || 'No reason provided';
+            const admin = getAdmin();
+            const status = document.getElementById('kickStatus');
+
+            if (!username) {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Please enter a username!';
+                return;
+            }
+
+            status.className = 'status-msg loading';
+            status.textContent = '⏳ Kicking user...';
+
+            fetch(`${BACKEND_URL}/api/kick`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, reason, admin })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    status.className = 'status-msg success';
+                    status.textContent = '✅ ' + data.message;
+                    document.getElementById('kickUser').value = '';
+                    document.getElementById('kickReason').value = '';
+                    loadUsers();
+                } else {
+                    status.className = 'status-msg error';
+                    status.textContent = '❌ ' + (data.error || 'Failed to kick user');
+                }
+            })
+            .catch(err => {
+                status.className = 'status-msg error';
+                status.textContent = '❌ Error: ' + err.message;
+            });
+        }
+
         // ===== BAN USER =====
         function banUser() {
             const username = document.getElementById('banUser').value.trim();
@@ -492,6 +636,7 @@
                     document.getElementById('banReason').value = '';
                     document.getElementById('banDuration').value = '';
                     loadUsers();
+                    loadActiveBans();
                 } else {
                     status.className = 'status-msg error';
                     status.textContent = '❌ ' + (data.error || 'Failed to ban user');
@@ -530,6 +675,7 @@
                     status.textContent = '✅ ' + data.message;
                     document.getElementById('unbanUser').value = '';
                     loadUsers();
+                    loadActiveBans();
                 } else {
                     status.className = 'status-msg error';
                     status.textContent = '❌ ' + (data.error || 'Failed to unban user');
