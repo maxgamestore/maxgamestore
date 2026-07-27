@@ -29,6 +29,8 @@
             top: 0;
             z-index: 100;
             backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .navbar-left {
@@ -114,10 +116,12 @@
             cursor: pointer;
             font-size: 12px;
             transition: 0.3s;
+            font-weight: bold;
         }
 
         .btn-test-ban:hover {
-            background: rgba(231, 76, 60, 0.4);
+            background: rgba(231, 76, 60, 0.5);
+            transform: scale(1.05);
         }
 
         .container {
@@ -412,7 +416,9 @@
             margin-top: 60px;
         }
 
+        /* ============================================================ */
         /* ===== BAN POPUP ===== */
+        /* ============================================================ */
         .ban-overlay {
             display: none;
             position: fixed;
@@ -808,10 +814,13 @@
             return parts.join(', ');
         }
 
+        // ================================================================
         // ===== BAN POPUP =====
+        // ================================================================
+
         function showBanPopup(type, reason, until, remaining) {
             console.log('🔴 Showing ban popup:', { type, reason, until, remaining });
-            
+
             const overlay = document.getElementById('banOverlay');
             const typeDisplay = document.getElementById('banTypeDisplay');
             const reasonDisplay = document.getElementById('banReasonDisplay');
@@ -873,13 +882,13 @@
 
             // Auto-redirect după 10 secunde
             if (banPopupTimer) clearTimeout(banPopupTimer);
-            banPopupTimer = setTimeout(() => {
+            banPopupTimer = setTimeout(function() {
                 closeBanPopup();
             }, duration * 1000 + 500);
         }
 
-        // ===== CLOSE BAN POPUP =====
         function closeBanPopup() {
+            console.log('🔴 Closing ban popup and redirecting to login...');
             const overlay = document.getElementById('banOverlay');
             overlay.classList.remove('show');
             if (banPopupTimer) {
@@ -902,8 +911,8 @@
 
         // ===== TEST BAN POPUP =====
         function testBanPopup() {
-            console.log('🧪 Testing ban popup...');
-            showBanPopup('Account', 'Test ban reason - you were caught cheating!', null, 10000);
+            console.log('🧪 TEST: Showing ban popup...');
+            showBanPopup('Account', 'Test ban reason - you were caught cheating!', null, 30000);
         }
 
         // ===== CHECK BAN STATUS =====
@@ -913,15 +922,15 @@
                 console.log('⚠️ No user logged in');
                 return;
             }
-            
+
             console.log('🔍 Checking ban status for:', user);
-            
-            fetch(`${BACKEND_URL}/api/check-ban/${user}`)
-                .then(res => {
+
+            fetch(BACKEND_URL + '/api/check-ban/' + user)
+                .then(function(res) {
                     console.log('📡 Response status:', res.status);
                     return res.json();
                 })
-                .then(data => {
+                .then(function(data) {
                     console.log('📨 Ban check response:', data);
                     if (data && data.banned === true) {
                         console.log('🔴 User is BANNED! Showing popup...');
@@ -930,47 +939,50 @@
                         console.log('✅ User is NOT banned');
                     }
                 })
-                .catch(err => {
+                .catch(function(err) {
                     console.error('❌ Ban check error:', err);
                 });
         }
 
-        // ============ WEBSOCKET ============
+        // ================================================================
+        // ===== WEBSOCKET =====
+        // ================================================================
+
         let ws = null;
         let wsReconnectTimer = null;
 
         function connectWebSocket() {
-            const user = localStorage.getItem('currentUser');
+            var user = localStorage.getItem('currentUser');
             if (!user) return;
 
-            const wsUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                ? 'ws://localhost:3000' 
+            var wsUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'ws://localhost:3000'
                 : 'wss://trimmer-chrome-landfall.ngrok-free.dev';
 
             try {
                 if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
 
                 ws = new WebSocket(wsUrl);
-                
+
                 ws.onopen = function() {
                     console.log('✅ WebSocket connected');
-                    ws.send(`REGISTER_NAME:${user}`);
+                    ws.send('REGISTER_NAME:' + user);
                 };
-                
+
                 ws.onmessage = function(event) {
-                    const msg = event.data;
+                    var msg = event.data;
                     console.log('📨 WebSocket message:', msg);
-                    
+
                     if (msg.startsWith('NOTIFICATION:')) {
-                        const notif = msg.substring(13);
-                        
+                        var notif = msg.substring(13);
+
                         if (notif.startsWith('BANNED:')) {
-                            const reason = notif.substring(7);
+                            var reason = notif.substring(7);
                             console.log('🔴 Received BAN notification:', reason);
                             showBanPopup('Account', reason, null, null);
                         } else if (notif.startsWith('KICKED:')) {
-                            const reason = notif.substring(7);
-                            alert(`👢 YOU HAVE BEEN KICKED!\n\nReason: ${reason}\n\nYou will be logged out now.`);
+                            var reason = notif.substring(7);
+                            alert('👢 YOU HAVE BEEN KICKED!\n\nReason: ' + reason + '\n\nYou will be logged out now.');
                             localStorage.removeItem('currentUser');
                             localStorage.removeItem('userRank');
                             localStorage.removeItem('userEmail');
@@ -979,25 +991,25 @@
                         } else if (notif.startsWith('UNBANNED')) {
                             alert('✅ You have been unbanned! You can now log in again.');
                         } else if (notif.startsWith('NEW_MESSAGE:')) {
-                            const from = notif.substring(12);
-                            alert(`💬 You have a new message from ${from}! Check your messages.`);
+                            var from = notif.substring(12);
+                            alert('💬 You have a new message from ' + from + '! Check your messages.');
                         }
                     }
                 };
-                
+
                 ws.onclose = function() {
                     console.log('🔌 WebSocket disconnected, reconnecting...');
                     if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
                     wsReconnectTimer = setTimeout(connectWebSocket, 5000);
                 };
-                
+
                 ws.onerror = function(err) {
                     console.error('WebSocket error:', err);
                     if (ws) { try { ws.close(); } catch(e) {} ws = null; }
                     if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
                     wsReconnectTimer = setTimeout(connectWebSocket, 5000);
                 };
-                
+
             } catch (e) {
                 console.error('WebSocket error:', e);
                 if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
@@ -1005,23 +1017,26 @@
             }
         }
 
-        // ============ WINDOW ONLOAD ============
+        // ================================================================
+        // ===== WINDOW ONLOAD =====
+        // ================================================================
+
         window.onload = function() {
             console.log('🚀 Page loaded');
-            
-            const user = localStorage.getItem('currentUser');
+
+            var user = localStorage.getItem('currentUser');
             console.log('👤 Current user:', user);
 
             if (user) {
-                fetch(`${BACKEND_URL}/api/get-rank/${user}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const rank = data.rank || 'user';
+                fetch(BACKEND_URL + '/api/get-rank/' + user)
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        var rank = data.rank || 'user';
                         localStorage.setItem('userRank', rank);
                         displayUser(user, rank);
                     })
-                    .catch(() => {
-                        const rank = localStorage.getItem('userRank') || 'user';
+                    .catch(function() {
+                        var rank = localStorage.getItem('userRank') || 'user';
                         displayUser(user, rank);
                     });
             } else {
@@ -1030,26 +1045,26 @@
             }
 
             // Live stats
-            fetch(`${BACKEND_URL}/players`)
-                .then(res => res.json())
-                .then(data => {
-                    const count = data.count || 0;
+            fetch(BACKEND_URL + '/players')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    var count = data.count || 0;
                     document.getElementById('totalPlayers').textContent = count;
                     document.getElementById('gamePlayers').textContent = count;
                     document.getElementById('wofPlayers').textContent = '👥 ' + count + ' players online';
                 })
-                .catch(() => {
+                .catch(function() {
                     document.getElementById('totalPlayers').textContent = '0';
                     document.getElementById('gamePlayers').textContent = '0';
                     document.getElementById('wofPlayers').textContent = '👥 0 players online';
                 });
 
-            fetch(`${BACKEND_URL}/versions`)
-                .then(res => res.json())
-                .then(data => {
+            fetch(BACKEND_URL + '/versions')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
                     document.getElementById('totalVersions').textContent = data.versions ? data.versions.length : 0;
                 })
-                .catch(() => {
+                .catch(function() {
                     document.getElementById('totalVersions').textContent = '0';
                 });
 
@@ -1058,21 +1073,21 @@
             setTimeout(checkBanStatus, 2000);
 
             // Refresh players
-            setInterval(() => {
-                fetch(`${BACKEND_URL}/players`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const count = data.count || 0;
+            setInterval(function() {
+                fetch(BACKEND_URL + '/players')
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        var count = data.count || 0;
                         document.getElementById('totalPlayers').textContent = count;
                         document.getElementById('gamePlayers').textContent = count;
                         document.getElementById('wofPlayers').textContent = '👥 ' + count + ' players online';
                     })
-                    .catch(() => {});
+                    .catch(function() {});
             }, 10000);
 
             // Conectează WebSocket
             setTimeout(connectWebSocket, 1500);
-            
+
             console.log('✅ All systems ready!');
             console.log('💡 Click "🧪 Test Ban" to test the ban popup');
         };
