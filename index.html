@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MaxGameStore Corporation</title>
     <style>
-        /* ... același CSS ca înainte ... */
         * {
             margin: 0;
             padding: 0;
@@ -575,6 +574,11 @@
             localStorage.removeItem('currentUser');
             localStorage.removeItem('userRank');
             localStorage.removeItem('userEmail');
+            // Închide conexiunea WebSocket
+            if (ws) {
+                try { ws.close(); } catch(e) {}
+                ws = null;
+            }
             window.location.href = 'login.html';
         }
 
@@ -646,10 +650,104 @@
                         localStorage.removeItem('currentUser');
                         localStorage.removeItem('userRank');
                         localStorage.removeItem('userEmail');
+                        if (ws) {
+                            try { ws.close(); } catch(e) {}
+                            ws = null;
+                        }
                         window.location.href = 'login.html';
                     }
                 })
                 .catch(() => {});
+        }
+
+        // ============ WEBSOCKET CONNECTION ============
+        let ws = null;
+        let wsReconnectTimer = null;
+
+        function connectWebSocket() {
+            const user = localStorage.getItem('currentUser');
+            if (!user) {
+                console.log('⚠️ No user logged in, skipping WebSocket connection');
+                return;
+            }
+
+            // Folosește același URL ca serverul
+            const wsUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'ws://localhost:3000' 
+                : 'wss://trimmer-chrome-landfall.ngrok-free.dev';
+
+            try {
+                if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+                    console.log('ℹ️ WebSocket already connected or connecting');
+                    return;
+                }
+
+                ws = new WebSocket(wsUrl);
+                
+                ws.onopen = function() {
+                    console.log('✅ WebSocket connected');
+                    ws.send(`REGISTER_NAME:${user}`);
+                };
+                
+                ws.onmessage = function(event) {
+                    const msg = event.data;
+                    console.log('📨 WebSocket message:', msg);
+                    
+                    if (msg.startsWith('NOTIFICATION:')) {
+                        const notif = msg.substring(13);
+                        
+                        if (notif.startsWith('BANNED:')) {
+                            const reason = notif.substring(7);
+                            alert(`⚠️ YOU HAVE BEEN BANNED!\n\nReason: ${reason}\n\nYou will be logged out now.`);
+                            localStorage.removeItem('currentUser');
+                            localStorage.removeItem('userRank');
+                            localStorage.removeItem('userEmail');
+                            if (ws) {
+                                try { ws.close(); } catch(e) {}
+                                ws = null;
+                            }
+                            window.location.href = 'login.html';
+                        } else if (notif.startsWith('KICKED:')) {
+                            const reason = notif.substring(7);
+                            alert(`👢 YOU HAVE BEEN KICKED!\n\nReason: ${reason}\n\nYou will be logged out now.`);
+                            localStorage.removeItem('currentUser');
+                            localStorage.removeItem('userRank');
+                            localStorage.removeItem('userEmail');
+                            if (ws) {
+                                try { ws.close(); } catch(e) {}
+                                ws = null;
+                            }
+                            window.location.href = 'login.html';
+                        } else if (notif.startsWith('UNBANNED')) {
+                            alert('✅ You have been unbanned! You can now log in again.');
+                        } else if (notif.startsWith('NEW_MESSAGE:')) {
+                            const from = notif.substring(12);
+                            alert(`💬 You have a new message from ${from}! Check your messages.`);
+                        }
+                    }
+                };
+                
+                ws.onclose = function() {
+                    console.log('🔌 WebSocket disconnected, reconnecting in 5s...');
+                    if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
+                    wsReconnectTimer = setTimeout(connectWebSocket, 5000);
+                };
+                
+                ws.onerror = function(err) {
+                    console.error('WebSocket error:', err);
+                    if (ws) {
+                        try { ws.close(); } catch(e) {}
+                        ws = null;
+                    }
+                    if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
+                    wsReconnectTimer = setTimeout(connectWebSocket, 5000);
+                };
+                
+            } catch (e) {
+                console.error('WebSocket connection error:', e);
+                if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
+                wsReconnectTimer = setTimeout(connectWebSocket, 5000);
+            }
         }
 
         window.onload = function() {
@@ -669,6 +767,7 @@
                     });
             } else {
                 window.location.href = 'login.html';
+                return;
             }
 
             // Live stats
@@ -711,6 +810,9 @@
                     })
                     .catch(() => {});
             }, 10000);
+
+            // Conectează WebSocket pentru notificări în timp real
+            setTimeout(connectWebSocket, 1500);
         };
     </script>
 </body>
