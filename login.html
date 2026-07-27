@@ -181,6 +181,28 @@
             
             return parts.join(', ');
         }
+
+        function connectWebSocketAfterLogin(username) {
+            try {
+                const wsUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? 'ws://localhost:3000' 
+                    : 'wss://trimmer-chrome-landfall.ngrok-free.dev';
+                    
+                const ws = new WebSocket(wsUrl);
+                ws.onopen = function() {
+                    console.log('✅ WebSocket connected for registration');
+                    ws.send(`REGISTER_NAME:${username}`);
+                    setTimeout(() => {
+                        try { ws.close(); } catch(e) {}
+                    }, 1000);
+                };
+                ws.onerror = function(err) {
+                    console.error('WebSocket registration error:', err);
+                };
+            } catch (e) {
+                console.error('WebSocket connection error:', e);
+            }
+        }
         
         async function login() {
             const username = document.getElementById('username').value.trim();
@@ -195,94 +217,4 @@
             
             // Verifică ban
             messageDiv.className = 'message loading';
-            messageDiv.innerText = '⏳ Checking ban status...';
-            
-            const banCheck = await checkBan(username);
-            
-            if (banCheck && banCheck.banned) {
-                let timeMessage = '';
-                if (banCheck.remaining && banCheck.remaining > 0) {
-                    timeMessage = `⏳ Remaining: ${formatTime(banCheck.remaining)}`;
-                } else {
-                    timeMessage = '⏳ Permanent ban';
-                }
-                
-                const banType = banCheck.type === 'IP' ? '🚫 IP BAN' : '🔨 ACCOUNT BAN';
-                
-                messageDiv.className = 'message error';
-                messageDiv.innerHTML = `
-                    <div class="ban-box">
-                        <div class="ban-title">${banType}</div>
-                        <div class="ban-reason">📝 Reason: ${banCheck.reason}</div>
-                        <div class="ban-time">${timeMessage}</div>
-                        ${banCheck.until ? `<div class="ban-expires">📅 Expires: ${new Date(banCheck.until).toLocaleString()}</div>` : ''}
-                    </div>
-                `;
-                return;
-            }
-            
-            // Continuă login
-            messageDiv.className = 'message loading';
-            messageDiv.innerText = '⏳ Logging in...';
-            
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-                
-                const data = await response.json();
-                console.log('Login response:', data);
-                
-                if (data.success) {
-                    localStorage.setItem('currentUser', username);
-                    localStorage.setItem('userRank', data.rank || 'user');
-                    localStorage.setItem('userEmail', data.email || '');
-                    
-                    messageDiv.className = 'message success';
-                    messageDiv.innerText = '✅ Login successful! Redirecting...';
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
-                } else {
-                    messageDiv.className = 'message error';
-                    
-                    if (data.kickReason) {
-                        messageDiv.innerText = `👢 You have been kicked!\nReason: ${data.kickReason}`;
-                    } else if (data.banType) {
-                        const banType = data.banType === 'IP' ? '🚫 IP BAN' : '🔨 ACCOUNT BAN';
-                        let timeMsg = 'Permanent';
-                        if (data.until && data.until !== 'Permanent') {
-                            const until = new Date(data.until);
-                            const diff = until - Date.now();
-                            timeMsg = formatTime(diff);
-                        }
-                        messageDiv.innerHTML = `
-                            <div class="ban-box">
-                                <div class="ban-title">${banType}</div>
-                                <div class="ban-reason">📝 Reason: ${data.reason || 'No reason'}</div>
-                                <div class="ban-time">⏳ ${timeMsg}</div>
-                                ${data.until && data.until !== 'Permanent' ? `<div class="ban-expires">📅 Expires: ${new Date(data.until).toLocaleString()}</div>` : ''}
-                            </div>
-                        `;
-                    } else {
-                        messageDiv.innerText = '❌ ' + (data.error || 'Login failed');
-                    }
-                }
-            } catch (error) {
-                console.error('Fetch error:', error);
-                messageDiv.className = 'message error';
-                messageDiv.innerText = '❌ Connection error: ' + error.message;
-            }
-        }
-        
-        if (localStorage.getItem('currentUser')) {
-            window.location.href = 'index.html';
-        }
-    </script>
-</body>
-</html>
+            messageDiv.innerText = '
