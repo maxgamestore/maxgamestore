@@ -804,23 +804,6 @@
         // ================================================================
         // FORMAT BAN TIME
         // ================================================================
-        function formatBanTime(ms) {
-            if (ms <= 0) return 'Expired';
-            var days = Math.floor(ms / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((ms % (1000 * 60)) / 1000);
-            var parts = [];
-            if (days > 0) parts.push(days + ' day' + (days > 1 ? 's' : ''));
-            if (hours > 0) parts.push(hours + ' hour' + (hours > 1 ? 's' : ''));
-            if (minutes > 0) parts.push(minutes + ' minute' + (minutes > 1 ? 's' : ''));
-            if (seconds > 0 || parts.length === 0) parts.push(seconds + ' second' + (seconds > 1 ? 's' : ''));
-            return parts.join(', ');
-        }
-
-        // ================================================================
-        // FORMAT REMAINING TIME FOR POPUP
-        // ================================================================
         function formatRemainingTime(ms) {
             if (!ms || ms <= 0) return null;
             var seconds = Math.floor(ms / 1000);
@@ -864,13 +847,19 @@
             var expiresMsg = '';
             var duration = 10;
 
+            // VERIFICĂ DURATA
             if (remaining && remaining > 0) {
                 var formatted = formatRemainingTime(remaining);
-                timeMsg = '⏳ Remaining: ' + formatted;
-                duration = Math.min(Math.ceil(remaining / 1000), 10);
-                if (until) {
-                    expiresMsg = '📅 Expires: ' + new Date(until).toLocaleString();
+                if (formatted) {
+                    timeMsg = '⏳ Remaining: ' + formatted;
+                    duration = Math.min(Math.ceil(remaining / 1000), 10);
+                    if (until && until !== 'null') {
+                        expiresMsg = '📅 Expires: ' + new Date(until).toLocaleString();
+                    }
                 }
+                console.log('⏳ Time message:', timeMsg);
+            } else {
+                console.log('⏳ No remaining time, showing permanent ban');
             }
 
             timeDisplay.textContent = timeMsg;
@@ -980,6 +969,7 @@
 
                     if (msg.startsWith('NOTIFICATION:')) {
                         var notif = msg.substring(13);
+                        console.log('📨 Notification content:', notif);
 
                         if (notif.startsWith('BANNED:')) {
                             // Parsează: BANNED:reason|remaining|until
@@ -988,7 +978,22 @@
                             var remaining = parts[1] ? parseInt(parts[1]) : null;
                             var until = parts[2] || null;
                             
-                            console.log('🔴 Received BAN notification:', { reason: reason, remaining: remaining, until: until });
+                            console.log('🔴 Parsed BAN notification:', { 
+                                reason: reason, 
+                                remaining: remaining, 
+                                until: until 
+                            });
+                            
+                            // Dacă remaining e null dar avem until, calculează diferența
+                            if ((!remaining || remaining === 0) && until && until !== 'null' && until !== 'undefined') {
+                                var untilDate = new Date(until);
+                                var now = new Date();
+                                if (untilDate > now) {
+                                    remaining = untilDate.getTime() - now.getTime();
+                                    console.log('🔄 Calculated remaining from until:', remaining);
+                                }
+                            }
+                            
                             showBanPopup('Account', reason, until, remaining);
                         } else if (notif.startsWith('KICKED:')) {
                             var reason = notif.substring(7);
