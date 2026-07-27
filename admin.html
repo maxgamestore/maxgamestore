@@ -180,14 +180,14 @@
             box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
         }
 
-        .btn-purple {
-            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+        .btn-success {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
             color: white;
         }
 
-        .btn-purple:hover {
+        .btn-success:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
         }
 
         .status-msg {
@@ -330,7 +330,7 @@
                 <h2>🔓 Unban User</h2>
                 <label>Username</label>
                 <input type="text" id="unbanUser" placeholder="Enter username">
-                <button class="btn btn-success" onclick="unbanUser()" style="background: linear-gradient(45deg, #2ecc71, #27ae60); color: white;">🔓 Unban User</button>
+                <button class="btn btn-success" onclick="unbanUser()">🔓 Unban User</button>
                 <div id="unbanStatus" class="status-msg"></div>
             </div>
 
@@ -352,7 +352,7 @@
                 <h2>🔓 Unban IP</h2>
                 <label>IP Address</label>
                 <input type="text" id="unbanIpAddress" placeholder="e.g. 192.168.1.1">
-                <button class="btn btn-success" onclick="unbanIp()" style="background: linear-gradient(45deg, #2ecc71, #27ae60); color: white;">🔓 Unban IP</button>
+                <button class="btn btn-success" onclick="unbanIp()">🔓 Unban IP</button>
                 <div id="unbanIpStatus" class="status-msg"></div>
             </div>
 
@@ -620,7 +620,9 @@
             status.textContent = '⏳ Banning user...';
 
             const body = { username, reason, admin };
-            if (duration) body.duration = parseInt(duration) * 1000;
+            if (duration) {
+                body.duration = parseInt(duration) * 1000; // convertește secunde în milisecunde
+            }
 
             fetch(`${BACKEND_URL}/api/ban`, {
                 method: 'POST',
@@ -705,7 +707,9 @@
             status.textContent = '⏳ Banning IP...';
 
             const body = { ip, reason, admin };
-            if (duration) body.duration = parseInt(duration) * 1000;
+            if (duration) {
+                body.duration = parseInt(duration) * 1000;
+            }
 
             fetch(`${BACKEND_URL}/api/ban-ip`, {
                 method: 'POST',
