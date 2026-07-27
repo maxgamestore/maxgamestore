@@ -743,40 +743,58 @@
     </footer>
 
     <script>
-        const BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
-        let banPopupTimer = null;
-        let banCountdownInterval = null;
+        // ================================================================
+        // CONFIG
+        // ================================================================
+        var BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
+        var banPopupTimer = null;
+        var banCountdownInterval = null;
+        var ws = null;
+        var wsReconnectTimer = null;
 
-        // ===== NAVIGATION =====
+        // ================================================================
+        // NAVIGATION
+        // ================================================================
         function showPage(page) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.navbar-right a').forEach(a => a.classList.remove('active'));
+            var pages = document.querySelectorAll('.page');
+            for (var i = 0; i < pages.length; i++) {
+                pages[i].classList.remove('active');
+            }
+            var links = document.querySelectorAll('.navbar-right a');
+            for (var i = 0; i < links.length; i++) {
+                links[i].classList.remove('active');
+            }
             document.getElementById('page-' + page).classList.add('active');
-            document.querySelectorAll('.navbar-right a').forEach(a => {
-                if (a.dataset.page === page) a.classList.add('active');
-            });
+            for (var i = 0; i < links.length; i++) {
+                if (links[i].dataset.page === page) {
+                    links[i].classList.add('active');
+                }
+            }
         }
 
-        // ===== LOGOUT =====
+        // ================================================================
+        // LOGOUT
+        // ================================================================
         function logout() {
             localStorage.removeItem('currentUser');
             localStorage.removeItem('userRank');
             localStorage.removeItem('userEmail');
             if (ws) {
-                try { ws.close(); } catch(e) {}
+                try { ws.close(); } catch (e) {}
                 ws = null;
             }
             window.location.href = 'login.html';
         }
 
-        // ===== GO TO ADMIN =====
+        // ================================================================
+        // ADMIN
+        // ================================================================
         function goToAdmin() {
             window.location.href = 'admin.html';
         }
 
-        // ===== CHECK ADMIN ACCESS =====
         function checkAdminAccess(rank) {
-            const adminBtn = document.getElementById('adminBtn');
+            var adminBtn = document.getElementById('adminBtn');
             if (rank === 'owner' || rank === 'admin') {
                 adminBtn.style.display = 'inline-block';
             } else {
@@ -784,10 +802,12 @@
             }
         }
 
-        // ===== DISPLAY USER =====
+        // ================================================================
+        // DISPLAY USER
+        // ================================================================
         function displayUser(username, rank) {
             document.getElementById('displayName').textContent = username;
-            const rankNames = {
+            var rankNames = {
                 'owner': '👑 OWNER',
                 'admin': '⚙️ ADMIN',
                 'developer': '💻 DEVELOPER',
@@ -799,37 +819,37 @@
             checkAdminAccess(rank);
         }
 
-        // ===== FORMAT BAN TIME =====
+        // ================================================================
+        // FORMAT BAN TIME
+        // ================================================================
         function formatBanTime(ms) {
             if (ms <= 0) return 'Expired';
-            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((ms % (1000 * 60)) / 1000);
-            let parts = [];
-            if (days > 0) parts.push(`${days} day${days > 1 ? 's' : ''}`);
-            if (hours > 0) parts.push(`${hours} hour${hours > 1 ? 's' : ''}`);
-            if (minutes > 0) parts.push(`${minutes} minute${minutes > 1 ? 's' : ''}`);
-            if (seconds > 0 || parts.length === 0) parts.push(`${seconds} second${seconds > 1 ? 's' : ''}`);
+            var days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((ms % (1000 * 60)) / 1000);
+            var parts = [];
+            if (days > 0) parts.push(days + ' day' + (days > 1 ? 's' : ''));
+            if (hours > 0) parts.push(hours + ' hour' + (hours > 1 ? 's' : ''));
+            if (minutes > 0) parts.push(minutes + ' minute' + (minutes > 1 ? 's' : ''));
+            if (seconds > 0 || parts.length === 0) parts.push(seconds + ' second' + (seconds > 1 ? 's' : ''));
             return parts.join(', ');
         }
 
         // ================================================================
-        // ===== BAN POPUP =====
+        // BAN POPUP
         // ================================================================
-
         function showBanPopup(type, reason, until, remaining) {
-            console.log('🔴 Showing ban popup:', { type, reason, until, remaining });
+            console.log('🔴 Showing ban popup:', { type: type, reason: reason, until: until, remaining: remaining });
 
-            const overlay = document.getElementById('banOverlay');
-            const typeDisplay = document.getElementById('banTypeDisplay');
-            const reasonDisplay = document.getElementById('banReasonDisplay');
-            const timeDisplay = document.getElementById('banTimeDisplay');
-            const expiresDisplay = document.getElementById('banExpiresDisplay');
-            const countdownSpan = document.getElementById('banCountdown');
-            const progressBar = document.getElementById('banProgressBar');
+            var overlay = document.getElementById('banOverlay');
+            var typeDisplay = document.getElementById('banTypeDisplay');
+            var reasonDisplay = document.getElementById('banReasonDisplay');
+            var timeDisplay = document.getElementById('banTimeDisplay');
+            var expiresDisplay = document.getElementById('banExpiresDisplay');
+            var countdownSpan = document.getElementById('banCountdown');
+            var progressBar = document.getElementById('banProgressBar');
 
-            // Setează tipul
             if (type === 'IP') {
                 typeDisplay.textContent = '🚫 IP BAN';
                 typeDisplay.className = 'ban-type ip';
@@ -838,13 +858,11 @@
                 typeDisplay.className = 'ban-type account';
             }
 
-            // Setează motivul
             reasonDisplay.textContent = '📝 Reason: ' + (reason || 'No reason provided');
 
-            // Setează timpul
-            let timeMsg = '⏳ Permanent ban';
-            let expiresMsg = '';
-            let duration = 10;
+            var timeMsg = '⏳ Permanent ban';
+            var expiresMsg = '';
+            var duration = 10;
 
             if (remaining && remaining > 0) {
                 timeMsg = '⏳ Remaining: ' + formatBanTime(remaining);
@@ -857,18 +875,16 @@
             timeDisplay.textContent = timeMsg;
             expiresDisplay.textContent = expiresMsg;
 
-            // Resetează progress bar
             progressBar.style.animation = 'none';
-            setTimeout(() => {
-                progressBar.style.animation = `progressShrink ${duration}s linear forwards`;
+            setTimeout(function() {
+                progressBar.style.animation = 'progressShrink ' + duration + 's linear forwards';
             }, 50);
 
-            // Countdown
-            let countdown = duration;
+            var countdown = duration;
             countdownSpan.textContent = countdown;
 
             if (banCountdownInterval) clearInterval(banCountdownInterval);
-            banCountdownInterval = setInterval(() => {
+            banCountdownInterval = setInterval(function() {
                 countdown--;
                 countdownSpan.textContent = countdown;
                 if (countdown <= 0) {
@@ -877,10 +893,8 @@
                 }
             }, 1000);
 
-            // Arată popup-ul
             overlay.classList.add('show');
 
-            // Auto-redirect după 10 secunde
             if (banPopupTimer) clearTimeout(banPopupTimer);
             banPopupTimer = setTimeout(function() {
                 closeBanPopup();
@@ -889,7 +903,7 @@
 
         function closeBanPopup() {
             console.log('🔴 Closing ban popup and redirecting to login...');
-            const overlay = document.getElementById('banOverlay');
+            var overlay = document.getElementById('banOverlay');
             overlay.classList.remove('show');
             if (banPopupTimer) {
                 clearTimeout(banPopupTimer);
@@ -903,28 +917,30 @@
             localStorage.removeItem('userRank');
             localStorage.removeItem('userEmail');
             if (ws) {
-                try { ws.close(); } catch(e) {}
+                try { ws.close(); } catch (e) {}
                 ws = null;
             }
             window.location.href = 'login.html';
         }
 
-        // ===== TEST BAN POPUP =====
+        // ================================================================
+        // TEST BAN POPUP
+        // ================================================================
         function testBanPopup() {
             console.log('🧪 TEST: Showing ban popup...');
             showBanPopup('Account', 'Test ban reason - you were caught cheating!', null, 30000);
         }
 
-        // ===== CHECK BAN STATUS =====
+        // ================================================================
+        // CHECK BAN STATUS
+        // ================================================================
         function checkBanStatus() {
-            const user = localStorage.getItem('currentUser');
+            var user = localStorage.getItem('currentUser');
             if (!user) {
                 console.log('⚠️ No user logged in');
                 return;
             }
-
             console.log('🔍 Checking ban status for:', user);
-
             fetch(BACKEND_URL + '/api/check-ban/' + user)
                 .then(function(res) {
                     console.log('📡 Response status:', res.status);
@@ -945,12 +961,8 @@
         }
 
         // ================================================================
-        // ===== WEBSOCKET =====
+        // WEBSOCKET
         // ================================================================
-
-        let ws = null;
-        let wsReconnectTimer = null;
-
         function connectWebSocket() {
             var user = localStorage.getItem('currentUser');
             if (!user) return;
@@ -986,7 +998,7 @@
                             localStorage.removeItem('currentUser');
                             localStorage.removeItem('userRank');
                             localStorage.removeItem('userEmail');
-                            if (ws) { try { ws.close(); } catch(e) {} ws = null; }
+                            if (ws) { try { ws.close(); } catch (e) {} ws = null; }
                             window.location.href = 'login.html';
                         } else if (notif.startsWith('UNBANNED')) {
                             alert('✅ You have been unbanned! You can now log in again.');
@@ -1005,7 +1017,7 @@
 
                 ws.onerror = function(err) {
                     console.error('WebSocket error:', err);
-                    if (ws) { try { ws.close(); } catch(e) {} ws = null; }
+                    if (ws) { try { ws.close(); } catch (e) {} ws = null; }
                     if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
                     wsReconnectTimer = setTimeout(connectWebSocket, 5000);
                 };
@@ -1018,9 +1030,8 @@
         }
 
         // ================================================================
-        // ===== WINDOW ONLOAD =====
+        // WINDOW ONLOAD
         // ================================================================
-
         window.onload = function() {
             console.log('🚀 Page loaded');
 
