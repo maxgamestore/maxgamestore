@@ -847,7 +847,19 @@
             var duration = 10;
 
             if (remaining && remaining > 0) {
-                timeMsg = '⏳ Remaining: ' + formatBanTime(remaining);
+                var remainingSeconds = Math.floor(remaining / 1000);
+                var days = Math.floor(remainingSeconds / (60 * 60 * 24));
+                var hours = Math.floor((remainingSeconds % (60 * 60 * 24)) / (60 * 60));
+                var minutes = Math.floor((remainingSeconds % (60 * 60)) / 60);
+                var seconds = remainingSeconds % 60;
+                
+                var parts = [];
+                if (days > 0) parts.push(days + ' day' + (days > 1 ? 's' : ''));
+                if (hours > 0) parts.push(hours + ' hour' + (hours > 1 ? 's' : ''));
+                if (minutes > 0) parts.push(minutes + ' minute' + (minutes > 1 ? 's' : ''));
+                if (seconds > 0 || parts.length === 0) parts.push(seconds + ' second' + (seconds > 1 ? 's' : ''));
+                
+                timeMsg = '⏳ Remaining: ' + parts.join(', ');
                 duration = Math.min(Math.ceil(remaining / 1000), 10);
                 if (until) {
                     expiresMsg = '📅 Expires: ' + new Date(until).toLocaleString();
