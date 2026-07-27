@@ -396,6 +396,146 @@
             margin-top: 60px;
         }
 
+        /* ===== BAN POPUP ===== */
+        .ban-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .ban-overlay.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .ban-popup {
+            background: linear-gradient(135deg, #1a1a2e, #2d1b3d);
+            border: 2px solid #e74c3c;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(231, 76, 60, 0.3);
+            position: relative;
+        }
+
+        .ban-popup .ban-icon {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        .ban-popup .ban-title {
+            color: #e74c3c;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .ban-popup .ban-type {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .ban-popup .ban-type.ip {
+            background: rgba(231, 76, 60, 0.3);
+            color: #e74c3c;
+        }
+
+        .ban-popup .ban-type.account {
+            background: rgba(243, 156, 18, 0.3);
+            color: #f39c12;
+        }
+
+        .ban-popup .ban-reason {
+            color: #ff6b6b;
+            font-size: 16px;
+            padding: 10px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .ban-popup .ban-time {
+            color: #ffd93d;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .ban-popup .ban-expires {
+            color: #888;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .ban-popup .ban-progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .ban-popup .ban-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #e74c3c, #f39c12);
+            border-radius: 4px;
+            width: 100%;
+            animation: progressShrink 10s linear forwards;
+        }
+
+        @keyframes progressShrink {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        .ban-popup .ban-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .ban-popup .ban-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+
+        .ban-popup .ban-countdown {
+            color: #888;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .ban-popup .ban-countdown span {
+            color: #ffd93d;
+            font-weight: bold;
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
@@ -411,11 +551,14 @@
             .hero-logo { font-size: 50px; }
             .live-stats { gap: 30px; }
             .stat-item .number { font-size: 28px; }
+            .ban-popup { padding: 25px; }
+            .ban-popup .ban-title { font-size: 22px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ===== NAVBAR ===== -->
     <nav class="navbar">
         <div class="navbar-left">
             <span class="user-name" id="displayName">Guest</span>
@@ -430,6 +573,24 @@
         </div>
     </nav>
 
+    <!-- ===== BAN POPUP ===== -->
+    <div class="ban-overlay" id="banOverlay">
+        <div class="ban-popup">
+            <div class="ban-icon">🚫</div>
+            <div class="ban-title">YOU HAVE BEEN BANNED!</div>
+            <div class="ban-type" id="banTypeDisplay">🔨 ACCOUNT BAN</div>
+            <div class="ban-reason" id="banReasonDisplay">No reason provided</div>
+            <div class="ban-time" id="banTimeDisplay">⏳ Permanent</div>
+            <div class="ban-expires" id="banExpiresDisplay"></div>
+            <div class="ban-progress">
+                <div class="ban-progress-bar" id="banProgressBar"></div>
+            </div>
+            <div class="ban-countdown">You will be redirected in <span id="banCountdown">10</span> seconds</div>
+            <button class="ban-btn" onclick="closeBanPopup()">I Understand</button>
+        </div>
+    </div>
+
+    <!-- ===== CONȚINUT ===== -->
     <div class="container">
 
         <div class="page active" id="page-home">
@@ -560,6 +721,8 @@
 
     <script>
         const BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
+        let banPopupTimer = null;
+        let banCountdownInterval = null;
 
         function showPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -574,7 +737,6 @@
             localStorage.removeItem('currentUser');
             localStorage.removeItem('userRank');
             localStorage.removeItem('userEmail');
-            // Închide conexiunea WebSocket
             if (ws) {
                 try { ws.close(); } catch(e) {}
                 ws = null;
@@ -616,11 +778,102 @@
             const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((ms % (1000 * 60)) / 1000);
             let parts = [];
-            if (days > 0) parts.push(`${days}d`);
-            if (hours > 0) parts.push(`${hours}h`);
-            if (minutes > 0) parts.push(`${minutes}m`);
-            if (seconds > 0 || parts.length === 0) parts.push(`${seconds}s`);
-            return parts.join(' ');
+            if (days > 0) parts.push(`${days} day${days > 1 ? 's' : ''}`);
+            if (hours > 0) parts.push(`${hours} hour${hours > 1 ? 's' : ''}`);
+            if (minutes > 0) parts.push(`${minutes} minute${minutes > 1 ? 's' : ''}`);
+            if (seconds > 0 || parts.length === 0) parts.push(`${seconds} second${seconds > 1 ? 's' : ''}`);
+            return parts.join(', ');
+        }
+
+        // ===== BAN POPUP =====
+        function showBanPopup(type, reason, until, remaining) {
+            const overlay = document.getElementById('banOverlay');
+            const typeDisplay = document.getElementById('banTypeDisplay');
+            const reasonDisplay = document.getElementById('banReasonDisplay');
+            const timeDisplay = document.getElementById('banTimeDisplay');
+            const expiresDisplay = document.getElementById('banExpiresDisplay');
+            const countdownSpan = document.getElementById('banCountdown');
+            const progressBar = document.getElementById('banProgressBar');
+
+            // Setează tipul
+            if (type === 'IP') {
+                typeDisplay.textContent = '🚫 IP BAN';
+                typeDisplay.className = 'ban-type ip';
+            } else {
+                typeDisplay.textContent = '🔨 ACCOUNT BAN';
+                typeDisplay.className = 'ban-type account';
+            }
+
+            // Setează motivul
+            reasonDisplay.textContent = '📝 Reason: ' + (reason || 'No reason provided');
+
+            // Setează timpul
+            let timeMsg = '⏳ Permanent ban';
+            let expiresMsg = '';
+            let duration = 10;
+
+            if (remaining && remaining > 0) {
+                timeMsg = '⏳ Remaining: ' + formatBanTime(remaining);
+                duration = Math.min(Math.ceil(remaining / 1000), 10);
+                if (until) {
+                    expiresMsg = '📅 Expires: ' + new Date(until).toLocaleString();
+                }
+            }
+
+            timeDisplay.textContent = timeMsg;
+            expiresDisplay.textContent = expiresMsg;
+
+            // Resetează progress bar
+            progressBar.style.animation = 'none';
+            setTimeout(() => {
+                progressBar.style.animation = `progressShrink ${duration}s linear forwards`;
+            }, 50);
+
+            // Countdown
+            let countdown = duration;
+            countdownSpan.textContent = countdown;
+
+            if (banCountdownInterval) clearInterval(banCountdownInterval);
+            banCountdownInterval = setInterval(() => {
+                countdown--;
+                countdownSpan.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(banCountdownInterval);
+                    banCountdownInterval = null;
+                    closeBanPopup();
+                }
+            }, 1000);
+
+            // Arată popup-ul
+            overlay.classList.add('show');
+
+            // Auto-redirect după 10 secunde
+            if (banPopupTimer) clearTimeout(banPopupTimer);
+            banPopupTimer = setTimeout(() => {
+                closeBanPopup();
+            }, duration * 1000 + 500);
+        }
+
+        function closeBanPopup() {
+            const overlay = document.getElementById('banOverlay');
+            overlay.classList.remove('show');
+            if (banPopupTimer) {
+                clearTimeout(banPopupTimer);
+                banPopupTimer = null;
+            }
+            if (banCountdownInterval) {
+                clearInterval(banCountdownInterval);
+                banCountdownInterval = null;
+            }
+            // Redirecționează către login
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('userRank');
+            localStorage.removeItem('userEmail');
+            if (ws) {
+                try { ws.close(); } catch(e) {}
+                ws = null;
+            }
+            window.location.href = 'login.html';
         }
 
         function checkBanStatus() {
@@ -631,56 +884,26 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.banned) {
-                        let timeMessage = '';
-                        if (data.remaining && data.remaining > 0) {
-                            timeMessage = `⏳ Remaining: ${formatBanTime(data.remaining)}`;
-                        } else {
-                            timeMessage = '⏳ Permanent ban';
-                        }
-                        const banType = data.type === 'IP' ? '🚫 IP BAN' : '🔨 ACCOUNT BAN';
-                        
-                        alert(
-                            `⚠️ YOU HAVE BEEN BANNED!\n\n` +
-                            `${banType}\n` +
-                            `📝 Reason: ${data.reason}\n` +
-                            `${timeMessage}\n` +
-                            `\nYou will be logged out now.`
-                        );
-                        
-                        localStorage.removeItem('currentUser');
-                        localStorage.removeItem('userRank');
-                        localStorage.removeItem('userEmail');
-                        if (ws) {
-                            try { ws.close(); } catch(e) {}
-                            ws = null;
-                        }
-                        window.location.href = 'login.html';
+                        showBanPopup(data.type, data.reason, data.until, data.remaining);
                     }
                 })
                 .catch(() => {});
         }
 
-        // ============ WEBSOCKET CONNECTION ============
+        // ============ WEBSOCKET ============
         let ws = null;
         let wsReconnectTimer = null;
 
         function connectWebSocket() {
             const user = localStorage.getItem('currentUser');
-            if (!user) {
-                console.log('⚠️ No user logged in, skipping WebSocket connection');
-                return;
-            }
+            if (!user) return;
 
-            // Folosește același URL ca serverul
             const wsUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
                 ? 'ws://localhost:3000' 
                 : 'wss://trimmer-chrome-landfall.ngrok-free.dev';
 
             try {
-                if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
-                    console.log('ℹ️ WebSocket already connected or connecting');
-                    return;
-                }
+                if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
 
                 ws = new WebSocket(wsUrl);
                 
@@ -698,25 +921,15 @@
                         
                         if (notif.startsWith('BANNED:')) {
                             const reason = notif.substring(7);
-                            alert(`⚠️ YOU HAVE BEEN BANNED!\n\nReason: ${reason}\n\nYou will be logged out now.`);
-                            localStorage.removeItem('currentUser');
-                            localStorage.removeItem('userRank');
-                            localStorage.removeItem('userEmail');
-                            if (ws) {
-                                try { ws.close(); } catch(e) {}
-                                ws = null;
-                            }
-                            window.location.href = 'login.html';
+                            // Arată popup-ul frumos
+                            showBanPopup('Account', reason, null, null);
                         } else if (notif.startsWith('KICKED:')) {
                             const reason = notif.substring(7);
                             alert(`👢 YOU HAVE BEEN KICKED!\n\nReason: ${reason}\n\nYou will be logged out now.`);
                             localStorage.removeItem('currentUser');
                             localStorage.removeItem('userRank');
                             localStorage.removeItem('userEmail');
-                            if (ws) {
-                                try { ws.close(); } catch(e) {}
-                                ws = null;
-                            }
+                            if (ws) { try { ws.close(); } catch(e) {} ws = null; }
                             window.location.href = 'login.html';
                         } else if (notif.startsWith('UNBANNED')) {
                             alert('✅ You have been unbanned! You can now log in again.');
@@ -728,23 +941,20 @@
                 };
                 
                 ws.onclose = function() {
-                    console.log('🔌 WebSocket disconnected, reconnecting in 5s...');
+                    console.log('🔌 WebSocket disconnected, reconnecting...');
                     if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
                     wsReconnectTimer = setTimeout(connectWebSocket, 5000);
                 };
                 
                 ws.onerror = function(err) {
                     console.error('WebSocket error:', err);
-                    if (ws) {
-                        try { ws.close(); } catch(e) {}
-                        ws = null;
-                    }
+                    if (ws) { try { ws.close(); } catch(e) {} ws = null; }
                     if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
                     wsReconnectTimer = setTimeout(connectWebSocket, 5000);
                 };
                 
             } catch (e) {
-                console.error('WebSocket connection error:', e);
+                console.error('WebSocket error:', e);
                 if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
                 wsReconnectTimer = setTimeout(connectWebSocket, 5000);
             }
@@ -811,7 +1021,7 @@
                     .catch(() => {});
             }, 10000);
 
-            // Conectează WebSocket pentru notificări în timp real
+            // Conectează WebSocket
             setTimeout(connectWebSocket, 1500);
         };
     </script>
