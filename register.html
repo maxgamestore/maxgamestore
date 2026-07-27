@@ -25,7 +25,7 @@
             padding: 40px;
             border-radius: 20px;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
             text-align: center;
         }
@@ -73,15 +73,22 @@
             transform: scale(1.02);
         }
         
-        .error {
-            color: #e74c3c;
+        .message {
             margin: 15px 0;
             font-size: 14px;
             min-height: 40px;
         }
         
-        .success {
+        .message.error {
+            color: #e74c3c;
+        }
+        
+        .message.success {
             color: #2ecc71;
+        }
+        
+        .message.loading {
+            color: #f39c12;
         }
         
         .link {
@@ -114,7 +121,7 @@
         <input type="password" id="password" placeholder="Password *">
         <input type="email" id="email" placeholder="Email (optional)">
         <button onclick="register()">CREATE ACCOUNT</button>
-        <div id="message" class="error"></div>
+        <div id="message" class="message"></div>
         <p>Already have an account? <a href="login.html" class="link">Login here</a></p>
         <div class="optional">* Required fields</div>
     </div>
@@ -130,13 +137,25 @@
             const messageDiv = document.getElementById('message');
             
             if (!username || !password) {
+                messageDiv.className = 'message error';
                 messageDiv.innerText = '❌ Username and password are required!';
-                messageDiv.style.color = '#e74c3c';
                 return;
             }
             
+            if (username.length < 3) {
+                messageDiv.className = 'message error';
+                messageDiv.innerText = '❌ Username must be at least 3 characters!';
+                return;
+            }
+            
+            if (password.length < 4) {
+                messageDiv.className = 'message error';
+                messageDiv.innerText = '❌ Password must be at least 4 characters!';
+                return;
+            }
+            
+            messageDiv.className = 'message loading';
             messageDiv.innerText = '⏳ Creating account...';
-            messageDiv.style.color = '#3498db';
             
             try {
                 const response = await fetch(`${BACKEND_URL}/api/register`, {
@@ -152,19 +171,19 @@
                 console.log('Register response:', data);
                 
                 if (data.success) {
+                    messageDiv.className = 'message success';
                     messageDiv.innerText = '✅ Account created! Redirecting to login...';
-                    messageDiv.style.color = '#2ecc71';
                     setTimeout(() => {
                         window.location.href = 'login.html';
                     }, 1500);
                 } else {
+                    messageDiv.className = 'message error';
                     messageDiv.innerText = '❌ ' + (data.error || 'Registration failed');
-                    messageDiv.style.color = '#e74c3c';
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
+                messageDiv.className = 'message error';
                 messageDiv.innerText = '❌ Connection error: ' + error.message;
-                messageDiv.style.color = '#e74c3c';
             }
         }
         
