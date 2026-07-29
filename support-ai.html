@@ -265,14 +265,19 @@
         <div class="header">
             <div class="icon">🤖</div>
             <h1>AI Support Assistant</h1>
-            <p>Describe your issue and I'll try to help you</p>
+            <p>Powered by MaxGameStore AI - Support for all our games</p>
             <div id="aiStatus" class="status-badge offline">⏳ Checking AI server...</div>
         </div>
 
         <div class="chat-box" id="chatBox">
             <div class="message bot">
-                👋 Hello! I'm your AI support assistant.<br>
-                Describe the error you're facing, or choose a quick option below.
+                👋 Hello! I'm the MaxGameStore AI Support Assistant.<br>
+                I can help with:<br>
+                • 🎮 <strong>World Of Fights</strong> (WoF)<br>
+                • 🚀 <strong>Project Nexus</strong><br>
+                • 🏢 <strong>Company info</strong><br>
+                • ⚙️ <strong>Technical issues</strong><br><br>
+                Describe your issue or choose a quick option below.
                 <div class="time">Just now</div>
             </div>
             <div id="typingIndicator" class="typing" style="display:none;">
@@ -286,10 +291,12 @@
             <button onclick="quickAction('login')">🔐 Login error</button>
             <button onclick="quickAction('java')">☕ Java issues</button>
             <button onclick="quickAction('blank')">⬛ Blank screen</button>
+            <button onclick="quickAction('games')">🎮 All games</button>
+            <button onclick="quickAction('company')">🏢 Company info</button>
         </div>
 
         <div class="input-area">
-            <textarea id="userInput" placeholder="Describe your issue or error message..." rows="1"></textarea>
+            <textarea id="userInput" placeholder="Describe your issue or ask about games..." rows="1"></textarea>
             <button id="sendBtn" onclick="sendMessage()">Send</button>
         </div>
 
@@ -301,31 +308,29 @@
 
     <script>
         // ============ CONFIG ============
-        // 🔧 Înlocuiește cu linkul tău ngrok când rulezi AI Server-ul!
-        const AI_API_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
-        // const AI_API_URL = 'http://localhost:3001'; // Pentru test local
+        // Folosește același server ca restul
+        const AI_API_URL = window.location.origin;
 
         let messageCount = 0;
-        let conversationHistory = [];
 
-        // ============ CHECK AI SERVER STATUS ============
+        // ============ CHECK AI STATUS ============
         function checkAIStatus() {
             const statusBadge = document.getElementById('aiStatus');
             const statusDot = document.getElementById('statusDot');
             const statusText = document.getElementById('statusText');
 
-            statusBadge.textContent = '⏳ Connecting to AI...';
+            statusBadge.textContent = '⏳ Connecting...';
             statusBadge.className = 'status-badge offline';
             statusDot.className = 'dot offline';
             statusText.textContent = 'Connecting to AI server...';
 
-            fetch(`${AI_API_URL}/api/status`)
+            fetch(`${AI_API_URL}/api/ai/status`)
                 .then(res => res.json())
                 .then(data => {
-                    statusBadge.textContent = '✅ AI Online';
+                    statusBadge.textContent = `✅ AI Online (${data.knowledge.games} games)`;
                     statusBadge.className = 'status-badge online';
                     statusDot.className = 'dot online';
-                    statusText.textContent = 'AI Server is online';
+                    statusText.textContent = `AI Server online • ${data.knowledge.solutions} solutions`;
                     console.log('🤖 AI Server online:', data);
                 })
                 .catch(err => {
@@ -335,7 +340,7 @@
                     statusText.textContent = 'AI Server offline - Contact support';
                     console.error('❌ AI Server offline:', err);
                     
-                    addMessage('⚠️ **AI Server is offline!**\n\nThe AI support is currently unavailable.\nPlease try again later or contact support directly.', 'bot');
+                    addMessage('⚠️ **AI Server is offline!**\n\nThe AI support is currently unavailable.\nPlease try again later or contact support directly.\n\n📧 support@maxgamestore.com', 'bot');
                 });
         }
 
@@ -370,7 +375,9 @@
                 'oracle': 'I think I have Oracle JDK issues, the launcher doesn\'t open',
                 'login': 'I can\'t log in to my account',
                 'java': 'I think I have Java problems',
-                'blank': 'The screen is completely blank'
+                'blank': 'The screen is completely blank',
+                'games': 'Tell me about all the games from MaxGameStore',
+                'company': 'Tell me about MaxGameStore corporation'
             };
             input.value = messages[type] || '';
             sendMessage();
@@ -389,7 +396,7 @@
             document.getElementById('typingIndicator').style.display = 'block';
             scrollToBottom();
 
-            fetch(`${AI_API_URL}/api/analyze`, {
+            fetch(`${AI_API_URL}/api/ai/analyze`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
