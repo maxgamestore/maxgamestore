@@ -83,6 +83,15 @@
             border-bottom-color: #ffd700;
         }
 
+        .navbar-right a.support-link {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .navbar-right a.support-link:hover {
+            color: #ff4757;
+        }
+
         .navbar-right a.admin-link {
             color: #e74c3c;
             font-weight: bold;
@@ -167,6 +176,42 @@
             0% { opacity: 1; }
             50% { opacity: 0.3; }
             100% { opacity: 1; }
+        }
+
+        .btn-download {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 40px;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .btn-download:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(46, 204, 113, 0.4);
+        }
+
+        .btn-ai {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 12px 35px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .btn-ai:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(238, 90, 36, 0.4);
         }
 
         .company-section {
@@ -399,148 +444,6 @@
             margin-top: 60px;
         }
 
-        /* ============================================================ */
-        /* ===== BAN POPUP ===== */
-        /* ============================================================ */
-        .ban-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .ban-overlay.show {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .ban-popup {
-            background: linear-gradient(135deg, #1a1a2e, #2d1b3d);
-            border: 2px solid #e74c3c;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 450px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 0 60px rgba(231, 76, 60, 0.3);
-            position: relative;
-        }
-
-        .ban-popup .ban-icon {
-            font-size: 60px;
-            margin-bottom: 10px;
-        }
-
-        .ban-popup .ban-title {
-            color: #e74c3c;
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .ban-popup .ban-type {
-            display: inline-block;
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .ban-popup .ban-type.ip {
-            background: rgba(231, 76, 60, 0.3);
-            color: #e74c3c;
-        }
-
-        .ban-popup .ban-type.account {
-            background: rgba(243, 156, 18, 0.3);
-            color: #f39c12;
-        }
-
-        .ban-popup .ban-reason {
-            color: #ff6b6b;
-            font-size: 16px;
-            padding: 10px;
-            background: rgba(231, 76, 60, 0.1);
-            border-radius: 10px;
-            margin: 10px 0;
-        }
-
-        .ban-popup .ban-time {
-            color: #ffd93d;
-            font-size: 18px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .ban-popup .ban-expires {
-            color: #888;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-
-        .ban-popup .ban-progress {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-
-        .ban-popup .ban-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #e74c3c, #f39c12);
-            border-radius: 4px;
-            width: 100%;
-            animation: progressShrink 10s linear forwards;
-        }
-
-        @keyframes progressShrink {
-            from { width: 100%; }
-            to { width: 0%; }
-        }
-
-        .ban-popup .ban-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        .ban-popup .ban-btn:hover {
-            background: #c0392b;
-            transform: scale(1.05);
-        }
-
-        .ban-popup .ban-countdown {
-            color: #888;
-            font-size: 13px;
-            margin-top: 10px;
-        }
-
-        .ban-popup .ban-countdown span {
-            color: #ffd93d;
-            font-weight: bold;
-        }
-
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
@@ -556,8 +459,6 @@
             .hero-logo { font-size: 50px; }
             .live-stats { gap: 30px; }
             .stat-item .number { font-size: 28px; }
-            .ban-popup { padding: 25px; }
-            .ban-popup .ban-title { font-size: 22px; }
         }
     </style>
 </head>
@@ -572,33 +473,18 @@
         <div class="navbar-right">
             <a href="#" class="active" data-page="home" onclick="showPage('home')">🏠 Home</a>
             <a href="#" data-page="games" onclick="showPage('games')">🎮 Games</a>
-            <a href="#" data-page="support" onclick="showPage('support')">📞 Support</a>
+            <a href="support-ai.html" class="support-link">🤖 AI Support</a>
             <a href="#" id="adminBtn" onclick="goToAdmin()" style="display:none; color: #e74c3c; font-weight: bold;">🛡️ Admin</a>
             <button class="btn-logout" onclick="logout()">🚪 Logout</button>
         </div>
     </nav>
 
-    <!-- ===== BAN POPUP ===== -->
-    <div class="ban-overlay" id="banOverlay">
-        <div class="ban-popup">
-            <div class="ban-icon">🚫</div>
-            <div class="ban-title">YOU HAVE BEEN BANNED!</div>
-            <div class="ban-type" id="banTypeDisplay">🔨 ACCOUNT BAN</div>
-            <div class="ban-reason" id="banReasonDisplay">No reason provided</div>
-            <div class="ban-time" id="banTimeDisplay">⏳ Permanent</div>
-            <div class="ban-expires" id="banExpiresDisplay"></div>
-            <div class="ban-progress">
-                <div class="ban-progress-bar" id="banProgressBar"></div>
-            </div>
-            <div class="ban-countdown">You will be redirected in <span id="banCountdown">10</span> seconds</div>
-            <button class="ban-btn" onclick="closeBanPopup()">I Understand</button>
-        </div>
-    </div>
-
     <!-- ===== CONȚINUT ===== -->
     <div class="container">
 
+        <!-- ===== PAGE: HOME ===== -->
         <div class="page active" id="page-home">
+
             <div class="hero">
                 <div class="hero-logo">🏢</div>
                 <h1>
@@ -614,8 +500,18 @@
                     immersive multiplayer experiences. We believe in games that bring people together, 
                     free from pay-to-win mechanics.
                 </p>
+                <div>
+                    <a href="launcher/WorldOfFights_Launcher.jar" class="btn-download" download>
+                        📥 DOWNLOAD LAUNCHER
+                    </a>
+                    <br>
+                    <a href="support-ai.html" class="btn-ai">
+                        🤖 AI SUPPORT
+                    </a>
+                </div>
             </div>
 
+            <!-- ===== COMPANY INFO ===== -->
             <div class="company-section">
                 <h2>🏢 About MaxGameStore</h2>
                 <p>
@@ -631,26 +527,31 @@
                 </p>
             </div>
 
+            <!-- ===== UPDATE-URI ===== -->
             <div class="updates-section">
                 <h2>📢 Game Updates</h2>
+
                 <div class="update-card">
                     <div class="date">July 23, 2025</div>
                     <div class="title">🎉 Official Launcher Released!</div>
                     <div class="desc">We've launched the new launcher with support for multiple game versions.</div>
                     <span class="tag tag-new">NEW</span>
                 </div>
+
                 <div class="update-card">
                     <div class="date">July 20, 2025</div>
                     <div class="title">⚔️ Combat System Overhaul</div>
                     <div class="desc">Improved sword combat system with new animations.</div>
                     <span class="tag tag-update">UPDATE</span>
                 </div>
+
                 <div class="update-card">
                     <div class="date">July 15, 2025</div>
                     <div class="title">🐛 Bug Fixes & Optimization</div>
                     <div class="desc">Fixed WebSocket connection issues and improved synchronization.</div>
                     <span class="tag tag-fix">FIX</span>
                 </div>
+
                 <div class="update-card">
                     <div class="date">July 10, 2025</div>
                     <div class="title">🏠 Private Rooms Now Available</div>
@@ -659,6 +560,7 @@
                 </div>
             </div>
 
+            <!-- ===== LIVE STATS ===== -->
             <div class="live-stats" id="liveStats">
                 <div class="stat-item">
                     <div class="number" id="totalPlayers">0</div>
@@ -673,47 +575,34 @@
                     <div class="label">🎮 World Of Fights Players</div>
                 </div>
             </div>
+
         </div>
 
+        <!-- ===== PAGE: GAMES ===== -->
         <div class="page" id="page-games">
             <h2 style="color: #ffd700; font-size: 32px; text-align: center; margin-bottom: 30px;">🎮 Our Games</h2>
+
             <div class="games-grid">
                 <div class="game-card">
                     <div class="icon">⚔️</div>
                     <h3>World Of Fights</h3>
-                    <p>A 2D multiplayer RPG where you fight, explore, level up, and build your character.</p>
-                    <a href="installer/WorldOfFights_Installer.jar" class="btn-play">🎮 Play Now</a>
+                    <p>
+                        A 2D multiplayer RPG where you fight, explore, level up, and build your character.
+                        Includes both <strong>Online Multiplayer</strong> and <strong>Survival Singleplayer</strong> modes.
+                    </p>
+                    <a href="launcher/WorldOfFights_Launcher.jar" class="btn-play">🎮 Play Now</a>
                     <div class="badge">🟢 Online</div>
                     <div class="player-count" id="wofPlayers">👥 0 players online</div>
                 </div>
+
                 <div class="game-card">
                     <div class="icon">🚀</div>
                     <h3>Project Nexus</h3>
-                    <p>Our next project – a sci-fi themed 2D adventure.</p>
+                    <p>
+                        Our next project – a sci-fi themed 2D adventure with unique mechanics.
+                    </p>
                     <span class="badge badge-dev">🚧 In Development</span>
                     <div class="player-count">🔜 Coming Soon</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="page" id="page-support">
-            <h2 style="color: #ffd700; font-size: 32px; text-align: center; margin-bottom: 30px;">📞 Support</h2>
-            <div class="support-section">
-                <div class="support-card">
-                    <h3>📖 How do I get started?</h3>
-                    <p>Download the installer from the Games page and run it.</p>
-                </div>
-                <div class="support-card">
-                    <h3>🐛 I found a bug!</h3>
-                    <p>Report it on Discord or via email.</p>
-                </div>
-                <div class="support-card">
-                    <h3>💬 Community</h3>
-                    <p>Join our Discord: <a href="#">https://discord.gg/worldoffights</a></p>
-                </div>
-                <div class="support-card">
-                    <h3>📧 Contact</h3>
-                    <p>Email: <a href="mailto:support@maxgamestore.com">support@maxgamestore.com</a></p>
                 </div>
             </div>
         </div>
@@ -725,58 +614,38 @@
     </footer>
 
     <script>
-        // ================================================================
-        // CONFIG
-        // ================================================================
-        var BACKEND_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
-        var banPopupTimer = null;
-        var banCountdownInterval = null;
-        var ws = null;
-        var wsReconnectTimer = null;
+        const BACKEND_URL = window.location.origin;
 
-        // ================================================================
-        // NAVIGATION
-        // ================================================================
+        // ===== NAVIGATION =====
         function showPage(page) {
-            var pages = document.querySelectorAll('.page');
-            for (var i = 0; i < pages.length; i++) {
-                pages[i].classList.remove('active');
-            }
-            var links = document.querySelectorAll('.navbar-right a');
-            for (var i = 0; i < links.length; i++) {
-                links[i].classList.remove('active');
-            }
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.navbar-right a').forEach(a => a.classList.remove('active'));
+
             document.getElementById('page-' + page).classList.add('active');
-            for (var i = 0; i < links.length; i++) {
-                if (links[i].dataset.page === page) {
-                    links[i].classList.add('active');
+
+            document.querySelectorAll('.navbar-right a').forEach(a => {
+                if (a.dataset.page === page) {
+                    a.classList.add('active');
                 }
-            }
+            });
         }
 
-        // ================================================================
-        // LOGOUT
-        // ================================================================
+        // ===== LOGOUT =====
         function logout() {
             localStorage.removeItem('currentUser');
             localStorage.removeItem('userRank');
             localStorage.removeItem('userEmail');
-            if (ws) {
-                try { ws.close(); } catch (e) {}
-                ws = null;
-            }
             window.location.href = 'login.html';
         }
 
-        // ================================================================
-        // ADMIN
-        // ================================================================
+        // ===== GO TO ADMIN =====
         function goToAdmin() {
             window.location.href = 'admin.html';
         }
 
+        // ===== CHECK ADMIN ACCESS =====
         function checkAdminAccess(rank) {
-            var adminBtn = document.getElementById('adminBtn');
+            const adminBtn = document.getElementById('adminBtn');
             if (rank === 'owner' || rank === 'admin') {
                 adminBtn.style.display = 'inline-block';
             } else {
@@ -784,273 +653,37 @@
             }
         }
 
-        // ================================================================
-        // DISPLAY USER
-        // ================================================================
+        // ===== DISPLAY USER =====
         function displayUser(username, rank) {
             document.getElementById('displayName').textContent = username;
-            var rankNames = {
+
+            const rankNames = {
                 'owner': '👑 OWNER',
                 'admin': '⚙️ ADMIN',
                 'developer': '💻 DEVELOPER',
                 'tester': '🧪 TESTER',
                 'user': '🎮 PLAYER'
             };
+
             document.getElementById('displayRank').textContent = rankNames[rank] || '🎮 PLAYER';
             document.getElementById('displayRank').className = 'user-rank ' + (rank || 'user');
             checkAdminAccess(rank);
         }
 
-        // ================================================================
-        // FORMAT BAN TIME
-        // ================================================================
-        function formatRemainingTime(ms) {
-            if (!ms || ms <= 0) return null;
-            var seconds = Math.floor(ms / 1000);
-            var days = Math.floor(seconds / (60 * 60 * 24));
-            var hours = Math.floor((seconds % (60 * 60 * 24)) / (60 * 60));
-            var minutes = Math.floor((seconds % (60 * 60)) / 60);
-            var secs = seconds % 60;
-            var parts = [];
-            if (days > 0) parts.push(days + ' day' + (days > 1 ? 's' : ''));
-            if (hours > 0) parts.push(hours + ' hour' + (hours > 1 ? 's' : ''));
-            if (minutes > 0) parts.push(minutes + ' minute' + (minutes > 1 ? 's' : ''));
-            if (secs > 0 || parts.length === 0) parts.push(secs + ' second' + (secs > 1 ? 's' : ''));
-            return parts.join(', ');
-        }
-
-        // ================================================================
-        // BAN POPUP
-        // ================================================================
-        function showBanPopup(type, reason, until, remaining) {
-            console.log('🔴 Showing ban popup:', { type: type, reason: reason, until: until, remaining: remaining });
-
-            var overlay = document.getElementById('banOverlay');
-            var typeDisplay = document.getElementById('banTypeDisplay');
-            var reasonDisplay = document.getElementById('banReasonDisplay');
-            var timeDisplay = document.getElementById('banTimeDisplay');
-            var expiresDisplay = document.getElementById('banExpiresDisplay');
-            var countdownSpan = document.getElementById('banCountdown');
-            var progressBar = document.getElementById('banProgressBar');
-
-            if (type === 'IP') {
-                typeDisplay.textContent = '🚫 IP BAN';
-                typeDisplay.className = 'ban-type ip';
-            } else {
-                typeDisplay.textContent = '🔨 ACCOUNT BAN';
-                typeDisplay.className = 'ban-type account';
-            }
-
-            reasonDisplay.textContent = '📝 Reason: ' + (reason || 'No reason provided');
-
-            var timeMsg = '⏳ Permanent ban';
-            var expiresMsg = '';
-            var duration = 10;
-
-            // VERIFICĂ DURATA
-            if (remaining && remaining > 0) {
-                var formatted = formatRemainingTime(remaining);
-                if (formatted) {
-                    timeMsg = '⏳ Remaining: ' + formatted;
-                    duration = Math.min(Math.ceil(remaining / 1000), 10);
-                    if (until && until !== 'null') {
-                        expiresMsg = '📅 Expires: ' + new Date(until).toLocaleString();
-                    }
-                }
-                console.log('⏳ Time message:', timeMsg);
-            } else {
-                console.log('⏳ No remaining time, showing permanent ban');
-            }
-
-            timeDisplay.textContent = timeMsg;
-            expiresDisplay.textContent = expiresMsg;
-
-            progressBar.style.animation = 'none';
-            setTimeout(function() {
-                progressBar.style.animation = 'progressShrink ' + duration + 's linear forwards';
-            }, 50);
-
-            var countdown = duration;
-            countdownSpan.textContent = countdown;
-
-            if (banCountdownInterval) clearInterval(banCountdownInterval);
-            banCountdownInterval = setInterval(function() {
-                countdown--;
-                countdownSpan.textContent = countdown;
-                if (countdown <= 0) {
-                    clearInterval(banCountdownInterval);
-                    banCountdownInterval = null;
-                }
-            }, 1000);
-
-            overlay.classList.add('show');
-
-            if (banPopupTimer) clearTimeout(banPopupTimer);
-            banPopupTimer = setTimeout(function() {
-                closeBanPopup();
-            }, duration * 1000 + 500);
-        }
-
-        function closeBanPopup() {
-            console.log('🔴 Closing ban popup and redirecting to login...');
-            var overlay = document.getElementById('banOverlay');
-            overlay.classList.remove('show');
-            if (banPopupTimer) {
-                clearTimeout(banPopupTimer);
-                banPopupTimer = null;
-            }
-            if (banCountdownInterval) {
-                clearInterval(banCountdownInterval);
-                banCountdownInterval = null;
-            }
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('userRank');
-            localStorage.removeItem('userEmail');
-            if (ws) {
-                try { ws.close(); } catch (e) {}
-                ws = null;
-            }
-            window.location.href = 'login.html';
-        }
-
-        // ================================================================
-        // CHECK BAN STATUS
-        // ================================================================
-        function checkBanStatus() {
-            var user = localStorage.getItem('currentUser');
-            if (!user) {
-                console.log('⚠️ No user logged in');
-                return;
-            }
-            console.log('🔍 Checking ban status for:', user);
-            fetch(BACKEND_URL + '/api/check-ban/' + user)
-                .then(function(res) {
-                    console.log('📡 Response status:', res.status);
-                    return res.json();
-                })
-                .then(function(data) {
-                    console.log('📨 Ban check response:', data);
-                    if (data && data.banned === true) {
-                        console.log('🔴 User is BANNED! Showing popup...');
-                        showBanPopup(data.type, data.reason, data.until, data.remaining);
-                    } else {
-                        console.log('✅ User is NOT banned');
-                    }
-                })
-                .catch(function(err) {
-                    console.error('❌ Ban check error:', err);
-                });
-        }
-
-        // ================================================================
-        // WEBSOCKET
-        // ================================================================
-        function connectWebSocket() {
-            var user = localStorage.getItem('currentUser');
-            if (!user) return;
-
-            var wsUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                ? 'ws://localhost:3000'
-                : 'wss://trimmer-chrome-landfall.ngrok-free.dev';
-
-            try {
-                if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
-
-                ws = new WebSocket(wsUrl);
-
-                ws.onopen = function() {
-                    console.log('✅ WebSocket connected');
-                    ws.send('REGISTER_NAME:' + user);
-                };
-
-                ws.onmessage = function(event) {
-                    var msg = event.data;
-                    console.log('📨 WebSocket message:', msg);
-
-                    if (msg.startsWith('NOTIFICATION:')) {
-                        var notif = msg.substring(13);
-                        console.log('📨 Notification content:', notif);
-
-                        if (notif.startsWith('BANNED:')) {
-                            // Parsează: BANNED:reason|remaining|until
-                            var parts = notif.substring(7).split('|');
-                            var reason = parts[0] || 'No reason provided';
-                            var remaining = parts[1] ? parseInt(parts[1]) : null;
-                            var until = parts[2] || null;
-                            
-                            console.log('🔴 Parsed BAN notification:', { 
-                                reason: reason, 
-                                remaining: remaining, 
-                                until: until 
-                            });
-                            
-                            // Dacă remaining e null dar avem until, calculează diferența
-                            if ((!remaining || remaining === 0) && until && until !== 'null' && until !== 'undefined') {
-                                var untilDate = new Date(until);
-                                var now = new Date();
-                                if (untilDate > now) {
-                                    remaining = untilDate.getTime() - now.getTime();
-                                    console.log('🔄 Calculated remaining from until:', remaining);
-                                }
-                            }
-                            
-                            showBanPopup('Account', reason, until, remaining);
-                        } else if (notif.startsWith('KICKED:')) {
-                            var reason = notif.substring(7);
-                            alert('👢 YOU HAVE BEEN KICKED!\n\nReason: ' + reason + '\n\nYou will be logged out now.');
-                            localStorage.removeItem('currentUser');
-                            localStorage.removeItem('userRank');
-                            localStorage.removeItem('userEmail');
-                            if (ws) { try { ws.close(); } catch (e) {} ws = null; }
-                            window.location.href = 'login.html';
-                        } else if (notif.startsWith('UNBANNED')) {
-                            alert('✅ You have been unbanned! You can now log in again.');
-                        } else if (notif.startsWith('NEW_MESSAGE:')) {
-                            var from = notif.substring(12);
-                            alert('💬 You have a new message from ' + from + '! Check your messages.');
-                        }
-                    }
-                };
-
-                ws.onclose = function() {
-                    console.log('🔌 WebSocket disconnected, reconnecting...');
-                    if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
-                    wsReconnectTimer = setTimeout(connectWebSocket, 5000);
-                };
-
-                ws.onerror = function(err) {
-                    console.error('WebSocket error:', err);
-                    if (ws) { try { ws.close(); } catch (e) {} ws = null; }
-                    if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
-                    wsReconnectTimer = setTimeout(connectWebSocket, 5000);
-                };
-
-            } catch (e) {
-                console.error('WebSocket error:', e);
-                if (wsReconnectTimer) clearTimeout(wsReconnectTimer);
-                wsReconnectTimer = setTimeout(connectWebSocket, 5000);
-            }
-        }
-
-        // ================================================================
-        // WINDOW ONLOAD
-        // ================================================================
+        // ===== LOAD USER =====
         window.onload = function() {
-            console.log('🚀 Page loaded');
-
-            var user = localStorage.getItem('currentUser');
-            console.log('👤 Current user:', user);
+            const user = localStorage.getItem('currentUser');
 
             if (user) {
-                fetch(BACKEND_URL + '/api/get-rank/' + user)
-                    .then(function(res) { return res.json(); })
-                    .then(function(data) {
-                        var rank = data.rank || 'user';
+                fetch(`${BACKEND_URL}/api/get-rank/${user}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const rank = data.rank || 'user';
                         localStorage.setItem('userRank', rank);
                         displayUser(user, rank);
                     })
-                    .catch(function() {
-                        var rank = localStorage.getItem('userRank') || 'user';
+                    .catch(() => {
+                        const rank = localStorage.getItem('userRank') || 'user';
                         displayUser(user, rank);
                     });
             } else {
@@ -1058,51 +691,42 @@
                 return;
             }
 
-            // Live stats
-            fetch(BACKEND_URL + '/players')
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    var count = data.count || 0;
+            // ===== LIVE STATS =====
+            fetch(`${BACKEND_URL}/players`)
+                .then(res => res.json())
+                .then(data => {
+                    const count = data.count || 0;
                     document.getElementById('totalPlayers').textContent = count;
                     document.getElementById('gamePlayers').textContent = count;
                     document.getElementById('wofPlayers').textContent = '👥 ' + count + ' players online';
                 })
-                .catch(function() {
+                .catch(() => {
                     document.getElementById('totalPlayers').textContent = '0';
                     document.getElementById('gamePlayers').textContent = '0';
                     document.getElementById('wofPlayers').textContent = '👥 0 players online';
                 });
 
-            fetch(BACKEND_URL + '/versions')
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
+            fetch(`${BACKEND_URL}/versions`)
+                .then(res => res.json())
+                .then(data => {
                     document.getElementById('totalVersions').textContent = data.versions ? data.versions.length : 0;
                 })
-                .catch(function() {
+                .catch(() => {
                     document.getElementById('totalVersions').textContent = '0';
                 });
 
-            // Verifică ban la fiecare 30 de secunde
-            setInterval(checkBanStatus, 30000);
-            setTimeout(checkBanStatus, 2000);
-
             // Refresh players
-            setInterval(function() {
-                fetch(BACKEND_URL + '/players')
-                    .then(function(res) { return res.json(); })
-                    .then(function(data) {
-                        var count = data.count || 0;
+            setInterval(() => {
+                fetch(`${BACKEND_URL}/players`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const count = data.count || 0;
                         document.getElementById('totalPlayers').textContent = count;
                         document.getElementById('gamePlayers').textContent = count;
                         document.getElementById('wofPlayers').textContent = '👥 ' + count + ' players online';
                     })
-                    .catch(function() {});
+                    .catch(() => {});
             }, 10000);
-
-            // Conectează WebSocket
-            setTimeout(connectWebSocket, 1500);
-
-            console.log('✅ All systems ready!');
         };
     </script>
 </body>
