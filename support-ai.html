@@ -22,7 +22,7 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 750px;
             width: 95%;
             background: rgba(0, 0, 0, 0.85);
             border-radius: 20px;
@@ -38,13 +38,24 @@
             margin-bottom: 15px;
         }
 
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .header .icon {
             font-size: 30px;
         }
 
         .header h1 {
-            font-size: 22px;
+            font-size: 20px;
             color: #ffd700;
+        }
+
+        .header .subtitle {
+            font-size: 12px;
+            color: #666;
         }
 
         .header .close {
@@ -53,6 +64,7 @@
             text-decoration: none;
             cursor: pointer;
             transition: 0.3s;
+            padding: 0 10px;
         }
 
         .header .close:hover {
@@ -63,8 +75,8 @@
             display: inline-block;
             padding: 2px 10px;
             border-radius: 20px;
-            font-size: 11px;
-            margin-left: 10px;
+            font-size: 10px;
+            margin-left: 8px;
         }
 
         .status-badge.online {
@@ -79,11 +91,18 @@
             border: 1px solid rgba(231, 76, 60, 0.3);
         }
 
+        .status-badge.checking {
+            background: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+            border: 1px solid rgba(243, 156, 18, 0.3);
+        }
+
         .chat-box {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             padding: 12px;
-            max-height: 400px;
+            max-height: 420px;
+            min-height: 250px;
             overflow-y: auto;
             margin-bottom: 12px;
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -111,6 +130,7 @@
             white-space: pre-wrap;
             word-wrap: break-word;
             font-size: 14px;
+            line-height: 1.5;
         }
 
         @keyframes fadeIn {
@@ -125,6 +145,17 @@
             align-self: flex-start;
         }
 
+        .message.bot .code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #ffd93d;
+            display: inline-block;
+            margin: 2px 0;
+        }
+
         .message.user {
             background: rgba(46, 204, 113, 0.15);
             border: 1px solid rgba(46, 204, 113, 0.2);
@@ -137,6 +168,14 @@
             font-size: 9px;
             color: #666;
             margin-top: 4px;
+        }
+
+        .message .error-text {
+            color: #ff6b6b;
+        }
+
+        .message .success-text {
+            color: #2ecc71;
         }
 
         .input-area {
@@ -179,6 +218,7 @@
             cursor: pointer;
             transition: 0.3s;
             white-space: nowrap;
+            min-width: 70px;
         }
 
         .input-area button:hover {
@@ -233,11 +273,17 @@
 
         .status .dot.online { background: #2ecc71; }
         .status .dot.offline { background: #e74c3c; }
+        .status .dot.checking { background: #f39c12; }
 
         .typing {
             color: #888;
             font-size: 12px;
             padding: 3px 0;
+            display: none;
+        }
+
+        .typing.show {
+            display: block;
         }
 
         .typing span {
@@ -252,12 +298,26 @@
             30% { opacity: 0; }
         }
 
+        .ai-avatar {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffd700, #f39c12);
+            color: #1a1a2e;
+            text-align: center;
+            line-height: 28px;
+            font-size: 14px;
+            margin-right: 6px;
+        }
+
         @media (max-width: 600px) {
             .container { padding: 15px; }
             .header h1 { font-size: 18px; }
             .input-area textarea { font-size: 12px; height: 36px; }
-            .input-area button { font-size: 12px; padding: 8px 14px; }
+            .input-area button { font-size: 12px; padding: 8px 14px; min-width: 60px; }
             .message { font-size: 13px; }
+            .chat-box { max-height: 300px; min-height: 180px; }
         }
     </style>
 </head>
@@ -266,22 +326,30 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div>
+            <div class="header-left">
                 <span class="icon">🤖</span>
-                <span style="font-size: 14px; color: #888;">MaxGameStore AI</span>
-                <span id="aiStatus" class="status-badge offline">⏳</span>
+                <div>
+                    <h1>MaxGameStore AI</h1>
+                    <span class="subtitle">Support Assistant</span>
+                </div>
+                <span id="aiStatus" class="status-badge checking">⏳</span>
             </div>
-            <a href="index.html" class="close">✕</a>
+            <a href="index.html" class="close" title="Close">✕</a>
         </div>
 
-        <!-- Chat -->
+        <!-- Chat Box -->
         <div class="chat-box" id="chatBox">
             <div class="message bot">
-                👋 Hey! I'm MaxGameStore AI.<br>
-                Ask me anything about our games or technical issues.
+                <span class="ai-avatar">AI</span> 👋 Hey! I'm MaxGameStore AI.<br>
+                I can help you with:<br>
+                • 🎮 <strong>World Of Fights</strong> (WoF)<br>
+                • 🚀 <strong>Project Nexus</strong><br>
+                • 🔧 <strong>Technical issues</strong><br>
+                • 🏢 <strong>Company info</strong><br><br>
+                <em>Ask me anything!</em>
                 <div class="time">Just now</div>
             </div>
-            <div id="typingIndicator" class="typing" style="display:none;">
+            <div id="typingIndicator" class="typing">
                 <span>●</span><span>●</span><span>●</span>
             </div>
         </div>
@@ -293,6 +361,7 @@
             <button onclick="quickAction('login')">🔐 Login</button>
             <button onclick="quickAction('games')">🎮 Games</button>
             <button onclick="quickAction('company')">🏢 Company</button>
+            <button onclick="quickAction('update')">📦 Updates</button>
         </div>
 
         <!-- Input -->
@@ -304,102 +373,196 @@
         <!-- Status -->
         <div class="status">
             <span class="dot" id="statusDot"></span>
-            <span id="statusText">AI ready</span>
+            <span id="statusText">Connecting...</span>
         </div>
     </div>
 
     <script>
-        // 🔧 Înlocuiește cu linkul tău ngrok (fără / la final)
+        // ================================================================
+        // 🔧 CONFIG - Înlocuiește cu linkul tău ngrok
+        // ================================================================
         const AI_API_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
 
+        // ================================================================
+        // VARIABLES
+        // ================================================================
+        let isProcessing = false;
+
+        // ================================================================
+        // CHECK AI STATUS
+        // ================================================================
         function checkAIStatus() {
             const badge = document.getElementById('aiStatus');
             const dot = document.getElementById('statusDot');
             const text = document.getElementById('statusText');
 
+            badge.textContent = '⏳';
+            badge.className = 'status-badge checking';
+            dot.className = 'dot checking';
+            text.textContent = 'Checking connection...';
+
             fetch(`${AI_API_URL}/api/ai/status`)
-                .then(res => res.json())
-                .then(() => {
+                .then(res => {
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    return res.json();
+                })
+                .then(data => {
                     badge.textContent = '🟢 Online';
                     badge.className = 'status-badge online';
                     dot.className = 'dot online';
-                    text.textContent = 'AI ready';
+                    text.textContent = `AI ready • ${data.knowledge.games} games • ${data.knowledge.solutions} solutions`;
+                    console.log('✅ AI Server online:', data);
                 })
                 .catch((err) => {
-                    console.error('AI Status error:', err);
+                    console.error('❌ AI Status error:', err);
                     badge.textContent = '🔴 Offline';
                     badge.className = 'status-badge offline';
                     dot.className = 'dot offline';
-                    text.textContent = 'AI offline - contact support';
+                    text.textContent = 'AI offline - make sure server is running';
                 });
         }
 
+        // ================================================================
+        // ADD MESSAGE
+        // ================================================================
         function addMessage(text, sender) {
             const chatBox = document.getElementById('chatBox');
             const msg = document.createElement('div');
             msg.className = `message ${sender}`;
-            msg.innerHTML = text.replace(/\n/g, '<br>');
+            
+            // Procesează textul pentru formatare
+            let formatted = text
+                .replace(/\n/g, '<br>')
+                .replace(/`([^`]+)`/g, '<span class="code">$1</span>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            if (sender === 'bot') {
+                formatted = `<span class="ai-avatar">AI</span> ${formatted}`;
+            }
+            
+            msg.innerHTML = formatted;
             
             const time = document.createElement('div');
             time.className = 'time';
             time.textContent = new Date().toLocaleTimeString();
             msg.appendChild(time);
             
-            chatBox.insertBefore(msg, document.getElementById('typingIndicator'));
+            // Inserează înaintea indicatorului de typing
+            const typingIndicator = document.getElementById('typingIndicator');
+            chatBox.insertBefore(msg, typingIndicator);
+            
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
+        // ================================================================
+        // QUICK ACTIONS
+        // ================================================================
         function quickAction(type) {
             const input = document.getElementById('userInput');
             const msgs = {
-                'launcher': 'Launcher won\'t open',
-                'oracle': 'Oracle JDK error',
-                'login': 'Login not working',
-                'games': 'What games do you have?',
-                'company': 'Tell me about MaxGameStore'
+                'launcher': 'Launcher won\'t open when I double-click it',
+                'oracle': 'I have Oracle JDK issues, the launcher doesn\'t open',
+                'login': 'I can\'t log in to my account',
+                'games': 'What games does MaxGameStore have?',
+                'company': 'Tell me about MaxGameStore Corporation',
+                'update': 'What are the latest updates for World Of Fights?'
             };
             input.value = msgs[type] || '';
             sendMessage();
         }
 
+        // ================================================================
+        // SEND MESSAGE
+        // ================================================================
         function sendMessage() {
             const input = document.getElementById('userInput');
             const msg = input.value.trim();
-            if (!msg) return;
+            if (!msg || isProcessing) return;
 
             input.value = '';
             addMessage(msg, 'user');
+            isProcessing = true;
             document.getElementById('sendBtn').disabled = true;
 
-            document.getElementById('typingIndicator').style.display = 'block';
+            // Arată typing indicator
+            const typing = document.getElementById('typingIndicator');
+            typing.classList.add('show');
             document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
+
+            const startTime = Date.now();
 
             fetch(`${AI_API_URL}/api/ai/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: msg,
-                    userName: localStorage.getItem('currentUser') || 'Guest'
+                    userName: localStorage.getItem('currentUser') || 'Guest',
+                    userEmail: localStorage.getItem('userEmail') || ''
                 })
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
             .then(data => {
-                document.getElementById('typingIndicator').style.display = 'none';
-                if (data.success) {
-                    addMessage(data.solution, 'bot');
-                } else {
-                    addMessage('❌ Error: ' + (data.error || 'Something went wrong'), 'bot');
-                }
-                document.getElementById('sendBtn').disabled = false;
+                typing.classList.remove('show');
+                
+                // Asigură timp minim de răspuns pentru UX
+                const elapsed = Date.now() - startTime;
+                const minDelay = 300;
+                const delay = Math.max(0, minDelay - elapsed);
+                
+                setTimeout(() => {
+                    if (data.success) {
+                        let response = data.solution;
+                        
+                        // Adaugă info Java dacă e disponibil
+                        if (data.javaInfo) {
+                            const javaType = data.javaInfo.isOpenJDK ? 'OpenJDK ✅' : 'Oracle JDK ❌';
+                            response += `\n\n🔍 **Java detected:** ${javaType} (v${data.javaInfo.version})`;
+                            if (data.javaInfo.isOracle) {
+                                response += `\n⚠️ **Warning:** Oracle JDK may cause issues!`;
+                            }
+                        }
+                        
+                        // Adaugă contact
+                        if (data.contact) {
+                            response += `\n\n📧 **Need more help?** Contact: ${data.contact}`;
+                        }
+                        
+                        addMessage(response, 'bot');
+                    } else {
+                        addMessage(`❌ **Error:** ${data.error || 'Something went wrong'}`, 'bot');
+                    }
+                    isProcessing = false;
+                    document.getElementById('sendBtn').disabled = false;
+                }, delay);
             })
             .catch((err) => {
-                console.error('Send error:', err);
-                document.getElementById('typingIndicator').style.display = 'none';
-                addMessage('❌ Connection error. Please make sure the server is running.', 'bot');
+                console.error('❌ Send error:', err);
+                typing.classList.remove('show');
+                
+                // Afișează mesaj de eroare detaliat
+                let errorMsg = '❌ **Connection Error**\n\n';
+                if (err.message.includes('Failed to fetch')) {
+                    errorMsg += 'Could not reach the AI server.\n\n';
+                    errorMsg += '**Possible reasons:**\n';
+                    errorMsg += '• Server is not running\n';
+                    errorMsg += '• Ngrok is not active\n';
+                    errorMsg += '• Wrong URL in configuration\n\n';
+                    errorMsg += `**Current URL:** ${AI_API_URL}`;
+                } else {
+                    errorMsg += err.message;
+                }
+                addMessage(errorMsg, 'bot');
+                isProcessing = false;
                 document.getElementById('sendBtn').disabled = false;
             });
         }
 
+        // ================================================================
+        // KEYBOARD SHORTCUTS
+        // ================================================================
         document.getElementById('userInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -409,6 +572,20 @@
             }
         });
 
+        // Auto-resize textarea
+        document.getElementById('userInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+
+        // Focus input la încărcare
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('userInput').focus();
+        });
+
+        // ================================================================
+        // INIT
+        // ================================================================
         window.onload = function() {
             checkAIStatus();
             setInterval(checkAIStatus, 30000);
