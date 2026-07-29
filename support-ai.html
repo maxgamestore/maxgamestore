@@ -309,7 +309,8 @@
     </div>
 
     <script>
-        const AI_API_URL = window.location.origin;
+        // 🔧 Înlocuiește cu linkul tău ngrok (fără / la final)
+        const AI_API_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
 
         function checkAIStatus() {
             const badge = document.getElementById('aiStatus');
@@ -324,7 +325,8 @@
                     dot.className = 'dot online';
                     text.textContent = 'AI ready';
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.error('AI Status error:', err);
                     badge.textContent = '🔴 Offline';
                     badge.className = 'status-badge offline';
                     dot.className = 'dot offline';
@@ -390,9 +392,10 @@
                 }
                 document.getElementById('sendBtn').disabled = false;
             })
-            .catch(() => {
+            .catch((err) => {
+                console.error('Send error:', err);
                 document.getElementById('typingIndicator').style.display = 'none';
-                addMessage('❌ Connection error. Please try again later.', 'bot');
+                addMessage('❌ Connection error. Please make sure the server is running.', 'bot');
                 document.getElementById('sendBtn').disabled = false;
             });
         }
