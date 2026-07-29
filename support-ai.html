@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Support - MaxGameStore</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 95%;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header .icon {
+            font-size: 50px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #ffd700;
+            margin: 10px 0 5px;
+        }
+
+        .header p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .status-badge.online {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .status-badge.offline {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .chat-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            max-height: 350px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .chat-box::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .chat-box::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-box::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 10px;
+        }
+
+        .message {
+            margin: 8px 0;
+            padding: 10px 15px;
+            border-radius: 12px;
+            max-width: 85%;
+            animation: fadeIn 0.3s ease;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.bot {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            color: #ddd;
+            align-self: flex-start;
+        }
+
+        .message.user {
+            background: rgba(46, 204, 113, 0.15);
+            border: 1px solid rgba(46, 204, 113, 0.2);
+            color: #fff;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .message .time {
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-area textarea {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 14px;
+            resize: none;
+            height: 50px;
+            font-family: inherit;
+            transition: 0.3s;
+        }
+
+        .input-area textarea:focus {
+            outline: none;
+            border-color: #ffd700;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .input-area textarea::placeholder {
+            color: #666;
+        }
+
+        .input-area button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(45deg, #ffd700, #f39c12);
+            color: #1a1a2e;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        .input-area button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .input-area button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .quick-actions button {
+            padding: 6px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #aaa;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .quick-actions button:hover {
+            background: rgba(255, 215, 0, 0.15);
+            color: #ffd700;
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .status {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .status .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        .status .dot.online { background: #2ecc71; }
+        .status .dot.offline { background: #e74c3c; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .typing {
+            color: #888;
+            font-size: 13px;
+            padding: 5px 0;
+        }
+
+        .typing span {
+            animation: blink 1.4s infinite;
+        }
+
+        .typing span:nth-child(2) { animation-delay: 0.2s; }
+        .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes blink {
+            0%, 60%, 100% { opacity: 1; }
+            30% { opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            .header h1 { font-size: 22px; }
+            .input-area textarea { font-size: 13px; }
+            .input-area button { font-size: 14px; padding: 10px 18px; }
+            .message { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="icon">🤖</div>
+            <h1>AI Support Assistant</h1>
+            <p>Describe your issue and I'll try to help you</p>
+            <div id="aiStatus" class="status-badge offline">⏳ Checking AI server...</div>
+        </div>
+
+        <div class="chat-box" id="chatBox">
+            <div class="message bot">
+                👋 Hello! I'm your AI support assistant.<br>
+                Describe the error you're facing, or choose a quick option below.
+                <div class="time">Just now</div>
+            </div>
+            <div id="typingIndicator" class="typing" style="display:none;">
+                <span>●</span><span>●</span><span>●</span>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <button onclick="quickAction('launcher')">🚀 Launcher not opening</button>
+            <button onclick="quickAction('oracle')">🔴 Oracle JDK error</button>
+            <button onclick="quickAction('login')">🔐 Login error</button>
+            <button onclick="quickAction('java')">☕ Java issues</button>
+            <button onclick="quickAction('blank')">⬛ Blank screen</button>
+        </div>
+
+        <div class="input-area">
+            <textarea id="userInput" placeholder="Describe your issue or error message..." rows="1"></textarea>
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+
+        <div class="status">
+            <span class="dot" id="statusDot"></span>
+            <span id="statusText">Checking connection...</span>
+        </div>
+    </div>
+
+    <script>
+        // ============ CONFIG ============
+        // 🔧 Înlocuiește cu linkul tău ngrok când rulezi AI Server-ul!
+        const AI_API_URL = 'https://trimmer-chrome-landfall.ngrok-free.dev';
+        // const AI_API_URL = 'http://localhost:3001'; // Pentru test local
+
+        let messageCount = 0;
+        let conversationHistory = [];
+
+        // ============ CHECK AI SERVER STATUS ============
+        function checkAIStatus() {
+            const statusBadge = document.getElementById('aiStatus');
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+
+            statusBadge.textContent = '⏳ Connecting to AI...';
+            statusBadge.className = 'status-badge offline';
+            statusDot.className = 'dot offline';
+            statusText.textContent = 'Connecting to AI server...';
+
+            fetch(`${AI_API_URL}/api/status`)
+                .then(res => res.json())
+                .then(data => {
+                    statusBadge.textContent = '✅ AI Online';
+                    statusBadge.className = 'status-badge online';
+                    statusDot.className = 'dot online';
+                    statusText.textContent = 'AI Server is online';
+                    console.log('🤖 AI Server online:', data);
+                })
+                .catch(err => {
+                    statusBadge.textContent = '❌ AI Offline';
+                    statusBadge.className = 'status-badge offline';
+                    statusDot.className = 'dot offline';
+                    statusText.textContent = 'AI Server offline - Contact support';
+                    console.error('❌ AI Server offline:', err);
+                    
+                    addMessage('⚠️ **AI Server is offline!**\n\nThe AI support is currently unavailable.\nPlease try again later or contact support directly.', 'bot');
+                });
+        }
+
+        // ============ ADD MESSAGE ============
+        function addMessage(text, sender) {
+            const chatBox = document.getElementById('chatBox');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender}`;
+            msgDiv.innerHTML = text.replace(/\n/g, '<br>');
+            
+            const time = document.createElement('div');
+            time.className = 'time';
+            time.textContent = new Date().toLocaleTimeString();
+            msgDiv.appendChild(time);
+            
+            chatBox.insertBefore(msgDiv, document.getElementById('typingIndicator'));
+            scrollToBottom();
+            messageCount++;
+        }
+
+        // ============ SCROLL TO BOTTOM ============
+        function scrollToBottom() {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // ============ QUICK ACTIONS ============
+        function quickAction(type) {
+            const input = document.getElementById('userInput');
+            const messages = {
+                'launcher': 'Launcher won\'t open when I double-click it',
+                'oracle': 'I think I have Oracle JDK issues, the launcher doesn\'t open',
+                'login': 'I can\'t log in to my account',
+                'java': 'I think I have Java problems',
+                'blank': 'The screen is completely blank'
+            };
+            input.value = messages[type] || '';
+            sendMessage();
+        }
+
+        // ============ SEND MESSAGE TO AI ============
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            input.value = '';
+            addMessage(message, 'user');
+            document.getElementById('sendBtn').disabled = true;
+
+            document.getElementById('typingIndicator').style.display = 'block';
+            scrollToBottom();
+
+            fetch(`${AI_API_URL}/api/analyze`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    userName: localStorage.getItem('currentUser') || 'Guest',
+                    userEmail: localStorage.getItem('userEmail') || ''
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('typingIndicator').style.display = 'none';
+                
+                if (data.success) {
+                    let response = data.solution;
+                    
+                    if (data.javaInfo) {
+                        const javaType = data.javaInfo.isOpenJDK ? 'OpenJDK ✅' : 'Oracle JDK ❌';
+                        response += `\n\n🔍 **Java detected:** ${javaType} (v${data.javaInfo.version})`;
+                        if (data.javaInfo.isOracle) {
+                            response += `\n⚠️ **Warning:** Oracle JDK may cause issues!`;
+                        }
+                    }
+                    
+                    if (data.contact) {
+                        response += `\n\n📧 **Need more help?** Contact: ${data.contact}`;
+                    }
+                    
+                    addMessage(response, 'bot');
+                } else {
+                    addMessage(`❌ **Error:** ${data.error || 'Something went wrong'}\n\nPlease try again or contact support.`, 'bot');
+                }
+                
+                document.getElementById('sendBtn').disabled = false;
+                scrollToBottom();
+            })
+            .catch(err => {
+                document.getElementById('typingIndicator').style.display = 'none';
+                addMessage(`❌ **Connection Error:**\n\nCould not reach the AI server.\nPlease make sure the server is running.\n\nError: ${err.message}`, 'bot');
+                document.getElementById('sendBtn').disabled = false;
+                scrollToBottom();
+            });
+        }
+
+        // ============ ENTER KEY ============
+        document.getElementById('userInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (!document.getElementById('sendBtn').disabled) {
+                    sendMessage();
+                }
+            }
+        });
+
+        // Auto-resize textarea
+        document.getElementById('userInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+
+        // ============ INIT ============
+        window.onload = function() {
+            checkAIStatus();
+            setInterval(checkAIStatus, 30000);
+        };
+    </script>
+</body>
+</html>
