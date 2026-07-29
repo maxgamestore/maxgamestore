@@ -26,37 +26,45 @@
             width: 95%;
             background: rgba(0, 0, 0, 0.85);
             border-radius: 20px;
-            padding: 30px;
+            padding: 25px;
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .header {
-            text-align: center;
-            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
 
         .header .icon {
-            font-size: 50px;
+            font-size: 30px;
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 22px;
             color: #ffd700;
-            margin: 10px 0 5px;
         }
 
-        .header p {
-            color: #888;
-            font-size: 14px;
+        .header .close {
+            color: #666;
+            font-size: 24px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .header .close:hover {
+            color: #ff6b6b;
         }
 
         .status-badge {
             display: inline-block;
-            padding: 3px 12px;
+            padding: 2px 10px;
             border-radius: 20px;
-            font-size: 12px;
-            margin-top: 5px;
+            font-size: 11px;
+            margin-left: 10px;
         }
 
         .status-badge.online {
@@ -73,16 +81,16 @@
 
         .chat-box {
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 15px;
-            max-height: 350px;
+            border-radius: 12px;
+            padding: 12px;
+            max-height: 400px;
             overflow-y: auto;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .chat-box::-webkit-scrollbar {
-            width: 5px;
+            width: 4px;
         }
 
         .chat-box::-webkit-scrollbar-track {
@@ -95,13 +103,14 @@
         }
 
         .message {
-            margin: 8px 0;
-            padding: 10px 15px;
-            border-radius: 12px;
+            margin: 6px 0;
+            padding: 8px 14px;
+            border-radius: 10px;
             max-width: 85%;
             animation: fadeIn 0.3s ease;
             white-space: pre-wrap;
             word-wrap: break-word;
+            font-size: 14px;
         }
 
         @keyframes fadeIn {
@@ -125,26 +134,26 @@
         }
 
         .message .time {
-            font-size: 10px;
+            font-size: 9px;
             color: #666;
-            margin-top: 5px;
+            margin-top: 4px;
         }
 
         .input-area {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .input-area textarea {
             flex: 1;
-            padding: 12px 15px;
-            border-radius: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.05);
             color: white;
-            font-size: 14px;
+            font-size: 13px;
             resize: none;
-            height: 50px;
+            height: 42px;
             font-family: inherit;
             transition: 0.3s;
         }
@@ -160,13 +169,13 @@
         }
 
         .input-area button {
-            padding: 12px 25px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             background: linear-gradient(45deg, #ffd700, #f39c12);
             color: #1a1a2e;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             transition: 0.3s;
             white-space: nowrap;
@@ -186,17 +195,17 @@
         .quick-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
+            gap: 6px;
+            margin-top: 10px;
         }
 
         .quick-actions button {
-            padding: 6px 14px;
+            padding: 4px 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            border-radius: 15px;
             background: rgba(255, 255, 255, 0.05);
             color: #aaa;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
             transition: 0.3s;
         }
@@ -209,33 +218,26 @@
 
         .status {
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             color: #666;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .status .dot {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            margin-right: 5px;
-            animation: pulse 2s infinite;
+            margin-right: 4px;
         }
 
         .status .dot.online { background: #2ecc71; }
         .status .dot.offline { background: #e74c3c; }
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
-        }
-
         .typing {
             color: #888;
-            font-size: 13px;
-            padding: 5px 0;
+            font-size: 12px;
+            padding: 3px 0;
         }
 
         .typing span {
@@ -251,33 +253,32 @@
         }
 
         @media (max-width: 600px) {
-            .container { padding: 20px; }
-            .header h1 { font-size: 22px; }
-            .input-area textarea { font-size: 13px; }
-            .input-area button { font-size: 14px; padding: 10px 18px; }
-            .message { font-size: 14px; }
+            .container { padding: 15px; }
+            .header h1 { font-size: 18px; }
+            .input-area textarea { font-size: 12px; height: 36px; }
+            .input-area button { font-size: 12px; padding: 8px 14px; }
+            .message { font-size: 13px; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <div class="icon">🤖</div>
-            <h1>AI Support Assistant</h1>
-            <p>Powered by MaxGameStore AI - Support for all our games</p>
-            <div id="aiStatus" class="status-badge offline">⏳ Checking AI server...</div>
+            <div>
+                <span class="icon">🤖</span>
+                <span style="font-size: 14px; color: #888;">MaxGameStore AI</span>
+                <span id="aiStatus" class="status-badge offline">⏳</span>
+            </div>
+            <a href="index.html" class="close">✕</a>
         </div>
 
+        <!-- Chat -->
         <div class="chat-box" id="chatBox">
             <div class="message bot">
-                👋 Hello! I'm the MaxGameStore AI Support Assistant.<br>
-                I can help with:<br>
-                • 🎮 <strong>World Of Fights</strong> (WoF)<br>
-                • 🚀 <strong>Project Nexus</strong><br>
-                • 🏢 <strong>Company info</strong><br>
-                • ⚙️ <strong>Technical issues</strong><br><br>
-                Describe your issue or choose a quick option below.
+                👋 Hey! I'm MaxGameStore AI.<br>
+                Ask me anything about our games or technical issues.
                 <div class="time">Just now</div>
             </div>
             <div id="typingIndicator" class="typing" style="display:none;">
@@ -285,163 +286,117 @@
             </div>
         </div>
 
+        <!-- Quick Actions -->
         <div class="quick-actions">
-            <button onclick="quickAction('launcher')">🚀 Launcher not opening</button>
-            <button onclick="quickAction('oracle')">🔴 Oracle JDK error</button>
-            <button onclick="quickAction('login')">🔐 Login error</button>
-            <button onclick="quickAction('java')">☕ Java issues</button>
-            <button onclick="quickAction('blank')">⬛ Blank screen</button>
-            <button onclick="quickAction('games')">🎮 All games</button>
-            <button onclick="quickAction('company')">🏢 Company info</button>
+            <button onclick="quickAction('launcher')">🚀 Launcher</button>
+            <button onclick="quickAction('oracle')">🔴 Oracle JDK</button>
+            <button onclick="quickAction('login')">🔐 Login</button>
+            <button onclick="quickAction('games')">🎮 Games</button>
+            <button onclick="quickAction('company')">🏢 Company</button>
         </div>
 
+        <!-- Input -->
         <div class="input-area">
-            <textarea id="userInput" placeholder="Describe your issue or ask about games..." rows="1"></textarea>
+            <textarea id="userInput" placeholder="Ask me anything..." rows="1"></textarea>
             <button id="sendBtn" onclick="sendMessage()">Send</button>
         </div>
 
+        <!-- Status -->
         <div class="status">
             <span class="dot" id="statusDot"></span>
-            <span id="statusText">Checking connection...</span>
+            <span id="statusText">AI ready</span>
         </div>
     </div>
 
     <script>
-        // ============ CONFIG ============
         const AI_API_URL = window.location.origin;
 
-        let messageCount = 0;
-
-        // ============ CHECK AI STATUS ============
         function checkAIStatus() {
-            const statusBadge = document.getElementById('aiStatus');
-            const statusDot = document.getElementById('statusDot');
-            const statusText = document.getElementById('statusText');
-
-            statusBadge.textContent = '⏳ Connecting...';
-            statusBadge.className = 'status-badge offline';
-            statusDot.className = 'dot offline';
-            statusText.textContent = 'Connecting to AI server...';
+            const badge = document.getElementById('aiStatus');
+            const dot = document.getElementById('statusDot');
+            const text = document.getElementById('statusText');
 
             fetch(`${AI_API_URL}/api/ai/status`)
                 .then(res => res.json())
-                .then(data => {
-                    statusBadge.textContent = `✅ AI Online (${data.knowledge.games} games)`;
-                    statusBadge.className = 'status-badge online';
-                    statusDot.className = 'dot online';
-                    statusText.textContent = `AI Server online • ${data.knowledge.solutions} solutions`;
-                    console.log('🤖 AI Server online:', data);
+                .then(() => {
+                    badge.textContent = '🟢 Online';
+                    badge.className = 'status-badge online';
+                    dot.className = 'dot online';
+                    text.textContent = 'AI ready';
                 })
-                .catch(err => {
-                    statusBadge.textContent = '❌ AI Offline';
-                    statusBadge.className = 'status-badge offline';
-                    statusDot.className = 'dot offline';
-                    statusText.textContent = 'AI Server offline - Contact support';
-                    console.error('❌ AI Server offline:', err);
-                    
-                    addMessage('⚠️ **AI Server is offline!**\n\nThe AI support is currently unavailable.\nPlease try again later or contact support directly.\n\n📧 support@maxgamestore.com', 'bot');
+                .catch(() => {
+                    badge.textContent = '🔴 Offline';
+                    badge.className = 'status-badge offline';
+                    dot.className = 'dot offline';
+                    text.textContent = 'AI offline - contact support';
                 });
         }
 
-        // ============ ADD MESSAGE ============
         function addMessage(text, sender) {
             const chatBox = document.getElementById('chatBox');
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `message ${sender}`;
-            msgDiv.innerHTML = text.replace(/\n/g, '<br>');
+            const msg = document.createElement('div');
+            msg.className = `message ${sender}`;
+            msg.innerHTML = text.replace(/\n/g, '<br>');
             
             const time = document.createElement('div');
             time.className = 'time';
             time.textContent = new Date().toLocaleTimeString();
-            msgDiv.appendChild(time);
+            msg.appendChild(time);
             
-            chatBox.insertBefore(msgDiv, document.getElementById('typingIndicator'));
-            scrollToBottom();
-            messageCount++;
-        }
-
-        // ============ SCROLL TO BOTTOM ============
-        function scrollToBottom() {
-            const chatBox = document.getElementById('chatBox');
+            chatBox.insertBefore(msg, document.getElementById('typingIndicator'));
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // ============ QUICK ACTIONS ============
         function quickAction(type) {
             const input = document.getElementById('userInput');
-            const messages = {
-                'launcher': 'Launcher won\'t open when I double-click it',
-                'oracle': 'I think I have Oracle JDK issues, the launcher doesn\'t open',
-                'login': 'I can\'t log in to my account',
-                'java': 'I think I have Java problems',
-                'blank': 'The screen is completely blank',
-                'games': 'Tell me about all the games from MaxGameStore',
-                'company': 'Tell me about MaxGameStore corporation'
+            const msgs = {
+                'launcher': 'Launcher won\'t open',
+                'oracle': 'Oracle JDK error',
+                'login': 'Login not working',
+                'games': 'What games do you have?',
+                'company': 'Tell me about MaxGameStore'
             };
-            input.value = messages[type] || '';
+            input.value = msgs[type] || '';
             sendMessage();
         }
 
-        // ============ SEND MESSAGE TO AI ============
         function sendMessage() {
             const input = document.getElementById('userInput');
-            const message = input.value.trim();
-            if (!message) return;
+            const msg = input.value.trim();
+            if (!msg) return;
 
             input.value = '';
-            addMessage(message, 'user');
+            addMessage(msg, 'user');
             document.getElementById('sendBtn').disabled = true;
 
             document.getElementById('typingIndicator').style.display = 'block';
-            scrollToBottom();
+            document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
 
             fetch(`${AI_API_URL}/api/ai/analyze`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: message,
-                    userName: localStorage.getItem('currentUser') || 'Guest',
-                    userEmail: localStorage.getItem('userEmail') || ''
+                    message: msg,
+                    userName: localStorage.getItem('currentUser') || 'Guest'
                 })
             })
             .then(res => res.json())
             .then(data => {
                 document.getElementById('typingIndicator').style.display = 'none';
-                
                 if (data.success) {
-                    let response = data.solution;
-                    
-                    if (data.javaInfo) {
-                        const javaType = data.javaInfo.isOpenJDK ? 'OpenJDK ✅' : 'Oracle JDK ❌';
-                        response += `\n\n🔍 **Java detected:** ${javaType} (v${data.javaInfo.version})`;
-                        if (data.javaInfo.isOracle) {
-                            response += `\n⚠️ **Warning:** Oracle JDK may cause issues!`;
-                        }
-                    }
-                    
-                    if (data.contact) {
-                        response += `\n\n📧 **Need more help?** Contact: ${data.contact}`;
-                    }
-                    
-                    addMessage(response, 'bot');
+                    addMessage(data.solution, 'bot');
                 } else {
-                    addMessage(`❌ **Error:** ${data.error || 'Something went wrong'}\n\nPlease try again or contact support.`, 'bot');
+                    addMessage('❌ Error: ' + (data.error || 'Something went wrong'), 'bot');
                 }
-                
                 document.getElementById('sendBtn').disabled = false;
-                scrollToBottom();
             })
-            .catch(err => {
+            .catch(() => {
                 document.getElementById('typingIndicator').style.display = 'none';
-                addMessage(`❌ **Connection Error:**\n\nCould not reach the AI server.\nPlease make sure the server is running.\n\nError: ${err.message}`, 'bot');
+                addMessage('❌ Connection error. Please try again later.', 'bot');
                 document.getElementById('sendBtn').disabled = false;
-                scrollToBottom();
             });
         }
 
-        // ============ ENTER KEY ============
         document.getElementById('userInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -451,13 +406,6 @@
             }
         });
 
-        // Auto-resize textarea
-        document.getElementById('userInput').addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-        });
-
-        // ============ INIT ============
         window.onload = function() {
             checkAIStatus();
             setInterval(checkAIStatus, 30000);
